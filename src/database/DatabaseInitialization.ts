@@ -49,6 +49,7 @@ export class DatabaseInitialization {
     }
 
     // List table
+    // DEMO ONLY
     transaction.executeSql(
       "CREATE TABLE IF NOT EXISTS List( " +
         "list_id INTEGER PRIMARY KEY NOT NULL, " +
@@ -57,6 +58,7 @@ export class DatabaseInitialization {
     );
 
     // ListItem table
+    //DEMO ONLY
     transaction.executeSql(
       "CREATE TABLE IF NOT EXISTS ListItem( " +
         "item_id INTEGER PRIMARY KEY NOT NULL, " +
@@ -72,6 +74,84 @@ export class DatabaseInitialization {
       "CREATE TABLE IF NOT EXISTS Version( " +
         "version_id INTEGER PRIMARY KEY NOT NULL, " +
         "version INTEGER" +
+        ");"
+    );
+
+    // string ids table
+    transaction.executeSql(
+      "CREATE TABLE IF NOT EXISTS string_ids ( " +
+        "id uuid PRIMARY KEY " +
+        ");"
+    );
+
+    // string content table
+    transaction.executeSql(
+      "CREATE TABLE IF NOT EXISTS string_content ( " +
+        "id uuid REFERENCES string_ids(id) ON DELETE CASCADE, " +
+        "language varchar(5), " +
+        "content text, " +
+        "edited_at timestamp with time zone " +
+        ");"
+    );
+
+    transaction.executeSql(
+      "CREATE UNIQUE INDEX ON string_content (id, language); "
+    );
+
+    // Version table
+    transaction.executeSql(
+      "CREATE TABLE IF NOT EXISTS patients ( " +
+        "id uuid PRIMARY KEY, " +
+        "given_name uuid REFERENCES string_ids(id) ON DELETE CASCADE," +
+        "surname uuid REFERENCES string_ids(id) ON DELETE CASCADE, " +
+        "date_of_birth DATE, " +
+        "place_of_birth uuid REFERENCES string_ids(id) ON DELETE CASCADE, " +
+        "edited_at timestamp with time zone " +
+        ");"
+    );
+
+    // Clinics table
+    transaction.executeSql(
+      "CREATE TABLE IF NOT EXISTS clinics ( " +
+        "id uuid PRIMARY KEY," +
+        "name uuid REFERENCES string_ids(id) ON DELETE CASCADE," +
+        "edited_at timestamp with time zone" +
+        ");"
+    );
+
+    // Users table
+    transaction.executeSql(
+      "CREATE TABLE IF NOT EXISTS users ( " +
+        "id uuid PRIMARY KEY, " +
+        "name uuid REFERENCES string_ids(id) ON DELETE CASCADE, " +
+        "role text not null, " +
+        "email text not null, " +
+        "hashed_password text not null, " +
+        "edited_at timestamp with time zone " +
+        ");"
+    );
+
+    // Visits table
+    transaction.executeSql(
+      "CREATE TABLE IF NOT EXISTS visits ( " +
+        "id uuid PRIMARY KEY, " +
+        "patient_id uuid REFERENCES patients(id) ON DELETE CASCADE, " +
+        "clinic_id uuid REFERENCES clinics(id) ON DELETE CASCADE, " +
+        "provider_id uuid REFERENCES users(id) ON DELETE CASCADE, " +
+        "check_in_timestamp timestamp with time zone, " +
+        "check_out_timestamp timestamp with time zone, " +
+        "edited_at timestamp with time zone " +
+        ");"
+    );
+
+    // Events table
+    transaction.executeSql(
+      "CREATE TABLE IF NOT EXISTS events ( " +
+        "id uuid PRIMARY KEY, " +
+        "patient_id uuid REFERENCES patients(id) ON DELETE CASCADE, " +
+        "visit_id uuid REFERENCES visits(id) ON DELETE CASCADE, " +
+        "event_timestamp timestamp with time zone, " +
+        "event_metadata timestamp with time zone " +
         ");"
     );
   }

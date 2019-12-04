@@ -6,12 +6,32 @@ import {
 import invoke from 'lodash/invoke';
 import loginValidator from '../validators/loginValidator';
 
+
 const Login = (props) => {
   const [email, setEmail] = useState(props.email || '');
   const [password, setPassword] = useState(props.password || '');
 
   const handleLogin = () => {
     props.navigation.navigate('PatientList')
+
+    fetch('https://demo-api.hikmahealth.org/', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    }).then((response) => response.json())
+      .then((responseJson) => {
+        return responseJson.users;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
   };
 
   return (
@@ -35,7 +55,7 @@ const Login = (props) => {
       </View>
 
       <View >
-        <TouchableOpacity onPress={()=> props.navigation.navigate('PatientList')}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('PatientList')}>
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>
       </View>

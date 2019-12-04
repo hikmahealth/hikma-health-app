@@ -11,13 +11,15 @@ const rootNavigator = createStackNavigator(
       screen: Login,
       navigationOptions: () => ({
         title: `Login`,
-        // headerBackTitle: null,
+        header: null,
       })
     },
     PatientList: {
       screen: PatientList,
       navigationOptions: () => ({
-        title: `PatientList`
+        title: `PatientList`,
+        header: null,
+
       })
     }
   },
