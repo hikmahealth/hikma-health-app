@@ -43,116 +43,57 @@ export class DatabaseInitialization {
     // DANGER! For dev only
     const dropAllTables = false;
     if (dropAllTables) {
-      transaction.executeSql("DROP TABLE IF EXISTS List;");
-      transaction.executeSql("DROP TABLE IF EXISTS ListItem;");
-      transaction.executeSql("DROP TABLE IF EXISTS Version;");
+      transaction.executeSql("DROP TABLE IF EXISTS version;");
+      transaction.executeSql("DROP TABLE IF EXISTS string_ids;");
+      transaction.executeSql("DROP TABLE IF EXISTS string_content;");
+      transaction.executeSql("DROP TABLE IF EXISTS patients;");
+      transaction.executeSql("DROP TABLE IF EXISTS clinics;");
+      transaction.executeSql("DROP TABLE IF EXISTS users;");
+      transaction.executeSql("DROP TABLE IF EXISTS visits;");
+      transaction.executeSql("DROP TABLE IF EXISTS events;");
     }
-
-    // List table
-    // DEMO ONLY
-    transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS List( " +
-        "list_id INTEGER PRIMARY KEY NOT NULL, " +
-        "title TEXT" +
-        ");"
-    );
-
-    // ListItem table
-    //DEMO ONLY
-    transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS ListItem( " +
-        "item_id INTEGER PRIMARY KEY NOT NULL, " +
-        "list_id INTEGER, " +
-        "text TEXT, " +
-        "done INTEGER DEFAULT 0, " +
-        "FOREIGN KEY ( list_id ) REFERENCES List ( list_id )" +
-        ");"
-    );
 
     // Version table
     transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS Version( " +
+        "CREATE TABLE IF NOT EXISTS version( " +
         "version_id INTEGER PRIMARY KEY NOT NULL, " +
         "version INTEGER" +
         ");"
     );
 
-    // string ids table
     transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS string_ids ( " +
-        "id uuid PRIMARY KEY " +
-        ");"
-    );
-
-    // string content table
-    transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS string_content ( " +
-        "id uuid REFERENCES string_ids(id) ON DELETE CASCADE, " +
-        "language varchar(5), " +
-        "content text, " +
-        "edited_at timestamp with time zone " +
-        ");"
+      "CREATE TABLE IF NOT EXISTS string_ids (id blob(16) PRIMARY KEY);"
     );
 
     transaction.executeSql(
-      "CREATE UNIQUE INDEX ON string_content (id, language); "
+      "CREATE TABLE IF NOT EXISTS string_content (id blob(16) REFERENCES string_ids(id) ON DELETE CASCADE, language varchar(5), content text, edited_at text);"
+    );
+
+    transaction.executeSql(
+      "CREATE UNIQUE INDEX IF NOT EXISTS string_content_id_language_udx ON string_content (id, language);"
+    );
+
+    transaction.executeSql(
+      "CREATE TABLE IF NOT EXISTS patients (id blob(16) PRIMARY KEY, given_name blob(16) REFERENCES string_ids(id) ON DELETE CASCADE, surname blob(16) REFERENCES string_ids(id) ON DELETE CASCADE, date_of_birth text, place_of_birth blob(16) REFERENCES string_ids(id) ON DELETE CASCADE, edited_at text);"
+    );
+
+    transaction.executeSql(
+      "CREATE TABLE IF NOT EXISTS clinics (id blob(16) PRIMARY KEY, name blob(16) REFERENCES string_ids(id) ON DELETE CASCADE, edited_at text);"
     );
 
     // Version table
     transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS patients ( " +
-        "id uuid PRIMARY KEY, " +
-        "given_name uuid REFERENCES string_ids(id) ON DELETE CASCADE," +
-        "surname uuid REFERENCES string_ids(id) ON DELETE CASCADE, " +
-        "date_of_birth DATE, " +
-        "place_of_birth uuid REFERENCES string_ids(id) ON DELETE CASCADE, " +
-        "edited_at timestamp with time zone " +
-        ");"
+      "CREATE TABLE IF NOT EXISTS users (id blob(16) PRIMARY KEY, name blob(16) REFERENCES string_ids(id) ON DELETE CASCADE, role text not null, email text not null, hashed_password text not null, edited_at text);"
     );
 
     // Clinics table
     transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS clinics ( " +
-        "id uuid PRIMARY KEY," +
-        "name uuid REFERENCES string_ids(id) ON DELETE CASCADE," +
-        "edited_at timestamp with time zone" +
-        ");"
+      "CREATE TABLE IF NOT EXISTS visits (id blob(16) PRIMARY KEY, patient_id blob(16) REFERENCES patients(id) ON DELETE CASCADE, clinic_id blob(16) REFERENCES clinics(id) ON DELETE CASCADE, provider_id blob(16) REFERENCES users(id) ON DELETE CASCADE, check_in_timestamp text, check_out_timestamp text, edited_at text);"
     );
 
     // Users table
     transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS users ( " +
-        "id uuid PRIMARY KEY, " +
-        "name uuid REFERENCES string_ids(id) ON DELETE CASCADE, " +
-        "role text not null, " +
-        "email text not null, " +
-        "hashed_password text not null, " +
-        "edited_at timestamp with time zone " +
-        ");"
-    );
-
-    // Visits table
-    transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS visits ( " +
-        "id uuid PRIMARY KEY, " +
-        "patient_id uuid REFERENCES patients(id) ON DELETE CASCADE, " +
-        "clinic_id uuid REFERENCES clinics(id) ON DELETE CASCADE, " +
-        "provider_id uuid REFERENCES users(id) ON DELETE CASCADE, " +
-        "check_in_timestamp timestamp with time zone, " +
-        "check_out_timestamp timestamp with time zone, " +
-        "edited_at timestamp with time zone " +
-        ");"
-    );
-
-    // Events table
-    transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS events ( " +
-        "id uuid PRIMARY KEY, " +
-        "patient_id uuid REFERENCES patients(id) ON DELETE CASCADE, " +
-        "visit_id uuid REFERENCES visits(id) ON DELETE CASCADE, " +
-        "event_timestamp timestamp with time zone, " +
-        "event_metadata timestamp with time zone " +
-        ");"
+      "CREATE TABLE IF NOT EXISTS events (id blob(16) PRIMARY KEY, patient_id blob(16) REFERENCES patients(id) ON DELETE CASCADE, visit_id blob(16) REFERENCES visits(id) ON DELETE CASCADE, event_timestamp text, event_metadata text);"
     );
   }
 
@@ -160,11 +101,10 @@ export class DatabaseInitialization {
   private getDatabaseVersion(database: SQLite.SQLiteDatabase): Promise<number> {
     // Select the highest version number from the version table
     return database
-      .executeSql("SELECT version FROM Version ORDER BY version DESC LIMIT 1;")
+      .executeSql("SELECT version FROM version ORDER BY version DESC LIMIT 1;")
       .then(([results]) => {
         if (results.rows && results.rows.length > 0) {
-          const version = results.rows.item(0).version;
-          return version;
+          return results.rows.item(0).version;
         } else {
           return 0;
         }
