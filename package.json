@@ -8,7 +8,6 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.148",
     "@types/react-native-elements": "^0.18.0",
     "elements": "^0.6.0",
     "react": "16.8.6",
@@ -22,7 +21,8 @@
     "react-native-sqlite-storage": "^4.1.0",
     "react-native-vector-icons": "^6.6.0",
     "react-navigation": "^4.0.10",
-    "react-navigation-stack": "^1.10.3"
+    "react-navigation-stack": "^1.10.3",
+    "uuidv4": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",

@@ -3,34 +3,74 @@ import {
   View, Text, Image, TextInput, StyleSheet, Button, TouchableOpacity
 } from 'react-native';
 
-import invoke from 'lodash/invoke';
+import { database } from "../database/Database";
 import loginValidator from '../validators/loginValidator';
+import { StringContent } from '../types/StringContent';
+import { User } from '../types/User';
 
 
 const Login = (props) => {
-  const [email, setEmail] = useState(props.email || '');
-  const [password, setPassword] = useState(props.password || '');
+  const [email, setEmail] = useState(props.email || 'sam@hikmahealth.org');
+  const [password, setPassword] = useState(props.password || 'c43171c8a242');
+  const [loggedInUser, setLoggedInUser] = useState()
 
   const handleLogin = () => {
-    props.navigation.navigate('PatientList')
 
-    fetch('https://demo-api.hikmahealth.org/', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    }).then((response) => response.json())
-      .then((responseJson) => {
-        return responseJson.users;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    database.login(email, password).then(user => {
+      if (!!user && !!user.id) {
+        setLoggedInUser(user)
+
+      }
+      console.log('logged in user: ' + user)
+
+    })
+
+    if (loggedInUser === null || loggedInUser === undefined) {
+      console.log("email: " + email)
+      console.log("password: " + password)
+
+      // fetch('https://demo-api.hikmahealth.org/api/login', {
+        fetch('http://gpu.cairnlabs.com:8081/api/login', {
+
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "email": email,
+          "password": password,
+        })
+      }).then((response) => 
+          response.json())
+        .then((responseJson) => {
+          console.log('response' + responseJson)
+          const stringContent: StringContent = {
+            language: Object.keys(responseJson.name.content)[0],
+            content: responseJson.name.content
+          }
+
+          database.saveStringContent(stringContent, responseJson.name.id)
+            .then(stringId => {
+              const user: User = {
+                id: responseJson.id,
+                name: stringId,
+                role: responseJson.role,
+                email: responseJson.email
+              }
+              database.createUser(user, password);
+              setLoggedInUser(user);
+            })
+
+          props.navigation.navigate('PatientList', { user: loggedInUser })
+
+
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+    // props.navigation.navigate('PatientList', { user: loggedInUser })
 
   };
 
@@ -55,7 +95,7 @@ const Login = (props) => {
       </View>
 
       <View >
-        <TouchableOpacity onPress={() => props.navigation.navigate('PatientList')}>
+        <TouchableOpacity onPress={handleLogin}>
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>
       </View>

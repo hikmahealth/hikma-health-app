@@ -28,19 +28,18 @@ import {
 
 
 const App = () => {
-  const [appState, setAppState] = useState(AppState.currentState.toString())
-  const [databaseIsReady, setDatabaseIsReady] = useState(false)
+  const [appState, setAppState] = useState(AppState.currentState.toString());
+  const [databaseIsReady, setDatabaseIsReady] = useState(false);
 
   useEffect(() => {
-    SQLite.DEBUG(true);
-    SQLite.enablePromise(true);
+    
+    appIsNowRunningInForeground();
+    setAppState('active');
+    AppState.addEventListener("change", handleAppStateChange);
 
-    SQLite.openDatabase({
-        name: "TestDatabase",
-        location: "default"
-    }).then((db) => {
-        console.log("Database open!");
-    });
+    return (() => {
+      AppState.removeEventListener("change", handleAppStateChange);
+    })
   })
 
   const handleAppStateChange = (nextAppState: string) => {
@@ -49,13 +48,13 @@ const App = () => {
       nextAppState === "active"
     ) {
       // App has moved from the background (or inactive) into the foreground
-      this.appIsNowRunningInForeground();
+      appIsNowRunningInForeground();
     } else if (
       appState === "active" &&
       nextAppState.match(/inactive|background/)
     ) {
       // App has moved from the foreground into the background (or become inactive)
-      this.appHasGoneToTheBackground();
+      appHasGoneToTheBackground();
     }
     setAppState(nextAppState);
   }
