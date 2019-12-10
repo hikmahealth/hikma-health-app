@@ -9,11 +9,13 @@
   },
   "dependencies": {
     "@types/react-native-elements": "^0.18.0",
+    "@types/react-native-fs": "^2.13.0",
     "elements": "^0.6.0",
     "react": "16.8.6",
     "react-final-form": "^6.3.0",
     "react-native": "^0.60.5",
     "react-native-elements": "^1.2.7",
+    "react-native-fs": "^2.16.2",
     "react-native-gesture-handler": "^1.5.0",
     "react-native-reanimated": "^1.4.0",
     "react-native-screens": "^1.0.0-alpha.23",
@@ -22,6 +24,7 @@
     "react-native-vector-icons": "^6.6.0",
     "react-navigation": "^4.0.10",
     "react-navigation-stack": "^1.10.3",
+    "rn-fetch-blob": "^0.11.2",
     "uuidv4": "^6.0.0"
   },
   "devDependencies": {

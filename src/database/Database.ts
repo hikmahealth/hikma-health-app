@@ -1,7 +1,5 @@
 import SQLite from "react-native-sqlite-storage";
 import { DatabaseInitialization } from "./DatabaseInitialization";
-import { List } from "../types/List";
-import { ListItem } from "../types/ListItem";
 import { Clinic } from "../types/Clinic";
 import { User } from "../types/User";
 import { StringContent } from "../types/StringContent";
@@ -11,7 +9,7 @@ import { uuid } from 'uuidv4';
 export interface Database {
   open(): Promise<SQLite.SQLiteDatabase>;
   close(): Promise<void>;
-  login(email: string, hashed_password: string): Promise<User>;
+  login(email: string, password: string): Promise<any>;
   getClinics(): Promise<Clinic[]>;
   createUser(user: User, password: string): Promise<void>;
   languageStringDataById(id: string): Promise<StringContent>;
@@ -57,30 +55,27 @@ class DatabaseImpl implements Database {
     });
   }
 
-  // Insert a new list into the database
-  public createList(newListTitle: string): Promise<void> {
-    return this.getDatabase()
-      .then(db =>
-        db.executeSql("INSERT INTO List (title) VALUES (?);", [newListTitle])
-      )
-      .then(([results]) => {
-        const { insertId } = results;
-        console.log(
-          `[db] Added list with title: "${newListTitle}"! InsertId: ${insertId}`
-        );
-      });
-  }
-
   public saveStringContent(stringContent: StringContent, id?: string): Promise<string> {
     const contentId = id || uuid();
-    const date = new Date().toISOString();
     var stringId = contentId.replace(/-/g, "");
     return this.getDatabase()
       .then(db =>
-        db.executeSql(`INSERT INTO string_ids (id) VALUES (X'${stringId}'); INSERT INTO string_content (id, language, content, edited_at) VALUES (?, ?, ?, ?);`, [stringId, stringContent.language, stringContent.content, date]),
+        db.executeSql(`INSERT INTO string_ids (id) VALUES (X'${stringId}');`)
       )
       .then(() => {
-        return stringId;
+        return this.saveStringWithId(stringContent, stringId)
+      });
+  }
+
+  private saveStringWithId(stringContent: StringContent, id: string): Promise<string> {
+    const date = new Date().toISOString();
+    
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql(`INSERT INTO string_content (id, language, content, edited_at) VALUES (X'${id}', ?, ?, ?);`, [stringContent.language, stringContent.content, date]),
+      )
+      .then(() => {
+        return id;
       });
   }
 
@@ -91,7 +86,7 @@ class DatabaseImpl implements Database {
     const hashed_password = password
     return this.getDatabase()
       .then(db =>
-        db.executeSql(`INSERT INTO users (id, name, role, email, hashed_password) VALUES (X'${user.id.replace(/-/g, "")}', ?, ?, ?, ?);`, [user.name, user.role, user.email, hashed_password])
+        db.executeSql(`INSERT INTO users (id, name, role, email, hashed_password) VALUES (X'${user.id.replace(/-/g, "")}', X'${user.name}', ?, ?, ?);`, [user.role, user.email, hashed_password])
       )
       .then(([results]) => {
         const { insertId } = results;
@@ -125,7 +120,7 @@ class DatabaseImpl implements Database {
       });
   }
 
-  public login(email: string, password: string): Promise<User> {
+  public login(email: string, password: string): Promise<any> {
     return this.getDatabase()
       .then(db =>
         db.executeSql(

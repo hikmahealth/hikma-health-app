@@ -1,8 +1,9 @@
 import React, { Component, useState } from "react";
 import { View, Text, Image, TextInput, FlatList, StyleSheet, ActivityIndicator, ImageBackground, ImageBackgroundBase } from "react-native";
+import { User } from "../types/User";
 
 const PatientList = (props) => {
-  // const loggedInUser = props.navigation.getParam('user', {})
+  const [loggedInUser, _] = useState(props.navigation.getParam('localUser'));
   const [search, setSearch] = useState('');
 
   const list = [
@@ -71,9 +72,9 @@ const PatientList = (props) => {
       <View style={styles.viewStack}>
         <Text style={styles.text}>{'Welcome Back, Dr. Ebrahim'}</Text>
       </View>
-      {/* <View style={styles.viewStack}>
+      <View style={styles.viewStack}>
         <Text style={styles.text}>{loggedInUser.email}</Text>
-      </View> */}
+      </View>
       <View style={styles.viewStack}>
         <FlatList
           keyExtractor={keyExtractor}
