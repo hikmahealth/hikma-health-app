@@ -8,6 +8,8 @@ import loginValidator from '../validators/loginValidator';
 import { StringContent } from '../types/StringContent';
 import { User } from '../types/User';
 
+import DatabaseSync from '../database/Sync'
+
 const Login = (props) => {
   const [email, setEmail] = useState(props.email || 'sam@hikmahealth.org');
   const [password, setPassword] = useState(props.password || 'c43171c8a242');
@@ -17,6 +19,13 @@ const Login = (props) => {
     email: '',
     role: ''
   });
+
+  const callSync = () => {
+
+    const databaseSync: DatabaseSync = new DatabaseSync()
+
+    databaseSync.performSync();
+  }
 
   const handleLogin = () => {
 

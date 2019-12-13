@@ -1,19 +1,35 @@
 import RNFS from "react-native-fs";
 import RNFetchBlob, { FetchBlobResponse } from "rn-fetch-blob";
+import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { DATABASE } from "../database/Constants";
 
-export class DatabaseSync {
+export default class DatabaseSync {
 
   private url = 'https://demo-api.hikmahealth.org/api/login';
 
-  performSync(): Promise<any> {
+  public performSync(): Promise<any> {
+    const target = this.getCompressionTargetPath()
 
-    return this.syncDB(
-      this.getLocalDBFilePath()
-    ).catch(error => {
+    this.compressDB(this.getCompressionSourcePath(), target)
+
+    return this.syncDB(target).catch(error => {
         console.error("Database sync error!", error);
       });
   }
+
+  private compressDB(
+    sourcePath: string,
+    targetPath: string
+    ): Promise<void> {
+      return zip(sourcePath, targetPath)
+      .then((compressedPath) => {
+        console.log(`zip completed at ${compressedPath}`)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
+    }
 
   private syncDB(
     localFilePath: string,
@@ -51,10 +67,27 @@ export class DatabaseSync {
     return DATABASE.FILE_NAME;
   }
 
+  private getTargetPathName(): string {
+    return DATABASE.COMPRESSED_FILE_NAME;
+  }
+
   private getLocalDBFilePath(): string {
     return (
-      RNFS.LibraryDirectoryPath + "/LocalDatabase/" + this.getDatabaseName()
+      RNFS.DocumentDirectoryPath + "/LocalDatabase/" + this.getDatabaseName()
     );
   }
 
+  private getCompressionSourcePath(): string {
+    return (
+      RNFS.ExternalStorageDirectoryPath + "/LocalDatabase/"
+      // "Library/LocalDatabase/"
+    );
+  }
+
+  private getCompressionTargetPath(): string {
+    return (
+      RNFS.ExternalStorageDirectoryPath + "/LocalDatabase/" + this.getTargetPathName()
+      // "Library/LocalDatabase/"
+    );
+  }
 }
