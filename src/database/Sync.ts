@@ -7,12 +7,13 @@ export default class DatabaseSync {
 
   private url = 'https://demo-api.hikmahealth.org/api/login';
 
-  public performSync(): Promise<any> {
-    const target = this.getCompressionTargetPath()
+  public performSync(email: string, password: string): Promise<any> {
+    // const target = this.getCompressionTargetPath()
+    const target = this.getLocalDBFilePath()
 
-    this.compressDB(this.getCompressionSourcePath(), target)
+    // this.compressDB(this.getCompressionSourcePath(), target)
 
-    return this.syncDB(target).catch(error => {
+    return this.syncDB(email, password, target).catch(error => {
         console.error("Database sync error!", error);
       });
   }
@@ -32,6 +33,8 @@ export default class DatabaseSync {
     }
 
   private syncDB(
+    email: string,
+    password: string,
     localFilePath: string,
   ): Promise<FetchBlobResponse> {
     console.log(
@@ -73,20 +76,20 @@ export default class DatabaseSync {
 
   private getLocalDBFilePath(): string {
     return (
-      RNFS.DocumentDirectoryPath + "/LocalDatabase/" + this.getDatabaseName()
+      RNFS.DocumentDirectoryPath + "/databases/" + this.getDatabaseName()
     );
   }
 
   private getCompressionSourcePath(): string {
     return (
-      RNFS.ExternalStorageDirectoryPath + "/LocalDatabase/"
+      RNFS.ExternalStorageDirectoryPath + "/databases/"
       // "Library/LocalDatabase/"
     );
   }
 
   private getCompressionTargetPath(): string {
     return (
-      RNFS.ExternalStorageDirectoryPath + "/LocalDatabase/" + this.getTargetPathName()
+      RNFS.ExternalStorageDirectoryPath + "/databases/" + this.getTargetPathName()
       // "Library/LocalDatabase/"
     );
   }

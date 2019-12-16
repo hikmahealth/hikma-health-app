@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { View, Text, Image, TextInput, FlatList, StyleSheet, ActivityIndicator, ImageBackground, ImageBackgroundBase } from "react-native";
+import { View, Text, Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase } from "react-native";
 import { User } from "../types/User";
 
 const PatientList = (props) => {
@@ -69,6 +69,13 @@ const PatientList = (props) => {
         </View>
       </View>
 
+      <View style={styles.viewStack}>
+
+        <TouchableOpacity onPress={() => props.navigation.navigate('NewPatient')}>
+          <Text style={styles.text}>+</Text>
+
+        </TouchableOpacity>
+      </View>
       <View style={styles.viewStack}>
         <Text style={styles.text}>{'Welcome Back, Dr. Ebrahim'}</Text>
       </View>
@@ -175,7 +182,7 @@ const styles = StyleSheet.create(
       borderRightColor: '#FFFFFF',
       borderBottomWidth: 25,
       borderBottomColor: 'transparent'
-  
+
     }
 
 
