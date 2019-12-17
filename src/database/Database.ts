@@ -4,6 +4,7 @@ import { Clinic } from "../types/Clinic";
 import { User } from "../types/User";
 import { StringContent } from "../types/StringContent";
 import { uuid } from 'uuidv4';
+import { SyncResponse } from "../types/syncResponse";
 // import * as bcrypt from 'bcrypt';
 
 export interface Database {
@@ -14,6 +15,7 @@ export interface Database {
   createUser(user: User, password: string): Promise<void>;
   languageStringDataById(id: string): Promise<StringContent>;
   saveStringContent(stringContent: StringContent, id?: string): Promise<string>
+  applyScript(script: SyncResponse): Promise<void>
 }
 
 class DatabaseImpl implements Database {
@@ -69,7 +71,7 @@ class DatabaseImpl implements Database {
 
   private saveStringWithId(stringContent: StringContent, id: string): Promise<string> {
     const date = new Date().toISOString();
-    
+
     return this.getDatabase()
       .then(db =>
         db.executeSql(`INSERT INTO string_content (id, language, content, edited_at) VALUES (X'${id}', ?, ?, ?);`, [stringContent.language, stringContent.content, date]),
@@ -163,6 +165,20 @@ class DatabaseImpl implements Database {
         return (count == 1) ? results.rows.item(0) : null;
       });
   }
+
+  public applyScript(syncResponse: SyncResponse): Promise<void> {
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql(syncResponse.sql, syncResponse.values)
+      )
+      .then(() => {
+        console.log(
+          `[db] Updates applied!`
+        );
+      });
+
+  }
+
 
   private getDatabase(): Promise<SQLite.SQLiteDatabase> {
     if (this.database !== undefined) {

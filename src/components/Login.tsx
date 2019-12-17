@@ -24,7 +24,7 @@ const Login = (props) => {
 
     const databaseSync: DatabaseSync = new DatabaseSync()
 
-    databaseSync.performSync();
+    databaseSync.performSync(email, password);
   }
 
   const handleLogin = () => {
@@ -124,7 +124,7 @@ const Login = (props) => {
       </View>
 
       <View >
-        <TouchableOpacity onPress={() => handleLogin()}>
+        <TouchableOpacity onPress={() => callSync()}>
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>
       </View>
