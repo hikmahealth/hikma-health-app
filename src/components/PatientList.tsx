@@ -17,24 +17,6 @@ const PatientList = (props) => {
     })
   }, [])
 
-  // const list = [
-  //   {
-  //     name: 'Amy Farha',
-  //     avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-  //     subtitle: 'Vice President',
-  //     id: '12345',
-  //     last_visit: '12/12/1234'
-  //   },
-  //   {
-  //     name: 'Chris Jackson',
-  //     avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-  //     subtitle: 'Vice Chairman',
-  //     id: '12345',
-  //     last_visit: '12/12/1234'
-  //   },
-    // more items
-  // ]
-
   const keyExtractor = (item, index) => index.toString()
 
   const renderItem = ({ item }) => (
@@ -49,7 +31,7 @@ const PatientList = (props) => {
         </ImageBackground>
 
         <View>
-          <Text>{`${item.given_name}`}</Text>
+          <Text>{`${item.given_name.content['en']} ${item.surname.content['en']}`}</Text>
           <View
             style={{
               marginVertical: 5,
@@ -66,8 +48,8 @@ const PatientList = (props) => {
   )
 
   return (
-    <View style={styles.container}>
-      <View style={styles.viewStack}>
+    <View style={styles.main}>
+      <View style={styles.container}>
         <View style={styles.searchBar}>
           <TextInput
             style={styles.searchInput}
@@ -78,33 +60,27 @@ const PatientList = (props) => {
           />
           <Image source={require('../images/search.jpg')} style={{ width: 30, height: 30 }} />
         </View>
-      </View>
 
-      <View style={styles.viewStack}>
+        <View style={styles.searchBar}>
+          <Text style={styles.text}>{'Welcome Back, Dr. Ebrahim'}</Text>
 
-        <TouchableOpacity onPress={() => props.navigation.navigate('NewPatient')}>
-          <Text style={styles.text}>Add Patient+</Text>
+          <TouchableOpacity onPress={() => props.navigation.navigate('NewPatient')}>
+            <Image source={require('../images/add.png')} style={{ width: 25, height: 25 }} />
 
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => databaseSync.performSync('sam@hikmahealth.org', 'c43171c8a242')}>
-          <Text style={styles.text}>SYNC</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => databaseSync.performSync('sam@hikmahealth.org', 'c43171c8a242')}>
+            <Image source={require('../images/sync.png')} style={{ width: 30, height: 30 }} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.scroll}>
+          <FlatList
+            keyExtractor={keyExtractor}
+            data={list}
+            renderItem={(item) => renderItem(item)}
+          />
+        </View>
 
-        </TouchableOpacity>
       </View>
-      <View style={styles.viewStack}>
-        <Text style={styles.text}>{'Welcome Back, Dr. Ebrahim'}</Text>
-      </View>
-      <View style={styles.viewStack}>
-        <Text style={styles.text}>{loggedInUser.email}</Text>
-      </View>
-      <View style={styles.viewStack}>
-        <FlatList
-          keyExtractor={keyExtractor}
-          data={list}
-          renderItem={renderItem}
-        />
-      </View>
-
     </View>
   )
 
@@ -112,14 +88,18 @@ const PatientList = (props) => {
 
 const styles = StyleSheet.create(
   {
+    main: {
+      flex: 1
+    },
     container: {
       backgroundColor: '#31BBF3',
       flexDirection: 'column',
       flex: 1,
-      justifyContent: 'flex-start'
+      alignContent: "flex-start"
     },
-    viewStack: {
-      display: 'flex'
+    scroll: {
+      flex: 1,
+      height: 0
     },
     text: {
       margin: 10,
@@ -172,35 +152,32 @@ const styles = StyleSheet.create(
     },
     hexagonAfter: {
       position: 'absolute',
-      bottom: -25,
+      bottom: -25.5,
       left: 0,
       width: 0,
       height: 0,
       borderStyle: 'solid',
-      borderLeftWidth: 50,
+      borderLeftWidth: 51,
       borderLeftColor: '#FFFFFF',
-      borderRightWidth: 50,
+      borderRightWidth: 51,
       borderRightColor: '#FFFFFF',
-      borderTopWidth: 25,
+      borderTopWidth: 25.5,
       borderTopColor: 'transparent',
     },
     hexagonBefore: {
       position: 'absolute',
-      top: -25,
+      top: -25.5,
       left: 0,
       width: 0,
       height: 0,
       borderStyle: 'solid',
-      borderLeftWidth: 50,
+      borderLeftWidth: 51,
       borderLeftColor: '#FFFFFF',
-      borderRightWidth: 50,
+      borderRightWidth: 51,
       borderRightColor: '#FFFFFF',
-      borderBottomWidth: 25,
+      borderBottomWidth: 25.5,
       borderBottomColor: 'transparent'
-
     }
-
-
   }
 );
 

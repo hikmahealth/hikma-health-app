@@ -67,19 +67,7 @@ class DatabaseImpl implements Database {
     await db.executeSql(`INSERT INTO string_ids (id) VALUES (?);`, [stringId]);
     return await this.saveStringWithId(stringContent, stringId);
   }
-
-  // public saveStringContent(stringContent: StringContent, id?: string): Promise<string> {
-  //   const contentId = id || uuid();
-  //   var stringId = contentId.replace(/-/g, "");
-  //   return this.getDatabase()
-  //     .then(db =>
-  //       db.executeSql(`INSERT INTO string_ids (id) VALUES (?);`, [stringId])
-  //     )
-  //     .then(() => {
-  //       return this.saveStringWithId(stringContent, stringId)
-  //     });
-  // }
-
+  
   private async saveStringWithId(stringContent: StringContent, id: string): Promise<string> {
     const date = new Date().toISOString();
     const db = await this.getDatabase();
@@ -110,7 +98,7 @@ class DatabaseImpl implements Database {
     const date = new Date().toISOString();
     return this.getDatabase()
       .then(db =>
-        db.executeSql(`INSERT INTO patients (id, given_name, surname, date_of_birth, country, hometown, phone, sex, edited_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`, [patient.id.replace(/-/g, ""), patient.given_name, patient.surname, patient.date_of_birth, patient.country, patient.hometown, patient.phone, patient.sex, date])
+        db.executeSql(`INSERT INTO patients (id, given_name, surname, date_of_birth, country, hometown, phone, sex, edited_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`, [patient.id.replace(/-/g, ""), patient.given_name, patient.surname, patient.date_of_birth, patient.country, patient.hometown, patient.phone, patient.sex, date])
       )
       .then(([results]) => {
         console.log(
@@ -148,17 +136,22 @@ class DatabaseImpl implements Database {
       .then(db =>
         db.executeSql("SELECT id, given_name, surname, date_of_birth, country, hometown, sex, phone FROM patients;")
       )
-      .then(([results]) => {
+      .then(async ([results]) => {
         if (results === undefined) {
           return [];
         }
         const count = results.rows.length;
         const patients: Patient[] = [];
         for (let i = 0; i < count; i++) {
+
           const row = results.rows.item(i);
           const { id, given_name, surname, date_of_birth, country, hometown, sex, phone } = row;
+          const givenNameContent =  await this.languageStringDataById(given_name)
+          const surnameContent = await this.languageStringDataById(surname)
+          const countryContent = await this.languageStringDataById(country)
+          const hometownContent = await this.languageStringDataById(hometown)
           console.log(`[db] Patient name: ${given_name}, id: ${id}`);
-          patients.push({ id, given_name, surname, date_of_birth, country, hometown, sex, phone });
+          patients.push({ id, given_name: givenNameContent, surname: surnameContent, date_of_birth, country: countryContent, hometown: hometownContent, sex, phone });
         }
         return patients;
       });
@@ -191,11 +184,11 @@ class DatabaseImpl implements Database {
       });
   }
 
-  public languageStringDataById(id: string): Promise<StringContent> {
+  public async languageStringDataById(id: string): Promise<StringContent> {
     return this.getDatabase()
       .then(db =>
         db.executeSql(
-          `SELECT language, content FROM string_content WHERE id = ?;`,
+          `SELECT language as language_string, content as content_string FROM string_content WHERE id = ?;`,
           [id]
         )
       )
@@ -204,7 +197,14 @@ class DatabaseImpl implements Database {
           return null;
         }
         const count = results.rows.length;
-        return (count == 1) ? results.rows.item(0) : null;
+        if (count > 0) {
+          const row = results.rows.item(0);
+          const { language_string, content_string } = row;
+          const content = {}
+          content[language_string] = content_string;
+          return {id, content}
+        }
+        return null
       });
   }
 

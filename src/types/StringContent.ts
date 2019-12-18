@@ -1,4 +1,4 @@
 export interface StringContent {
-  language: string
-  content: string
+  content: any
+  id: string
 }

@@ -1,10 +1,12 @@
+import { StringContent } from "./StringContent";
+
 export interface Patient {
   id: string
-  given_name: string
-  surname: string
+  given_name: StringContent
+  surname: StringContent
   date_of_birth: string
-  country: string
-  hometown: string
+  country: StringContent
+  hometown: StringContent
   sex: string
   phone: string
 }
