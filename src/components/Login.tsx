@@ -22,12 +22,6 @@ const Login = (props) => {
     role: ''
   });
 
-  const callSync = () => {
-
-
-    databaseSync.performSync(email, password);
-  }
-
   const handleLogin = () => {
 
     database.login(email, password).then((user) => {
@@ -48,7 +42,7 @@ const Login = (props) => {
         console.log("password: " + password)
 
         // fetch('https://demo-api.hikmahealth.org/api/login', {
-        fetch('http://gpu.cairnlabs.com:42069/api/login', {
+        fetch('http://216.21.162.104:42069/api/login', {
 
           method: 'POST',
           headers: {

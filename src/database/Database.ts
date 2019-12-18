@@ -5,7 +5,8 @@ import { User } from "../types/User";
 import { StringContent } from "../types/StringContent";
 import { uuid } from 'uuidv4';
 import { SyncResponse } from "../types/syncResponse";
-import { Patient } from "../types/Patient";
+import { Patient, NewPatient } from "../types/Patient";
+import { LanguageString } from "../types/LanguageString";
 // import * as bcrypt from 'bcrypt';
 
 export interface Database {
@@ -15,10 +16,10 @@ export interface Database {
   getClinics(): Promise<Clinic[]>;
   getPatients(): Promise<Patient[]>;
   addUser(user: User, password: string): Promise<void>;
-  languageStringDataById(id: string): Promise<StringContent>;
+  languageStringDataById(id: string): Promise<LanguageString>;
   saveStringContent(stringContent: StringContent, id?: string): Promise<string>;
   applyScript(script: SyncResponse): Promise<void>;
-  addPatient(patient: Patient): Promise<void>;
+  addPatient(patient: NewPatient): Promise<void>;
 }
 
 class DatabaseImpl implements Database {
@@ -94,7 +95,7 @@ class DatabaseImpl implements Database {
       });
   }
 
-  public addPatient(patient: Patient): Promise<void> {
+  public addPatient(patient: NewPatient): Promise<void> {
     const date = new Date().toISOString();
     return this.getDatabase()
       .then(db =>
@@ -184,7 +185,7 @@ class DatabaseImpl implements Database {
       });
   }
 
-  public async languageStringDataById(id: string): Promise<StringContent> {
+  public async languageStringDataById(id: string): Promise<LanguageString> {
     return this.getDatabase()
       .then(db =>
         db.executeSql(
