@@ -1,35 +1,46 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { View, Text, Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase } from "react-native";
 import { User } from "../types/User";
+import { database } from "../database/Database";
+import DatabaseSync from "../database/Sync";
 
 const PatientList = (props) => {
+  const databaseSync: DatabaseSync = new DatabaseSync();
+
   const [loggedInUser, _] = useState(props.navigation.getParam('localUser'));
   const [search, setSearch] = useState('');
+  const [list, setList] = useState([]);
 
-  const list = [
-    {
-      name: 'Amy Farha',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-      subtitle: 'Vice President',
-      id: '12345',
-      last_visit: '12/12/1234'
-    },
-    {
-      name: 'Chris Jackson',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Vice Chairman',
-      id: '12345',
-      last_visit: '12/12/1234'
-    },
+  useEffect(() => {
+    database.getPatients().then(patients => {
+      setList(patients)
+    })
+  }, [])
+
+  // const list = [
+  //   {
+  //     name: 'Amy Farha',
+  //     avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+  //     subtitle: 'Vice President',
+  //     id: '12345',
+  //     last_visit: '12/12/1234'
+  //   },
+  //   {
+  //     name: 'Chris Jackson',
+  //     avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+  //     subtitle: 'Vice Chairman',
+  //     id: '12345',
+  //     last_visit: '12/12/1234'
+  //   },
     // more items
-  ]
+  // ]
 
   const keyExtractor = (item, index) => index.toString()
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={styles.cardContent}>
-        <ImageBackground source={{ uri: item.avatar_url }} style={{ width: 100, height: 105, justifyContent: 'center' }}>
+        <ImageBackground source={require('../images/palm-icon.jpg')} style={{ width: 100, height: 105, justifyContent: 'center' }}>
           <View style={styles.hexagon}>
             <View style={styles.hexagonInner} />
             <View style={styles.hexagonBefore} />
@@ -38,7 +49,7 @@ const PatientList = (props) => {
         </ImageBackground>
 
         <View>
-          <Text>{`${item.name}`}</Text>
+          <Text>{`${item.given_name}`}</Text>
           <View
             style={{
               marginVertical: 5,
@@ -46,8 +57,8 @@ const PatientList = (props) => {
               borderBottomWidth: 1,
             }}
           />
-          <Text>{`PATIENT ID:  ${item.id}`}</Text>
-          <Text>{`LAST VISIT:  ${item.last_visit}`}</Text>
+          <Text>{`Date of birth:  ${item.date_of_birth}`}</Text>
+          <Text>{`Sex:  ${item.sex}`}</Text>
         </View>
       </View>
 
@@ -72,7 +83,11 @@ const PatientList = (props) => {
       <View style={styles.viewStack}>
 
         <TouchableOpacity onPress={() => props.navigation.navigate('NewPatient')}>
-          <Text style={styles.text}>+</Text>
+          <Text style={styles.text}>Add Patient+</Text>
+
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => databaseSync.performSync('sam@hikmahealth.org', 'c43171c8a242')}>
+          <Text style={styles.text}>SYNC</Text>
 
         </TouchableOpacity>
       </View>

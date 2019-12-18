@@ -5,6 +5,7 @@ import { User } from "../types/User";
 import { StringContent } from "../types/StringContent";
 import { uuid } from 'uuidv4';
 import { SyncResponse } from "../types/syncResponse";
+import { Patient } from "../types/Patient";
 // import * as bcrypt from 'bcrypt';
 
 export interface Database {
@@ -12,10 +13,12 @@ export interface Database {
   close(): Promise<void>;
   login(email: string, password: string): Promise<any>;
   getClinics(): Promise<Clinic[]>;
-  createUser(user: User, password: string): Promise<void>;
+  getPatients(): Promise<Patient[]>;
+  addUser(user: User, password: string): Promise<void>;
   languageStringDataById(id: string): Promise<StringContent>;
-  saveStringContent(stringContent: StringContent, id?: string): Promise<string>
-  applyScript(script: SyncResponse): Promise<void>
+  saveStringContent(stringContent: StringContent, id?: string): Promise<string>;
+  applyScript(script: SyncResponse): Promise<void>;
+  addPatient(patient: Patient): Promise<void>;
 }
 
 class DatabaseImpl implements Database {
@@ -57,38 +60,43 @@ class DatabaseImpl implements Database {
     });
   }
 
-  public saveStringContent(stringContent: StringContent, id?: string): Promise<string> {
+  public async saveStringContent(stringContent: StringContent, id?: string): Promise<string> {
     const contentId = id || uuid();
     var stringId = contentId.replace(/-/g, "");
-    return this.getDatabase()
-      .then(db =>
-        db.executeSql(`INSERT INTO string_ids (id) VALUES (X'${stringId}');`)
-      )
-      .then(() => {
-        return this.saveStringWithId(stringContent, stringId)
-      });
+    const db = await this.getDatabase();
+    await db.executeSql(`INSERT INTO string_ids (id) VALUES (?);`, [stringId]);
+    return await this.saveStringWithId(stringContent, stringId);
   }
 
-  private saveStringWithId(stringContent: StringContent, id: string): Promise<string> {
+  // public saveStringContent(stringContent: StringContent, id?: string): Promise<string> {
+  //   const contentId = id || uuid();
+  //   var stringId = contentId.replace(/-/g, "");
+  //   return this.getDatabase()
+  //     .then(db =>
+  //       db.executeSql(`INSERT INTO string_ids (id) VALUES (?);`, [stringId])
+  //     )
+  //     .then(() => {
+  //       return this.saveStringWithId(stringContent, stringId)
+  //     });
+  // }
+
+  private async saveStringWithId(stringContent: StringContent, id: string): Promise<string> {
+    const date = new Date().toISOString();
+    const db = await this.getDatabase();
+    await db.executeSql(`INSERT INTO string_content (id, language, content, edited_at) VALUES (?, ?, ?, ?);`, [id, stringContent.language, stringContent.content, date]);
+    return id;
+  }
+
+  public addUser(user: User, password: string): Promise<void> {
     const date = new Date().toISOString();
 
-    return this.getDatabase()
-      .then(db =>
-        db.executeSql(`INSERT INTO string_content (id, language, content, edited_at) VALUES (X'${id}', ?, ?, ?);`, [stringContent.language, stringContent.content, date]),
-      )
-      .then(() => {
-        return id;
-      });
-  }
-
-  public createUser(user: User, password: string): Promise<void> {
     // const hashed_password = bcrypt.hash(password, 10, function (err, hash) {
     //   return hash
     // });
     const hashed_password = password
     return this.getDatabase()
       .then(db =>
-        db.executeSql(`INSERT INTO users (id, name, role, email, hashed_password) VALUES (X'${user.id.replace(/-/g, "")}', X'${user.name}', ?, ?, ?);`, [user.role, user.email, hashed_password])
+        db.executeSql(`INSERT INTO users (id, name, role, email, hashed_password, edited_at) VALUES (?, ?, ?, ?, ?, ?);`, [user.id, user.name, user.role, user.email, hashed_password, date])
       )
       .then(([results]) => {
         const { insertId } = results;
@@ -98,12 +106,24 @@ class DatabaseImpl implements Database {
       });
   }
 
+  public addPatient(patient: Patient): Promise<void> {
+    const date = new Date().toISOString();
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql(`INSERT INTO patients (id, given_name, surname, date_of_birth, country, hometown, phone, sex, edited_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`, [patient.id.replace(/-/g, ""), patient.given_name, patient.surname, patient.date_of_birth, patient.country, patient.hometown, patient.phone, patient.sex, date])
+      )
+      .then(([results]) => {
+        console.log(
+          `[db] Added patient with name: "${patient.given_name} ${patient.surname}"!`
+        );
+      });
+  }
+
   // gets clinics from database
   public getClinics(): Promise<Clinic[]> {
     console.log("[db] Fetching clinics from the db...");
     return this.getDatabase()
       .then(db =>
-        // Get all the lists, ordered by newest lists first
         db.executeSql("SELECT * FROM clinics ORDER BY id DESC;")
       )
       .then(([results]) => {
@@ -119,6 +139,28 @@ class DatabaseImpl implements Database {
           clinics.push({ id, name });
         }
         return clinics;
+      });
+  }
+
+  public getPatients(): Promise<Patient[]> {
+    console.log("[db] Fetching patients from the db...");
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql("SELECT id, given_name, surname, date_of_birth, country, hometown, sex, phone FROM patients;")
+      )
+      .then(([results]) => {
+        if (results === undefined) {
+          return [];
+        }
+        const count = results.rows.length;
+        const patients: Patient[] = [];
+        for (let i = 0; i < count; i++) {
+          const row = results.rows.item(i);
+          const { id, given_name, surname, date_of_birth, country, hometown, sex, phone } = row;
+          console.log(`[db] Patient name: ${given_name}, id: ${id}`);
+          patients.push({ id, given_name, surname, date_of_birth, country, hometown, sex, phone });
+        }
+        return patients;
       });
   }
 
@@ -167,18 +209,20 @@ class DatabaseImpl implements Database {
   }
 
   public applyScript(syncResponse: SyncResponse): Promise<void> {
-    return this.getDatabase()
-      .then(db =>
-        db.executeSql(syncResponse.sql, syncResponse.values)
-      )
-      .then(() => {
+
+    return this.getDatabase().then(db => {
+      db.transaction((transaction: SQLite.Transaction) => {
+        syncResponse.values.forEach(value => {
+          transaction.executeSql(syncResponse.sql, value)
+        })
+      })
+    }).then(() => {
         console.log(
           `[db] Updates applied!`
         );
       });
 
   }
-
 
   private getDatabase(): Promise<SQLite.SQLiteDatabase> {
     if (this.database !== undefined) {

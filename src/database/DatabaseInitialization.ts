@@ -62,11 +62,11 @@ export class DatabaseInitialization {
     );
 
     transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS string_ids (id blob(16) PRIMARY KEY);"
+      "CREATE TABLE IF NOT EXISTS string_ids (id varchar(32) PRIMARY KEY);"
     );
 
     transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS string_content (id blob(16) REFERENCES string_ids(id) ON DELETE CASCADE, language varchar(5), content text, edited_at text);"
+      "CREATE TABLE IF NOT EXISTS string_content (id varchar(32) REFERENCES string_ids(id) ON DELETE CASCADE, language varchar(5), content text, edited_at text);"
     );
 
     transaction.executeSql(
@@ -74,26 +74,26 @@ export class DatabaseInitialization {
     );
 
     transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS patients (id blob(16) PRIMARY KEY, given_name blob(16) REFERENCES string_ids(id) ON DELETE CASCADE, surname blob(16) REFERENCES string_ids(id) ON DELETE CASCADE, date_of_birth text, place_of_birth blob(16) REFERENCES string_ids(id) ON DELETE CASCADE, edited_at text);"
+      "CREATE TABLE IF NOT EXISTS patients (id varchar(32) PRIMARY KEY, given_name varchar(32) REFERENCES string_ids(id) ON DELETE CASCADE, surname varchar(32) REFERENCES string_ids(id) ON DELETE CASCADE, date_of_birth varchar(10), country varchar(32) REFERENCES string_ids(id), hometown varchar(32) REFERENCES string_ids(id) ON DELETE CASCADE, phone text, sex varchar(1), edited_at text);"
     );
 
     transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS clinics (id blob(16) PRIMARY KEY, name blob(16) REFERENCES string_ids(id) ON DELETE CASCADE, edited_at text);"
+      "CREATE TABLE IF NOT EXISTS clinics (id varchar(32) PRIMARY KEY, name varchar(32) REFERENCES string_ids(id) ON DELETE CASCADE, edited_at text);"
     );
 
     // Version table
     transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS users (id blob(16) PRIMARY KEY, name blob(16) REFERENCES string_ids(id) ON DELETE CASCADE, role text not null, email text not null, hashed_password text not null, edited_at text);"
+      "CREATE TABLE IF NOT EXISTS users (id varchar(32) PRIMARY KEY, name varchar(32) REFERENCES string_ids(id) ON DELETE CASCADE, role text not null, email text not null, hashed_password text not null, edited_at text);"
     );
 
     // Clinics table
     transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS visits (id blob(16) PRIMARY KEY, patient_id blob(16) REFERENCES patients(id) ON DELETE CASCADE, clinic_id blob(16) REFERENCES clinics(id) ON DELETE CASCADE, provider_id blob(16) REFERENCES users(id) ON DELETE CASCADE, check_in_timestamp text, check_out_timestamp text, edited_at text);"
+      "CREATE TABLE IF NOT EXISTS visits (id varchar(32) PRIMARY KEY, patient_id varchar(32) REFERENCES patients(id) ON DELETE CASCADE, clinic_id varchar(32) REFERENCES clinics(id) ON DELETE CASCADE, provider_id varchar(32) REFERENCES users(id) ON DELETE CASCADE, check_in_timestamp text, check_out_timestamp text, edited_at text);"
     );
 
     // Users table
     transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS events (id blob(16) PRIMARY KEY, patient_id blob(16) REFERENCES patients(id) ON DELETE CASCADE, visit_id blob(16) REFERENCES visits(id) ON DELETE CASCADE, event_timestamp text, event_metadata text);"
+      "CREATE TABLE IF NOT EXISTS events (id varchar(32) PRIMARY KEY, patient_id varchar(32) REFERENCES patients(id) ON DELETE CASCADE, visit_id varchar(32) REFERENCES visits(id) ON DELETE CASCADE, event_timestamp text, event_metadata text);"
     );
   }
 

@@ -8,7 +8,8 @@ import { SyncResponse } from "../types/syncResponse";
 
 export default class DatabaseSync {
 
-  private url = 'https://demo-api.hikmahealth.org/api/sync';
+  // private url = 'https://demo-api.hikmahealth.org/api/sync';
+  private url  = 'http://gpu.cairnlabs.com:42069/api/sync';
 
   public performSync(email: string, password: string): Promise<any> {
     // const target = this.getCompressionTargetPath()
@@ -99,21 +100,18 @@ export default class DatabaseSync {
   private getLocalDBFilePath(): string {
     return (
       RNFS.DocumentDirectoryPath + "/../databases/" + this.getDatabaseName()
-      // "data/data/com.hikma_app/databases/" + this.getDatabaseName()
     );
   }
 
   private getCompressionSourcePath(): string {
     return (
       RNFS.DocumentDirectoryPath + "/databases/"
-      // "Library/LocalDatabase/"
     );
   }
 
   private getCompressionTargetPath(): string {
     return (
       RNFS.DocumentDirectoryPath + "/databases/" + this.getTargetPathName()
-      // "Library/LocalDatabase/"
     );
   }
 }

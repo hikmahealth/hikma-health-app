@@ -5,49 +5,61 @@ import {
 
 import { database } from "../database/Database";
 import { StringContent } from '../types/StringContent';
+import { uuid } from 'uuidv4';
+
 
 const NewPatient = (props) => {
-  const [firstName, setFirstName] = useState('');
+  const [givenName, setGivenName] = useState('');
   const [surname, setSurname] = useState('');
   const [dob, setDob] = useState('');
   const [male, setMale] = useState(false);
   const [country, setCountry] = useState('');
-  const [city, setCity] = useState('');
+  const [hometown, setHometown] = useState('');
   const [phone, setPhone] = useState('');
-  const [other, setOther] = useState('');
 
-  const addPatient = () => {
+  const addPatient = async () => {
+    const givenNameId = await database.saveStringContent({ language: 'en', content: givenName })
+    const surnameId = await database.saveStringContent({ language: 'en', content: surname })
+    const countryId = await database.saveStringContent({ language: 'en', content: country })
+    const hometownId = await database.saveStringContent({ language: 'en', content: hometown })
+    
 
-    // database.addPatient(email, password).then((user) => {
-    // })
-
-
+    database.addPatient({
+      id: uuid(),
+      given_name: givenNameId,
+      surname: surnameId,
+      date_of_birth: dob,
+      country: countryId,
+      hometown: hometownId,
+      phone: phone,
+      sex: male ? 'M' : 'F'
+    }).then(() => props.navigation.navigate('PatientList'))
 
   };
 
   function RadioButton(props) {
     return (
       <TouchableOpacity onPress={() => setMale(!male)}>
-      <View style={[{
-        height: 24,
-        width: 24,
-        borderRadius: 12,
-        borderWidth: 2,
-        borderColor: '#FFFFFF',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }, props.style]}>
-        {
-          props.selected ?
-            <View style={{
-              height: 12,
-              width: 12,
-              borderRadius: 6,
-              backgroundColor: 'green',
-            }} />
-            : null
-        }
-      </View>
+        <View style={[{
+          height: 24,
+          width: 24,
+          borderRadius: 12,
+          borderWidth: 2,
+          borderColor: '#FFFFFF',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }, props.style]}>
+          {
+            props.selected ?
+              <View style={{
+                height: 12,
+                width: 12,
+                borderRadius: 6,
+                backgroundColor: 'green',
+              }} />
+              : null
+          }
+        </View>
       </TouchableOpacity>
     );
   }
@@ -58,10 +70,10 @@ const NewPatient = (props) => {
         <TextInput
           style={styles.inputs}
           placeholder="First Name"
-          onChangeText={(text) => setFirstName(text)}
-          value={firstName}
+          onChangeText={(text) => setGivenName(text)}
+          value={givenName}
         />
-        </View>
+      </View>
       <View style={styles.inputsContainer}>
         <TextInput
           style={styles.inputs}
@@ -73,7 +85,7 @@ const NewPatient = (props) => {
       <View style={styles.inputsContainer}>
         <TextInput
           style={styles.inputs}
-          placeholder="DOB"
+          placeholder="DOB yyyy-mm-dd"
           onChangeText={(text) => setDob(text)}
           value={dob}
         />
@@ -94,9 +106,9 @@ const NewPatient = (props) => {
         />
         <TextInput
           style={styles.inputs}
-          placeholder="City"
-          onChangeText={(text) => setCity(text)}
-          value={city}
+          placeholder="Hometown"
+          onChangeText={(text) => setHometown(text)}
+          value={hometown}
         />
       </View>
       <View style={styles.inputsContainer}>
@@ -106,14 +118,6 @@ const NewPatient = (props) => {
           placeholder="Phone no"
           onChangeText={(text) => setPhone(text)}
           value={phone}
-        />
-        </View>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          style={styles.inputs}
-          placeholder="Other"
-          onChangeText={(text) => setOther(text)}
-          value={other}
         />
       </View>
       <View >

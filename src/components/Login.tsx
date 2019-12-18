@@ -9,8 +9,10 @@ import { StringContent } from '../types/StringContent';
 import { User } from '../types/User';
 
 import DatabaseSync from '../database/Sync'
+import { Clinic } from '../types/Clinic';
 
 const Login = (props) => {
+  const databaseSync: DatabaseSync = new DatabaseSync();
   const [email, setEmail] = useState(props.email || 'sam@hikmahealth.org');
   const [password, setPassword] = useState(props.password || 'c43171c8a242');
   const [loggedInUser, setLoggedInUser] = useState({
@@ -22,7 +24,6 @@ const Login = (props) => {
 
   const callSync = () => {
 
-    const databaseSync: DatabaseSync = new DatabaseSync()
 
     databaseSync.performSync(email, password);
   }
@@ -46,8 +47,8 @@ const Login = (props) => {
         console.log("email: " + email)
         console.log("password: " + password)
 
-        fetch('https://demo-api.hikmahealth.org/api/login', {
-          // fetch('http://gpu.cairnlabs.com:8081/api/login', {
+        // fetch('https://demo-api.hikmahealth.org/api/login', {
+        fetch('http://gpu.cairnlabs.com:42069/api/login', {
 
           method: 'POST',
           headers: {
@@ -82,14 +83,21 @@ const Login = (props) => {
 
         database.saveStringContent(stringContent, responseJson.name.id)
           .then(stringId => {
-            const savedUser: User = {
+            const newUser: User = {
               id: responseJson.id,
               name: stringId,
               role: responseJson.role,
               email: responseJson.email
             }
-            database.createUser(savedUser, password);
-            setLoggedInUser(savedUser);
+            database.addUser(newUser, password);
+            setLoggedInUser(newUser);
+          })
+        })
+        .then(() => {
+          database.getClinics().then((clinics: Clinic[]) => {
+            if (clinics.length == 0) {
+              databaseSync.performSync(email, password);
+            }
           })
         })
         .catch((error) => {
@@ -124,7 +132,7 @@ const Login = (props) => {
       </View>
 
       <View >
-        <TouchableOpacity onPress={() => callSync()}>
+        <TouchableOpacity onPress={() => handleLogin()}>
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>
       </View>
