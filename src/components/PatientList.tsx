@@ -7,7 +7,8 @@ import DatabaseSync from "../database/Sync";
 const PatientList = (props) => {
   const databaseSync: DatabaseSync = new DatabaseSync();
 
-  const [loggedInUser, _] = useState(props.navigation.getParam('localUser'));
+  const email = props.navigation.state.params.email
+  const password = props.navigation.state.params.password
   const [search, setSearch] = useState('');
   const [list, setList] = useState([]);
 
@@ -15,7 +16,7 @@ const PatientList = (props) => {
     database.getPatients().then(patients => {
       setList(patients)
     })
-  }, [])
+  }, [props.navigation.state.params.newPatient])
 
   const keyExtractor = (item, index) => index.toString()
 
@@ -62,13 +63,13 @@ const PatientList = (props) => {
         </View>
 
         <View style={styles.searchBar}>
-          <Text style={styles.text}>{'Welcome Back, Dr. Ebrahim'}</Text>
+          <Text style={styles.text}>{`Welcome Back, ${email}`}</Text>
 
           <TouchableOpacity onPress={() => props.navigation.navigate('NewPatient')}>
             <Image source={require('../images/add.png')} style={{ width: 25, height: 25 }} />
 
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => databaseSync.performSync('sam@hikmahealth.org', 'c43171c8a242')}>
+          <TouchableOpacity onPress={() => databaseSync.performSync(email, password)}>
             <Image source={require('../images/sync.png')} style={{ width: 30, height: 30 }} />
           </TouchableOpacity>
         </View>

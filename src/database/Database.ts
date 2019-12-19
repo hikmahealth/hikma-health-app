@@ -1,7 +1,7 @@
 import SQLite from "react-native-sqlite-storage";
 import { DatabaseInitialization } from "./DatabaseInitialization";
 import { Clinic } from "../types/Clinic";
-import { User } from "../types/User";
+import { User, NewUser } from "../types/User";
 import { StringContent } from "../types/StringContent";
 import { uuid } from 'uuidv4';
 import { SyncResponse } from "../types/syncResponse";
@@ -15,7 +15,7 @@ export interface Database {
   login(email: string, password: string): Promise<any>;
   getClinics(): Promise<Clinic[]>;
   getPatients(): Promise<Patient[]>;
-  addUser(user: User, password: string): Promise<void>;
+  addUser(user: NewUser, password: string): Promise<void>;
   languageStringDataById(id: string): Promise<LanguageString>;
   saveStringContent(stringContent: StringContent, id?: string): Promise<string>;
   applyScript(script: SyncResponse): Promise<void>;
@@ -76,34 +76,29 @@ class DatabaseImpl implements Database {
     return id;
   }
 
-  public addUser(user: User, password: string): Promise<void> {
+  public async addUser(user: NewUser, password: string): Promise<void> {
     const date = new Date().toISOString();
 
     // const hashed_password = bcrypt.hash(password, 10, function (err, hash) {
     //   return hash
     // });
     const hashed_password = password
-    return this.getDatabase()
-      .then(db =>
-        db.executeSql(`INSERT INTO users (id, name, role, email, hashed_password, edited_at) VALUES (?, ?, ?, ?, ?, ?);`, [user.id, user.name, user.role, user.email, hashed_password, date])
-      )
-      .then(([results]) => {
-        const { insertId } = results;
-        console.log(
-          `[db] Added user with name: "${user.name}"!`
-        );
-      });
+    const db = await this.getDatabase();
+      
+    await db.executeSql(`INSERT INTO users (id, name, role, email, hashed_password, edited_at) VALUES (?, ?, ?, ?, ?, ?);`, [user.id, user.name, user.role, user.email, hashed_password, date]);
+    return;
   }
 
   public addPatient(patient: NewPatient): Promise<void> {
     const date = new Date().toISOString();
+    const id = patient.id.replace(/-/g, "")
     return this.getDatabase()
       .then(db =>
-        db.executeSql(`INSERT INTO patients (id, given_name, surname, date_of_birth, country, hometown, phone, sex, edited_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`, [patient.id.replace(/-/g, ""), patient.given_name, patient.surname, patient.date_of_birth, patient.country, patient.hometown, patient.phone, patient.sex, date])
+        db.executeSql(`INSERT INTO patients (id, given_name, surname, date_of_birth, country, hometown, phone, sex, edited_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`, [id, patient.given_name, patient.surname, patient.date_of_birth, patient.country, patient.hometown, patient.phone, patient.sex, date])
       )
       .then(([results]) => {
         console.log(
-          `[db] Added patient with name: "${patient.given_name} ${patient.surname}"!`
+          `[db] Added patient with id: "${id}"!`
         );
       });
   }
