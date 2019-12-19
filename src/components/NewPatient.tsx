@@ -33,7 +33,7 @@ const NewPatient = (props) => {
       hometown: hometownId,
       phone: phone,
       sex: male ? 'M' : 'F'
-    }).then(() => props.navigation.navigate('PatientList', {newPatient: true}))
+    }).then(() => props.navigation.navigate('PatientList', {reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle}))
 
   };
 

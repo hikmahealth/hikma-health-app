@@ -16,7 +16,7 @@ const PatientList = (props) => {
     database.getPatients().then(patients => {
       setList(patients)
     })
-  }, [props.navigation.state.params.newPatient])
+  }, [props.navigation.state.params.reloadPatientsToggle])
 
   const keyExtractor = (item, index) => index.toString()
 
@@ -65,7 +65,7 @@ const PatientList = (props) => {
         <View style={styles.searchBar}>
           <Text style={styles.text}>{`Welcome Back, ${email}`}</Text>
 
-          <TouchableOpacity onPress={() => props.navigation.navigate('NewPatient')}>
+          <TouchableOpacity onPress={() => props.navigation.navigate('NewPatient', {reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle })}>
             <Image source={require('../images/add.png')} style={{ width: 25, height: 25 }} />
 
           </TouchableOpacity>

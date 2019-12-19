@@ -66,7 +66,7 @@ const Login = (props) => {
       })
     
 
-    props.navigation.navigate('PatientList', { email: email, password: password, newPatient: false })
+    props.navigation.navigate('PatientList', { email: email, password: password, reloadPatientsToggle: false })
 
 
 
