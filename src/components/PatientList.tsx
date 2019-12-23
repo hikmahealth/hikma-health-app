@@ -1,6 +1,5 @@
 import React, { Component, useState, useEffect } from "react";
 import { View, Text, Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase } from "react-native";
-import { User } from "../types/User";
 import { database } from "../database/Database";
 import DatabaseSync from "../database/Sync";
 
@@ -11,14 +10,38 @@ const PatientList = (props) => {
   const password = props.navigation.state.params.password
   const [search, setSearch] = useState('');
   const [list, setList] = useState([]);
+  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
 
   useEffect(() => {
     database.getPatients().then(patients => {
       setList(patients)
     })
-  }, [props.navigation.state.params.reloadPatientsToggle])
+  }, [props.navigation.state.params.reloadPatientsToggle, language])
 
   const keyExtractor = (item, index) => index.toString()
+
+  const LanguageToggle = () => {
+    return (
+      <TouchableOpacity onPress={() => {
+        if (language === 'en') {
+          setLanguage('ar')
+        } else {
+          setLanguage('en')
+        }
+      }}>
+        <Text style={styles.text}>{language}</Text>
+      </TouchableOpacity>
+    )
+  }
+
+  const displayName = (item) => {
+    if (!!item.given_name.content[language] && !!item.surname.content[language]) {
+      return <Text>{`${item.given_name.content[language]} ${item.surname.content[language]}`}</Text>
+    } else {
+      item.given_name.content[Object.keys(item.given_name.content)[0]]
+      return <Text>{`${item.given_name.content[Object.keys(item.given_name.content)[0]]} ${item.surname.content[Object.keys(item.surname.content)[0]]}`}</Text>
+    }
+  }
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
@@ -32,7 +55,7 @@ const PatientList = (props) => {
         </ImageBackground>
 
         <View>
-          <Text>{`${item.given_name.content['en']} ${item.surname.content['en']}`}</Text>
+          {displayName(item)}
           <View
             style={{
               marginVertical: 5,
@@ -44,7 +67,6 @@ const PatientList = (props) => {
           <Text>{`Sex:  ${item.sex}`}</Text>
         </View>
       </View>
-
     </View>
   )
 
@@ -65,7 +87,14 @@ const PatientList = (props) => {
         <View style={styles.searchBar}>
           <Text style={styles.text}>{`Welcome Back, ${email}`}</Text>
 
-          <TouchableOpacity onPress={() => props.navigation.navigate('NewPatient', {reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle })}>
+          {LanguageToggle()}
+
+          <TouchableOpacity onPress={() => props.navigation.navigate('NewPatient',
+            {
+              reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle,
+              language: language
+            })
+          }>
             <Image source={require('../images/add.png')} style={{ width: 25, height: 25 }} />
 
           </TouchableOpacity>

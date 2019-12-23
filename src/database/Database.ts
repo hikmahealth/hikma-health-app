@@ -17,7 +17,7 @@ export interface Database {
   getPatients(): Promise<Patient[]>;
   addUser(user: NewUser, password: string): Promise<void>;
   languageStringDataById(id: string): Promise<LanguageString>;
-  saveStringContent(stringContent: StringContent, id?: string): Promise<string>;
+  saveStringContent(stringContent: StringContent[], id?: string): Promise<string>;
   applyScript(script: SyncResponse): Promise<void>;
   addPatient(patient: NewPatient): Promise<void>;
 }
@@ -61,12 +61,15 @@ class DatabaseImpl implements Database {
     });
   }
 
-  public async saveStringContent(stringContent: StringContent, id?: string): Promise<string> {
+  public async saveStringContent(stringContent: StringContent[], id?: string): Promise<string> {
     const contentId = id || uuid();
     var stringId = contentId.replace(/-/g, "");
     const db = await this.getDatabase();
     await db.executeSql(`INSERT INTO string_ids (id) VALUES (?);`, [stringId]);
-    return await this.saveStringWithId(stringContent, stringId);
+    stringContent.forEach(async element => {
+      await this.saveStringWithId(element, stringId);
+    })
+    return stringId;
   }
   
   private async saveStringWithId(stringContent: StringContent, id: string): Promise<string> {
@@ -180,6 +183,7 @@ class DatabaseImpl implements Database {
       });
   }
 
+  //TODO: find by selected language
   public async languageStringDataById(id: string): Promise<LanguageString> {
     return this.getDatabase()
       .then(db =>
@@ -193,11 +197,14 @@ class DatabaseImpl implements Database {
           return null;
         }
         const count = results.rows.length;
-        if (count > 0) {
-          const row = results.rows.item(0);
+        const content = {}
+
+        for (let i = 0; i < count; i++) {
+          const row = results.rows.item(i);
           const { language_string, content_string } = row;
-          const content = {}
           content[language_string] = content_string;
+        }
+        if (count > 0) {
           return {id, content}
         }
         return null

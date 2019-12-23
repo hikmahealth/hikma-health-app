@@ -43,12 +43,19 @@ const Login = (props) => {
       const responseJson = await remoteLogin();
 
       console.log('response' + responseJson)
-      const stringContent: StringContent = {
-        language: Object.keys(responseJson.name.content)[0],
-        content: responseJson.name.content[Object.keys(responseJson.name.content)[0]]
-      }
 
-      const nameId = await database.saveStringContent(stringContent, responseJson.name.id)
+      const contentArray = Object.keys(responseJson.name.content)
+      const stringContentArray: StringContent[] = []
+
+      contentArray.forEach(element => {
+        stringContentArray.push({
+          language: element,
+          content: responseJson.name.content[element]
+        })
+      })
+
+
+      const nameId = await database.saveStringContent(stringContentArray, responseJson.name.id)
 
       const newUser: NewUser = {
         id: responseJson.id,

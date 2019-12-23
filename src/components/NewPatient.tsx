@@ -16,13 +16,14 @@ const NewPatient = (props) => {
   const [country, setCountry] = useState('');
   const [hometown, setHometown] = useState('');
   const [phone, setPhone] = useState('');
+  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
 
   const addPatient = async () => {
-    const givenNameId = await database.saveStringContent({ language: 'en', content: givenName })
-    const surnameId = await database.saveStringContent({ language: 'en', content: surname })
-    const countryId = await database.saveStringContent({ language: 'en', content: country })
-    const hometownId = await database.saveStringContent({ language: 'en', content: hometown })
-    
+    const givenNameId = await database.saveStringContent([{ language: language, content: givenName }])
+    const surnameId = await database.saveStringContent([{ language: language, content: surname }])
+    const countryId = await database.saveStringContent([{ language: language, content: country }])
+    const hometownId = await database.saveStringContent([{ language: language, content: hometown }])
+
 
     database.addPatient({
       id: uuid(),
@@ -33,9 +34,26 @@ const NewPatient = (props) => {
       hometown: hometownId,
       phone: phone,
       sex: male ? 'M' : 'F'
-    }).then(() => props.navigation.navigate('PatientList', {reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle}))
+    }).then(() => props.navigation.navigate('PatientList', {
+      reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle,
+      language: language
+    }))
 
   };
+
+  const LanguageToggle = () => {
+    return (
+      <TouchableOpacity onPress={() => {
+        if (language === 'en') {
+          setLanguage('ar')
+        } else {
+          setLanguage('en')
+        }
+      }}>
+        <Text style={styles.text}>{language}</Text>
+      </TouchableOpacity>
+    )
+  }
 
   function RadioButton(props) {
     return (
@@ -66,59 +84,62 @@ const NewPatient = (props) => {
 
   return (
     <View style={styles.container}>
+      {LanguageToggle()}
       <View style={styles.inputsContainer}>
-        <TextInput
-          style={styles.inputs}
-          placeholder="First Name"
-          onChangeText={(text) => setGivenName(text)}
-          value={givenName}
-        />
-      </View>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          style={styles.inputs}
-          placeholder="Surname"
-          onChangeText={(text) => setSurname(text)}
-          value={surname}
-        />
-      </View>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          style={styles.inputs}
-          placeholder="DOB yyyy-mm-dd"
-          onChangeText={(text) => setDob(text)}
-          value={dob}
-        />
-        <View >
-          <Text style={[{ color: '#FFFFFF' }]}>Gender</Text>
-          <View style={[{ flexDirection: 'row' }]}>
-            {RadioButton({ selected: male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>Male</Text>
-            {RadioButton({ selected: !male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>Female</Text>
+        <View style={styles.inputRow}>
+          <TextInput
+            style={styles.inputs}
+            placeholder="First Name"
+            onChangeText={(text) => setGivenName(text)}
+            value={givenName}
+          />
+        </View>
+        <View style={styles.inputRow}>
+          <TextInput
+            style={styles.inputs}
+            placeholder="Surname"
+            onChangeText={(text) => setSurname(text)}
+            value={surname}
+          />
+        </View>
+        <View style={styles.inputRow}>
+          <TextInput
+            style={styles.inputs}
+            placeholder="DOB yyyy-mm-dd"
+            onChangeText={(text) => setDob(text)}
+            value={dob}
+          />
+          <View >
+            <Text style={[{ color: '#FFFFFF' }]}>Gender</Text>
+            <View style={[{ flexDirection: 'row' }]}>
+              {RadioButton({ selected: male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>Male</Text>
+              {RadioButton({ selected: !male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>Female</Text>
+            </View>
           </View>
         </View>
-      </View>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          style={styles.inputs}
-          placeholder="Country"
-          onChangeText={(text) => setCountry(text)}
-          value={country}
-        />
-        <TextInput
-          style={styles.inputs}
-          placeholder="Hometown"
-          onChangeText={(text) => setHometown(text)}
-          value={hometown}
-        />
-      </View>
-      <View style={styles.inputsContainer}>
+        <View style={styles.inputRow}>
+          <TextInput
+            style={styles.inputs}
+            placeholder="Country"
+            onChangeText={(text) => setCountry(text)}
+            value={country}
+          />
+          <TextInput
+            style={styles.inputs}
+            placeholder="Hometown"
+            onChangeText={(text) => setHometown(text)}
+            value={hometown}
+          />
+        </View>
+        <View style={styles.inputRow}>
 
-        <TextInput
-          style={styles.inputs}
-          placeholder="Phone no"
-          onChangeText={(text) => setPhone(text)}
-          value={phone}
-        />
+          <TextInput
+            style={styles.inputs}
+            placeholder="Phone no"
+            onChangeText={(text) => setPhone(text)}
+            value={phone}
+          />
+        </View>
       </View>
       <View >
         <TouchableOpacity onPress={() => addPatient()}>
@@ -134,12 +155,19 @@ const NewPatient = (props) => {
 const styles = StyleSheet.create(
   {
     container: {
+      paddingTop: 20,
+      paddingBottom: 20,
+      justifyContent: 'space-between',
       flex: 1,
-      justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#31BBF3',
     },
     inputsContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    inputRow: {
       maxWidth: '90%',
       flexDirection: 'row',
     },
@@ -154,12 +182,15 @@ const styles = StyleSheet.create(
       width: '100%',
       flex: 1
     },
-
     image: {
       width: 110,
       height: 140,
       resizeMode: 'stretch'
-    }
+    },
+    text: {
+      margin: 10,
+      color: '#FFFFFF'
+    },
 
   }
 );
