@@ -6,6 +6,7 @@ import {
 import { database } from "../database/Database";
 import { StringContent } from '../types/StringContent';
 import { uuid } from 'uuidv4';
+import styles from './Style';
 
 
 const NewPatient = (props) => {
@@ -151,48 +152,5 @@ const NewPatient = (props) => {
 
   );
 };
-
-const styles = StyleSheet.create(
-  {
-    container: {
-      paddingTop: 20,
-      paddingBottom: 20,
-      justifyContent: 'space-between',
-      flex: 1,
-      alignItems: 'center',
-      backgroundColor: '#31BBF3',
-    },
-    inputsContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    inputRow: {
-      maxWidth: '90%',
-      flexDirection: 'row',
-    },
-    inputs: {
-      backgroundColor: '#FFFFFF',
-      margin: 10,
-      padding: 10,
-      height: 40,
-      borderRadius: 12,
-      borderColor: '#EAEAEA',
-      borderWidth: .5,
-      width: '100%',
-      flex: 1
-    },
-    image: {
-      width: 110,
-      height: 140,
-      resizeMode: 'stretch'
-    },
-    text: {
-      margin: 10,
-      color: '#FFFFFF'
-    },
-
-  }
-);
 
 export default NewPatient;

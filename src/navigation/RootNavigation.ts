@@ -4,7 +4,8 @@ import { createAppContainer } from 'react-navigation';
 
 import Login from '../components/Login';
 import PatientList from '../components/PatientList';
-import NewPatient from '../components/NewPatient'
+import NewPatient from '../components/NewPatient';
+import PatientView from '../components/PatientView';
 
 const rootNavigator = createStackNavigator(
   {
@@ -27,6 +28,13 @@ const rootNavigator = createStackNavigator(
       screen: NewPatient,
       navigationOptions: () => ({
         title: `NewPatient`,
+        header: null,
+      })
+    },
+    PatientView: {
+      screen: PatientView,
+      navigationOptions: () => ({
+        title: `PatientView`,
         header: null,
       })
     }

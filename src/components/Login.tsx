@@ -10,6 +10,7 @@ import { NewUser, User } from '../types/User';
 
 import DatabaseSync from '../database/Sync'
 import { Clinic } from '../types/Clinic';
+import styles from './Style';
 
 const Login = (props) => {
   const databaseSync: DatabaseSync = new DatabaseSync();
@@ -80,19 +81,19 @@ const Login = (props) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.loginContainer}>
       <View >
-        <Image source={require('../images/logo.png')} style={styles.image} />
+        <Image source={require('../images/logo.png')} style={styles.logo} />
       </View>
-      <View style={styles.inputsContainer}>
+      <View style={styles.loginInputsContainer}>
         <TextInput
-          style={styles.inputs}
+          style={styles.loginInputs}
           placeholder="Email"
           onChangeText={(text) => setEmail(text)}
           value={email}
         />
         <TextInput
-          style={styles.inputs}
+          style={styles.loginInputs}
           placeholder="Password"
           onChangeText={(text) => setPassword(text)}
           value={password}
@@ -107,39 +108,5 @@ const Login = (props) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create(
-  {
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#31BBF3',
-    },
-    inputsContainer: {
-      width: '90%',
-      borderRadius: 12,
-      backgroundColor: '#FFFFFF',
-      height: 140,
-      marginTop: 30,
-      marginBottom: 30,
-      justifyContent: 'center',
-    },
-    inputs: {
-      margin: 10,
-      padding: 10,
-      height: 40,
-      borderRadius: 12,
-      borderColor: '#EAEAEA',
-      borderWidth: .5,
-    },
-    image: {
-      width: 110,
-      height: 140,
-      resizeMode: 'stretch'
-    }
-
-  }
-);
 
 export default Login;

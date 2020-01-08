@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import { View, Text, Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase } from "react-native";
 import { database } from "../database/Database";
 import DatabaseSync from "../database/Sync";
+import styles from './Style';
 
 const PatientList = (props) => {
   const databaseSync: DatabaseSync = new DatabaseSync();
@@ -45,7 +46,7 @@ const PatientList = (props) => {
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
-      <View style={styles.cardContent}>
+      <TouchableOpacity style={styles.cardContent} onPress={() => props.navigation.navigate('PatientView', { language: language, patient: item })}>
         <ImageBackground source={require('../images/palm-icon.jpg')} style={{ width: 100, height: 105, justifyContent: 'center' }}>
           <View style={styles.hexagon}>
             <View style={styles.hexagonInner} />
@@ -66,13 +67,13 @@ const PatientList = (props) => {
           <Text>{`Date of birth:  ${item.date_of_birth}`}</Text>
           <Text>{`Sex:  ${item.sex}`}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   )
 
   return (
     <View style={styles.main}>
-      <View style={styles.container}>
+      <View style={styles.listContainer}>
         <View style={styles.searchBar}>
           <TextInput
             style={styles.searchInput}
@@ -115,100 +116,5 @@ const PatientList = (props) => {
   )
 
 }
-
-const styles = StyleSheet.create(
-  {
-    main: {
-      flex: 1
-    },
-    container: {
-      backgroundColor: '#31BBF3',
-      flexDirection: 'column',
-      flex: 1,
-      alignContent: "flex-start"
-    },
-    scroll: {
-      flex: 1,
-      height: 0
-    },
-    text: {
-      margin: 10,
-      color: '#FFFFFF'
-    },
-    searchInput: {
-      padding: 10,
-      fontSize: 30,
-    },
-    card: {
-      margin: 10,
-      height: 130,
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5,
-      borderColor: '#EAEAEA',
-      borderWidth: .5,
-      borderRadius: 12,
-      backgroundColor: '#FFFFFF'
-    },
-    searchBar: {
-      marginTop: 10,
-      marginHorizontal: 10,
-      justifyContent: 'space-between',
-      flexDirection: 'row',
-      textAlign: 'center',
-      height: 50,
-    },
-    cardContent: {
-      marginTop: 10,
-      marginHorizontal: 10,
-      flexDirection: 'row',
-      textAlign: 'center',
-      alignItems: 'center',
-      justifyContent: 'space-around'
-    },
-    hexagon: {
-      width: 100,
-      height: 55
-    },
-    hexagonInner: {
-      width: 100,
-      height: 55,
-      backgroundColor: 'transparent'
-    },
-    hexagonAfter: {
-      position: 'absolute',
-      bottom: -25.5,
-      left: 0,
-      width: 0,
-      height: 0,
-      borderStyle: 'solid',
-      borderLeftWidth: 51,
-      borderLeftColor: '#FFFFFF',
-      borderRightWidth: 51,
-      borderRightColor: '#FFFFFF',
-      borderTopWidth: 25.5,
-      borderTopColor: 'transparent',
-    },
-    hexagonBefore: {
-      position: 'absolute',
-      top: -25.5,
-      left: 0,
-      width: 0,
-      height: 0,
-      borderStyle: 'solid',
-      borderLeftWidth: 51,
-      borderLeftColor: '#FFFFFF',
-      borderRightWidth: 51,
-      borderRightColor: '#FFFFFF',
-      borderBottomWidth: 25.5,
-      borderBottomColor: 'transparent'
-    }
-  }
-);
 
 export default PatientList;
