@@ -6,6 +6,7 @@ import Login from '../components/Login';
 import PatientList from '../components/PatientList';
 import NewPatient from '../components/NewPatient';
 import PatientView from '../components/PatientView';
+import NewVisit from '../components/NewVisit';
 
 const rootNavigator = createStackNavigator(
   {
@@ -37,8 +38,14 @@ const rootNavigator = createStackNavigator(
         title: `PatientView`,
         header: null,
       })
+    },
+    NewVisit: {
+      screen: NewVisit,
+      navigationOptions: () => ({
+        title: `NewVisit`,
+        header: null,
+      })
     }
-
   },
   {
     initialRouteName: 'Home'

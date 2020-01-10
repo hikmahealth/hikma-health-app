@@ -35,7 +35,6 @@ export default StyleSheet.create({
     paddingBottom: 20,
     justifyContent: 'space-between',
     flex: 1,
-    alignItems: 'center',
     backgroundColor: '#31BBF3',
   },
   inputsContainer: {
@@ -56,13 +55,20 @@ export default StyleSheet.create({
     borderColor: '#EAEAEA',
     borderWidth: .5,
     width: '100%',
-    flex: 1
+    flex: 1,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   text: {
     margin: 10,
     color: '#FFFFFF'
   },
-
   main: {
     flex: 1
   },
@@ -76,13 +82,19 @@ export default StyleSheet.create({
     backgroundColor: '#FFFFFF',
     flexDirection: 'column',
     flex: 1,
-    alignContent: 'flex-start'
+    justifyContent: 'space-between'
+  },
+  newVisit: {
+    padding: 20,
+    flexDirection: 'row',
+    justifyContent: 'flex-end'
   },
   scroll: {
     flex: 1,
     height: 0
   },
   searchInput: {
+    color: '#FFFFFF',
     padding: 10,
     fontSize: 30,
   },
@@ -102,6 +114,27 @@ export default StyleSheet.create({
     borderRadius: 12,
     backgroundColor: '#FFFFFF'
   },
+  actionButton: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    margin: 4,
+    height: 120,
+    borderRadius: 12,
+    borderColor: '#EAEAEA',
+    borderWidth: .5,
+    width: '100%',
+    flex: 1,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
   button: {
     margin: 10,
     paddingHorizontal: 20,
@@ -118,6 +151,14 @@ export default StyleSheet.create({
     marginTop: 10,
     marginHorizontal: 10,
     justifyContent: 'space-between',
+    flexDirection: 'row',
+    textAlign: 'center',
+    height: 50,
+  },
+  buttonBar: {
+    marginTop: 10,
+    marginHorizontal: 10,
+    justifyContent: 'space-evenly',
     flexDirection: 'row',
     textAlign: 'center',
     height: 50,
@@ -141,6 +182,7 @@ export default StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold'
   },
+
   cardContent: {
     marginTop: 10,
     marginHorizontal: 10,

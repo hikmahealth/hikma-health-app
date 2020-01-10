@@ -9,15 +9,28 @@ const PatientList = (props) => {
 
   const email = props.navigation.state.params.email
   const password = props.navigation.state.params.password
-  const [search, setSearch] = useState('');
+  const [query, setQuery] = useState('');
   const [list, setList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
 
   useEffect(() => {
     database.getPatients().then(patients => {
-      setList(patients)
+      setList(patients);
+      setFilteredList(patients);
     })
   }, [props.navigation.state.params.reloadPatientsToggle, language])
+
+  useEffect(() => {
+    const lowerCaseQuery = query.toLowerCase();
+    const newList = list
+      .filter((patient) => 
+        ((!!patient.given_name.content[language] && patient.given_name.content[language].toLowerCase().includes(lowerCaseQuery))
+      || (!!patient.surname.content[language] && patient.surname.content[language].toLowerCase().includes(lowerCaseQuery)))
+    );
+  
+    setFilteredList(newList);
+  }, [query]);
 
   const keyExtractor = (item, index) => index.toString()
 
@@ -79,8 +92,8 @@ const PatientList = (props) => {
             style={styles.searchInput}
             placeholderTextColor='#FFFFFF'
             placeholder="Patients"
-            onChangeText={(text) => setSearch(text)}
-            value={search}
+            onChangeText={(text) => setQuery(text)}
+            value={query}
           />
           <Image source={require('../images/search.jpg')} style={{ width: 30, height: 30 }} />
         </View>
@@ -106,7 +119,7 @@ const PatientList = (props) => {
         <View style={styles.scroll}>
           <FlatList
             keyExtractor={keyExtractor}
-            data={list}
+            data={filteredList}
             renderItem={(item) => renderItem(item)}
           />
         </View>

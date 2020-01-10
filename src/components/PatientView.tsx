@@ -41,7 +41,7 @@ const PatientView = (props) => {
     <View style={styles.main}>
       <View style={styles.viewContainer}>
         <TouchableOpacity onPress={() => props.navigation.navigate('PatientList', { language: language })}>
-          <Text style={{margin: 20}}>{`< PATIENTS`}</Text>
+          <Text style={{ margin: 20 }}>{`< PATIENTS`}</Text>
         </TouchableOpacity>
         <View style={styles.cardContent}>
           <ImageBackground source={require('../images/palm-icon.jpg')} style={{ width: 100, height: 105, justifyContent: 'center' }}>
@@ -65,7 +65,7 @@ const PatientView = (props) => {
             <Text>{`Sex:  ${patient.sex}`}</Text>
           </View>
         </View>
-        <View style={styles.searchBar}>
+        <View style={styles.buttonBar}>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
@@ -110,10 +110,16 @@ const PatientView = (props) => {
         <View>
           <Text style={[styles.gridItemLabel, styles.title]}>Patient Summary</Text>
           <Text style={styles.paragraph}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</Text>
         </View>
+        <View style={styles.newVisit}>
+          <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit', { language: language, patient: patient })}>
+            <Image source={require('../images/newVisit.png')} style={{ width: 75, height: 75 }} />
+          </TouchableOpacity>
+        </View>
+
       </View>
     </View>
   )
