@@ -4,38 +4,41 @@ import {
 } from 'react-native';
 
 import { database } from "../database/Database";
-import { uuid } from 'uuidv4';
 import styles from './Style';
 
 
-const NewPatient = (props) => {
-  const [givenName, setGivenName] = useState('');
-  const [surname, setSurname] = useState('');
-  const [dob, setDob] = useState('');
-  const [male, setMale] = useState(false);
-  const [country, setCountry] = useState('');
-  const [hometown, setHometown] = useState('');
-  const [phone, setPhone] = useState('');
+const EditPatient = (props) => {
+
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
 
-  const addPatient = async () => {
-    const givenNameId = await database.saveStringContent([{ language: language, content: givenName }])
-    const surnameId = await database.saveStringContent([{ language: language, content: surname }])
-    const countryId = await database.saveStringContent([{ language: language, content: country }])
-    const hometownId = await database.saveStringContent([{ language: language, content: hometown }])
+  const patient = props.navigation.getParam('patient');
+
+  const [givenNameText, setGivenNameText] = useState(props.navigation.state.params.patient.given_name.content[language] || '');
+  const [surnameText, setSurnameText] = useState(props.navigation.state.params.patient.surname.content[language] || '');
+  const [dob, setDob] = useState(props.navigation.state.params.patient.date_of_birth);
+  const [male, setMale] = useState(props.navigation.state.params.patient.sex === 'M');
+  const [countryText, setCountryText] = useState(props.navigation.state.params.patient.country.content[language] || '');
+  const [hometownText, setHometownText] = useState(props.navigation.state.params.patient.hometown.content[language] || '');
+  const [phone, setPhone] = useState(props.navigation.state.params.patient.phone || '');
+
+  const editPatient = async () => {
+    await database.editStringContent([{ language: language, content: givenNameText }], patient.given_name.id)
+    await database.editStringContent([{ language: language, content: surnameText }], patient.surname.id)
+    await database.editStringContent([{ language: language, content: countryText }], patient.country.id)
+    await database.editStringContent([{ language: language, content: hometownText }], patient.hometown.id)
 
 
-    database.addPatient({
-      id: uuid(),
-      given_name: givenNameId,
-      surname: surnameId,
+    database.editPatient({
+      id: patient.id,
+      given_name: patient.given_name.id,
+      surname: patient.surname.id,
       date_of_birth: dob,
-      country: countryId,
-      hometown: hometownId,
+      country: patient.country.id,
+      hometown: patient.hometown.id,
       phone: phone,
       sex: male ? 'M' : 'F'
-    }).then(() => props.navigation.navigate('PatientList', {
-      reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle,
+    }).then((updatedPatient) => props.navigation.navigate('PatientView', {
+      patient: updatedPatient,
       language: language
     }))
 
@@ -90,23 +93,23 @@ const NewPatient = (props) => {
           <TextInput
             style={styles.inputs}
             placeholder="First Name"
-            onChangeText={(text) => setGivenName(text)}
-            value={givenName}
+            onChangeText={setGivenNameText}
+            value={givenNameText}
           />
         </View>
         <View style={styles.inputRow}>
           <TextInput
             style={styles.inputs}
             placeholder="Surname"
-            onChangeText={(text) => setSurname(text)}
-            value={surname}
+            onChangeText={setSurnameText}
+            value={surnameText}
           />
         </View>
         <View style={styles.inputRow}>
           <TextInput
             style={styles.inputs}
             placeholder="DOB yyyy-mm-dd"
-            onChangeText={(text) => setDob(text)}
+            onChangeText={setDob}
             value={dob}
           />
           <View >
@@ -121,14 +124,14 @@ const NewPatient = (props) => {
           <TextInput
             style={styles.inputs}
             placeholder="Country"
-            onChangeText={(text) => setCountry(text)}
-            value={country}
+            onChangeText={setCountryText}
+            value={countryText}
           />
           <TextInput
             style={styles.inputs}
             placeholder="Hometown"
-            onChangeText={(text) => setHometown(text)}
-            value={hometown}
+            onChangeText={setHometownText}
+            value={hometownText}
           />
         </View>
         <View style={styles.inputRow}>
@@ -142,7 +145,7 @@ const NewPatient = (props) => {
         </View>
       </View>
       <View >
-        <TouchableOpacity onPress={() => addPatient()}>
+        <TouchableOpacity onPress={() => editPatient()}>
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>
       </View>
@@ -152,4 +155,4 @@ const NewPatient = (props) => {
   );
 };
 
-export default NewPatient;
+export default EditPatient;

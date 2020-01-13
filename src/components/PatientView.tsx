@@ -7,6 +7,10 @@ const PatientView = (props) => {
   const [patient, setPatient] = useState(props.navigation.getParam('patient'));
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
 
+  useEffect(() => {
+    setPatient(props.navigation.getParam('patient'))
+  }, [props])
+
   const LanguageToggle = () => {
     return (
       <TouchableOpacity onPress={() => {
@@ -40,9 +44,15 @@ const PatientView = (props) => {
   return (
     <View style={styles.main}>
       <View style={styles.viewContainer}>
-        <TouchableOpacity onPress={() => props.navigation.navigate('PatientList', { language: language })}>
-          <Text style={{ margin: 20 }}>{`< PATIENTS`}</Text>
-        </TouchableOpacity>
+        <View style={styles.searchBar}>
+          <TouchableOpacity onPress={() => props.navigation.navigate('PatientList', { language: language, reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle })}>
+            <Text style={{ margin: 20 }}>{`< PATIENTS`}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => props.navigation.navigate('EditPatient', { language: language, patient: patient })}>
+            <Text style={{ margin: 20 }}>{`Edit`}</Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.cardContent}>
           <ImageBackground source={require('../images/palm-icon.jpg')} style={{ width: 100, height: 105, justifyContent: 'center' }}>
             <View style={styles.hexagon}>

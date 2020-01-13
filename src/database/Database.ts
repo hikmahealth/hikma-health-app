@@ -16,10 +16,11 @@ export interface Database {
   getClinics(): Promise<Clinic[]>;
   getPatients(): Promise<Patient[]>;
   addUser(user: NewUser, password: string): Promise<void>;
-  languageStringDataById(id: string): Promise<LanguageString>;
+  editStringContent(stringContent: StringContent[], id: string): Promise<string>;
   saveStringContent(stringContent: StringContent[], id?: string): Promise<string>;
   applyScript(script: SyncResponse): Promise<void>;
   addPatient(patient: NewPatient): Promise<void>;
+  editPatient(patient: NewPatient): Promise<Patient>;
 }
 
 class DatabaseImpl implements Database {
@@ -71,7 +72,22 @@ class DatabaseImpl implements Database {
     })
     return stringId;
   }
-  
+
+  public async editStringContent(stringContent: StringContent[], id: string): Promise<string> {
+    const db = await this.getDatabase();
+    stringContent.forEach(async element => {
+      await this.editStringwithId(element, id);
+    })
+    return id;
+  }
+
+  private async editStringwithId(stringContent: StringContent, id: string): Promise<string> {
+    const date = new Date().toISOString();
+    const db = await this.getDatabase();
+    await db.executeSql(`UPDATE string_content SET language = ?, content = ?, edited_at = ? WHERE id = ?`, [stringContent.language, stringContent.content, date, id]);
+    return id;
+  }
+
   private async saveStringWithId(stringContent: StringContent, id: string): Promise<string> {
     const date = new Date().toISOString();
     const db = await this.getDatabase();
@@ -87,7 +103,7 @@ class DatabaseImpl implements Database {
     // });
     const hashed_password = password
     const db = await this.getDatabase();
-      
+
     await db.executeSql(`INSERT INTO users (id, name, role, email, hashed_password, edited_at) VALUES (?, ?, ?, ?, ?, ?);`, [user.id, user.name, user.role, user.email, hashed_password, date]);
     return;
   }
@@ -103,6 +119,19 @@ class DatabaseImpl implements Database {
         console.log(
           `[db] Added patient with id: "${id}"!`
         );
+      });
+  }
+
+  public editPatient(patient: NewPatient): Promise<Patient> {
+    const date = new Date().toISOString();
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql(`UPDATE patients SET given_name = ?, surname = ?, date_of_birth = ?, country = ?, hometown = ?, phone = ?, sex = ?, edited_at = ? WHERE id = ?`, [patient.given_name, patient.surname, patient.date_of_birth, patient.country, patient.hometown, patient.phone, patient.sex, date, patient.id])
+      )
+      .then(async ([results]) => {
+
+        return this.getPatient(patient.id)
+
       });
   }
 
@@ -145,7 +174,7 @@ class DatabaseImpl implements Database {
 
           const row = results.rows.item(i);
           const { id, given_name, surname, date_of_birth, country, hometown, sex, phone } = row;
-          const givenNameContent =  await this.languageStringDataById(given_name)
+          const givenNameContent = await this.languageStringDataById(given_name)
           const surnameContent = await this.languageStringDataById(surname)
           const countryContent = await this.languageStringDataById(country)
           const hometownContent = await this.languageStringDataById(hometown)
@@ -184,7 +213,7 @@ class DatabaseImpl implements Database {
   }
 
   //TODO: find by selected language
-  public async languageStringDataById(id: string): Promise<LanguageString> {
+  private async languageStringDataById(id: string): Promise<LanguageString> {
     return this.getDatabase()
       .then(db =>
         db.executeSql(
@@ -205,11 +234,36 @@ class DatabaseImpl implements Database {
           content[language_string] = content_string;
         }
         if (count > 0) {
-          return {id, content}
+          return { id, content }
         }
         return null
       });
   }
+
+  private getPatient(patient_id: string): Promise<Patient> {
+    console.log("[db] Fetching patients from the db...");
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql("SELECT id, given_name, surname, date_of_birth, country, hometown, sex, phone FROM patients WHERE id = ?;", [patient_id])
+      )
+      .then(async ([results]) => {
+        if (results === undefined) {
+          return ;
+        }
+        const row = results.rows.item(0);
+        const { id, given_name, surname, date_of_birth, country, hometown, sex, phone } = row;
+        const givenNameContent = await this.languageStringDataById(given_name)
+        const surnameContent = await this.languageStringDataById(surname)
+        const countryContent = await this.languageStringDataById(country)
+        const hometownContent = await this.languageStringDataById(hometown)
+
+        const editedPatient: Patient = { id, given_name: givenNameContent, surname: surnameContent, date_of_birth, country: countryContent, hometown: hometownContent, sex, phone };
+        console.log(
+          `[db] Edited patient with id: "${id}"!`
+        );
+        return editedPatient;
+      });
+  } 
 
   public applyScript(syncResponse: SyncResponse): Promise<void> {
 
@@ -220,10 +274,10 @@ class DatabaseImpl implements Database {
         })
       })
     }).then(() => {
-        console.log(
-          `[db] Updates applied!`
-        );
-      });
+      console.log(
+        `[db] Updates applied!`
+      );
+    });
 
   }
 

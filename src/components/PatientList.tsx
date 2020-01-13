@@ -59,7 +59,7 @@ const PatientList = (props) => {
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
-      <TouchableOpacity style={styles.cardContent} onPress={() => props.navigation.navigate('PatientView', { language: language, patient: item })}>
+      <TouchableOpacity style={styles.cardContent} onPress={() => props.navigation.navigate('PatientView', { language: language, patient: item, reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle })}>
         <ImageBackground source={require('../images/palm-icon.jpg')} style={{ width: 100, height: 105, justifyContent: 'center' }}>
           <View style={styles.hexagon}>
             <View style={styles.hexagonInner} />

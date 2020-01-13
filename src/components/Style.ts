@@ -36,6 +36,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     flex: 1,
     backgroundColor: '#31BBF3',
+    alignItems: 'center'
   },
   inputsContainer: {
     flex: 1,
