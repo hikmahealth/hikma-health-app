@@ -1,8 +1,9 @@
 import React, { Component, useState, useEffect } from "react";
-import { View, Text, Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase } from "react-native";
+import { View, Text, Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase, ImageSourcePropType } from "react-native";
 import { database } from "../database/Database";
 import DatabaseSync from "../database/Sync";
 import styles from './Style';
+import { iconHash } from '../services/hash'
 
 const PatientList = (props) => {
   const databaseSync: DatabaseSync = new DatabaseSync();
@@ -60,12 +61,12 @@ const PatientList = (props) => {
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <TouchableOpacity style={styles.cardContent} onPress={() => props.navigation.navigate('PatientView', { language: language, patient: item, reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle })}>
-        <ImageBackground source={require('../images/palm-icon.jpg')} style={{ width: 100, height: 105, justifyContent: 'center' }}>
-          <View style={styles.hexagon}>
+        <ImageBackground source={{uri: iconHash(item.id)}} style={{ width: 100, height: 105, justifyContent: 'center' }}>
+          {/* <View style={styles.hexagon}>
             <View style={styles.hexagonInner} />
             <View style={styles.hexagonBefore} />
             <View style={styles.hexagonAfter} />
-          </View>
+          </View> */}
         </ImageBackground>
 
         <View>

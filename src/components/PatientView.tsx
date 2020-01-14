@@ -1,14 +1,25 @@
 import React, { Component, useState, useEffect } from "react";
 import { View, Text, Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase, Button, Alert } from "react-native";
+import { database } from "../database/Database";
 import styles from './Style';
+import { uuid } from "uuidv4";
+import { EventTypes } from "../enums/EventTypes";
+import { iconHash } from '../services/hash'
 
 const PatientView = (props) => {
 
   const [patient, setPatient] = useState(props.navigation.getParam('patient'));
-  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
+  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
+  const [isEditingSummary, setIsEditingSummary] = useState(false);
+  const [summary, setSummary] = useState('no content yet')
 
   useEffect(() => {
-    setPatient(props.navigation.getParam('patient'))
+    setPatient(props.navigation.getParam('patient'));
+    database.getLatestPatientEventByType(props.navigation.getParam('patient').id, EventTypes.PatientSummary).then((response: string) => {
+      if (response.length > 0) {
+        setSummary(response)
+      }
+    })
   }, [props])
 
   const LanguageToggle = () => {
@@ -41,6 +52,15 @@ const PatientView = (props) => {
     return Math.abs(ageDate.getUTCFullYear() - 1970);
   }
 
+  const handleSaveSummary = () => {
+    database.addEvent({
+      id: uuid(),
+      patient_id: patient.id,
+      event_type: EventTypes.PatientSummary,
+      event_metadata: summary
+    }).then(()=> console.log('patient summary saved'))
+  }
+
   return (
     <View style={styles.main}>
       <View style={styles.viewContainer}>
@@ -54,12 +74,12 @@ const PatientView = (props) => {
         </View>
 
         <View style={styles.cardContent}>
-          <ImageBackground source={require('../images/palm-icon.jpg')} style={{ width: 100, height: 105, justifyContent: 'center' }}>
-            <View style={styles.hexagon}>
+          <ImageBackground source={{uri: iconHash(patient.id)}} style={{ width: 100, height: 105, justifyContent: 'center' }}>
+            {/* <View style={styles.hexagon}>
               <View style={styles.hexagonInner} />
               <View style={styles.hexagonBefore} />
               <View style={styles.hexagonAfter} />
-            </View>
+            </View> */}
           </ImageBackground>
 
           <View>
@@ -119,10 +139,29 @@ const PatientView = (props) => {
         </View>
         <View>
           <Text style={[styles.gridItemLabel, styles.title]}>Patient Summary</Text>
-          <Text style={styles.paragraph}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</Text>
+          <TouchableOpacity onLongPress={() => setIsEditingSummary(true)}>
+            {isEditingSummary ?
+              <View>
+                <TextInput
+                  style={styles.paragraph}
+                  placeholder="First Name"
+                  onChangeText={setSummary}
+                  value={summary}
+                />
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => {
+                    handleSaveSummary();
+                    setIsEditingSummary(false);
+                    }}>
+                  <Text style={{ color: '#31BBF3' }}>SAVE</Text>
+                </TouchableOpacity>
+              </View> :
+              <Text style={styles.paragraph}>
+                {summary}
+              </Text>}
+          </TouchableOpacity>
+
         </View>
         <View style={styles.newVisit}>
           <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit', { language: language, patient: patient })}>

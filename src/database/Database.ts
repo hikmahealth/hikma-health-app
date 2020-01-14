@@ -7,6 +7,7 @@ import { uuid } from 'uuidv4';
 import { SyncResponse } from "../types/syncResponse";
 import { Patient, NewPatient } from "../types/Patient";
 import { LanguageString } from "../types/LanguageString";
+import { Event } from "../types/Event";
 // import * as bcrypt from 'bcrypt';
 
 export interface Database {
@@ -21,6 +22,8 @@ export interface Database {
   applyScript(script: SyncResponse): Promise<void>;
   addPatient(patient: NewPatient): Promise<void>;
   editPatient(patient: NewPatient): Promise<Patient>;
+  getLatestPatientEventByType(patient_id: string, event_type: string): Promise<string>;
+  addEvent(event: Event): Promise<void>;
 }
 
 class DatabaseImpl implements Database {
@@ -132,6 +135,38 @@ class DatabaseImpl implements Database {
 
         return this.getPatient(patient.id)
 
+      });
+  }
+
+  public addEvent(event: Event): Promise<void> {
+    const date = new Date().toISOString();
+    const id = event.id.replace(/-/g, "")
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql(`INSERT INTO events (id, patient_id, event_type, event_timestamp, event_metadata) VALUES (?, ?, ?, ?, ?);`, [id, event.patient_id, event.event_type, date, event.event_metadata])
+      )
+      .then(([results]) => {
+        console.log(
+          `[db] Added event with id: "${id}"!`
+        );
+      });
+  }
+
+  public getLatestPatientEventByType(patient_id: string, event_type: string): Promise<string>{
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql("SELECT event_metadata FROM events WHERE patient_id = ? AND event_type = ? ORDER BY event_timestamp DESC LIMIT 1;", [patient_id, event_type])
+      )
+      .then(async ([results]) => {
+        if (results === undefined || results.rows.length < 1) {
+          return '';
+        }
+        const row = results.rows.item(0);
+        const { event_metadata } = row;
+        console.log(
+          `[db] Retrieved event for patient with id: "${patient_id}"!`
+        );
+        return event_metadata;
       });
   }
 

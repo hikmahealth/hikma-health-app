@@ -1,7 +1,7 @@
 export interface Event {
-  id: number
-  patient_id: number
-  visit_id: number
-  event_timestamp: string
+  id: string
+  patient_id: string
+  visit_id?: string
+  event_type: string
   event_metadata: string
 }
