@@ -8,6 +8,7 @@ import { SyncResponse } from "../types/syncResponse";
 import { Patient, NewPatient } from "../types/Patient";
 import { LanguageString } from "../types/LanguageString";
 import { Event } from "../types/Event";
+import { Visit } from "../types/Visit";
 // import * as bcrypt from 'bcrypt';
 
 export interface Database {
@@ -24,6 +25,7 @@ export interface Database {
   editPatient(patient: NewPatient): Promise<Patient>;
   getLatestPatientEventByType(patient_id: string, event_type: string): Promise<string>;
   addEvent(event: Event): Promise<void>;
+  addVisit(visit: Visit): Promise<void>;
 }
 
 class DatabaseImpl implements Database {
@@ -100,14 +102,14 @@ class DatabaseImpl implements Database {
 
   public async addUser(user: NewUser, password: string): Promise<void> {
     const date = new Date().toISOString();
-
+    const id = user.id.replace(/-/g, "");
     // const hashed_password = bcrypt.hash(password, 10, function (err, hash) {
     //   return hash
     // });
     const hashed_password = password
     const db = await this.getDatabase();
 
-    await db.executeSql(`INSERT INTO users (id, name, role, email, hashed_password, edited_at) VALUES (?, ?, ?, ?, ?, ?);`, [user.id, user.name, user.role, user.email, hashed_password, date]);
+    await db.executeSql(`INSERT INTO users (id, name, role, email, hashed_password, edited_at) VALUES (?, ?, ?, ?, ?, ?);`, [id, user.name, user.role, user.email, hashed_password, date]);
     return;
   }
 
@@ -143,7 +145,7 @@ class DatabaseImpl implements Database {
     const id = event.id.replace(/-/g, "")
     return this.getDatabase()
       .then(db =>
-        db.executeSql(`INSERT INTO events (id, patient_id, event_type, event_timestamp, event_metadata) VALUES (?, ?, ?, ?, ?);`, [id, event.patient_id, event.event_type, date, event.event_metadata])
+        db.executeSql(`INSERT INTO events (id, patient_id, visit_id, event_type, event_timestamp, event_metadata) VALUES (?, ?, ?, ?, ?, ?);`, [id, event.patient_id, event.visit_id, event.event_type, date, event.event_metadata])
       )
       .then(([results]) => {
         console.log(
@@ -152,7 +154,21 @@ class DatabaseImpl implements Database {
       });
   }
 
-  public getLatestPatientEventByType(patient_id: string, event_type: string): Promise<string>{
+  public addVisit(visit: Visit): Promise<void> {
+    const date = new Date().toISOString();
+    const id = visit.id.replace(/-/g, "")
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql(`INSERT INTO visits (id, patient_id, clinic_id, provider_id, check_in_timestamp) VALUES (?, ?, ?, ?, ?);`, [id, visit.patient_id, visit.clinic_id, visit.provider_id, date])
+      )
+      .then(([results]) => {
+        console.log(
+          `[db] Added visit with id: "${id}"!`
+        );
+      });
+  }
+
+  public getLatestPatientEventByType(patient_id: string, event_type: string): Promise<string> {
     return this.getDatabase()
       .then(db =>
         db.executeSql("SELECT event_metadata FROM events WHERE patient_id = ? AND event_type = ? ORDER BY event_timestamp DESC LIMIT 1;", [patient_id, event_type])
@@ -283,7 +299,7 @@ class DatabaseImpl implements Database {
       )
       .then(async ([results]) => {
         if (results === undefined) {
-          return ;
+          return;
         }
         const row = results.rows.item(0);
         const { id, given_name, surname, date_of_birth, country, hometown, sex, phone } = row;
@@ -298,7 +314,7 @@ class DatabaseImpl implements Database {
         );
         return editedPatient;
       });
-  } 
+  }
 
   public applyScript(syncResponse: SyncResponse): Promise<void> {
 

@@ -8,8 +8,10 @@ import { iconHash } from '../services/hash'
 const PatientList = (props) => {
   const databaseSync: DatabaseSync = new DatabaseSync();
 
-  const email = props.navigation.state.params.email
-  const password = props.navigation.state.params.password
+  const email = props.navigation.state.params.email;
+  const password = props.navigation.state.params.password;
+  const clinicId = props.navigation.state.params.clinicId;
+  const userId = props.navigation.state.params.userId;
   const [query, setQuery] = useState('');
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
@@ -25,11 +27,11 @@ const PatientList = (props) => {
   useEffect(() => {
     const lowerCaseQuery = query.toLowerCase();
     const newList = list
-      .filter((patient) => 
+      .filter((patient) =>
         ((!!patient.given_name.content[language] && patient.given_name.content[language].toLowerCase().includes(lowerCaseQuery))
-      || (!!patient.surname.content[language] && patient.surname.content[language].toLowerCase().includes(lowerCaseQuery)))
-    );
-  
+          || (!!patient.surname.content[language] && patient.surname.content[language].toLowerCase().includes(lowerCaseQuery)))
+      );
+
     setFilteredList(newList);
   }, [query]);
 
@@ -60,8 +62,16 @@ const PatientList = (props) => {
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
-      <TouchableOpacity style={styles.cardContent} onPress={() => props.navigation.navigate('PatientView', { language: language, patient: item, reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle })}>
-        <ImageBackground source={{uri: iconHash(item.id)}} style={{ width: 100, height: 105, justifyContent: 'center' }}>
+      <TouchableOpacity style={styles.cardContent} onPress={() => props.navigation.navigate('PatientView',
+        {
+          language: language,
+          patient: item,
+          reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle,
+          clinicId: clinicId,
+          userId: userId
+        }
+      )}>
+        <ImageBackground source={{ uri: iconHash(item.id) }} style={{ width: 100, height: 105, justifyContent: 'center' }}>
           {/* <View style={styles.hexagon}>
             <View style={styles.hexagonInner} />
             <View style={styles.hexagonBefore} />

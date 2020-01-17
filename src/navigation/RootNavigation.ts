@@ -8,6 +8,7 @@ import NewPatient from '../components/NewPatient';
 import PatientView from '../components/PatientView';
 import NewVisit from '../components/NewVisit';
 import EditPatient from '../components/EditPatient';
+import OpenTextEvent from '../components/OpenTextEvent';
 
 const rootNavigator = createStackNavigator(
   {
@@ -52,6 +53,13 @@ const rootNavigator = createStackNavigator(
       navigationOptions: () => ({
         title: `NewVisit`,
         header: null,
+      })
+    },
+    OpenTextEvent: {
+      screen: OpenTextEvent,
+      navigationOptions: () => ({
+        title: `OpenTextEvent`,
+        header: null
       })
     }
   },

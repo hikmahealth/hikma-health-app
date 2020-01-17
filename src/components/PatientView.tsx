@@ -12,6 +12,8 @@ const PatientView = (props) => {
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
   const [isEditingSummary, setIsEditingSummary] = useState(false);
   const [summary, setSummary] = useState('no content yet')
+  const clinicId = props.navigation.state.params.clinicId;
+  const userId = props.navigation.state.params.userId;
 
   useEffect(() => {
     setPatient(props.navigation.getParam('patient'));
@@ -56,9 +58,10 @@ const PatientView = (props) => {
     database.addEvent({
       id: uuid(),
       patient_id: patient.id,
+      visit_id: null,
       event_type: EventTypes.PatientSummary,
       event_metadata: summary
-    }).then(()=> console.log('patient summary saved'))
+    }).then(() => console.log('patient summary saved'))
   }
 
   return (
@@ -74,7 +77,7 @@ const PatientView = (props) => {
         </View>
 
         <View style={styles.cardContent}>
-          <ImageBackground source={{uri: iconHash(patient.id)}} style={{ width: 100, height: 105, justifyContent: 'center' }}>
+          <ImageBackground source={{ uri: iconHash(patient.id) }} style={{ width: 100, height: 105, justifyContent: 'center' }}>
             {/* <View style={styles.hexagon}>
               <View style={styles.hexagonInner} />
               <View style={styles.hexagonBefore} />
@@ -153,7 +156,7 @@ const PatientView = (props) => {
                   onPress={() => {
                     handleSaveSummary();
                     setIsEditingSummary(false);
-                    }}>
+                  }}>
                   <Text style={{ color: '#31BBF3' }}>SAVE</Text>
                 </TouchableOpacity>
               </View> :
@@ -164,7 +167,22 @@ const PatientView = (props) => {
 
         </View>
         <View style={styles.newVisit}>
-          <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit', { language: language, patient: patient })}>
+          <TouchableOpacity onPress={() => {
+            const newVisitId = uuid();
+            database.addVisit({
+              id: newVisitId,
+              patient_id: patient.id,
+              clinic_id: clinicId,
+              provider_id: userId
+            })
+            props.navigation.navigate('NewVisit',
+              {
+                language: language,
+                patient: patient,
+                visitId: newVisitId.replace(/-/g, ""),
+              }
+            )
+          }}>
             <Image source={require('../images/newVisit.png')} style={{ width: 75, height: 75 }} />
           </TouchableOpacity>
         </View>

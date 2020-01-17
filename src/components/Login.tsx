@@ -16,6 +16,8 @@ const Login = (props) => {
   const databaseSync: DatabaseSync = new DatabaseSync();
   const [email, setEmail] = useState(props.email || 'sam@hikmahealth.org');
   const [password, setPassword] = useState(props.password || 'c43171c8a242');
+  let userId = '';
+  let clinicId = '';
 
   const remoteLogin = async (): Promise<any> => {
     // fetch('https://demo-api.hikmahealth.org/api/login', {
@@ -55,7 +57,6 @@ const Login = (props) => {
         })
       })
 
-
       const nameId = await database.saveStringContent(stringContentArray, responseJson.name.id)
 
       const newUser: NewUser = {
@@ -64,19 +65,24 @@ const Login = (props) => {
         role: responseJson.role,
         email: responseJson.email
       }
+      userId = responseJson.id
       await database.addUser(newUser, password)
+    } else {
+      userId = user.id
+    }
+
+    database.getClinics().then((clinics: Clinic[]) => {
+      if (clinics.length == 0) {
+        databaseSync.performSync(email, password).then(() => {
+          database.getClinics().then((clinics: Clinic[]) => {
+            clinicId = clinics[0].id
+          })
+        })
+      } else {
+        clinicId = clinics[0].id
       }
-
-      database.getClinics().then((clinics: Clinic[]) => {
-        if (clinics.length == 0) {
-          databaseSync.performSync(email, password);
-        }
-      })
-    
-
-    props.navigation.navigate('PatientList', { email: email, password: password, reloadPatientsToggle: false })
-
-
+      props.navigation.navigate('PatientList', { email: email, password: password, reloadPatientsToggle: false, clinicId: clinicId, userId: userId })
+    })
 
   };
 
