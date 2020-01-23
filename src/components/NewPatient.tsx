@@ -6,7 +6,8 @@ import {
 import { database } from "../database/Database";
 import { uuid } from 'uuidv4';
 import styles from './Style';
-
+import DatePicker from 'react-native-datepicker'
+import LinearGradient from 'react-native-linear-gradient';
 
 const NewPatient = (props) => {
   const [givenName, setGivenName] = useState('');
@@ -83,7 +84,7 @@ const NewPatient = (props) => {
   }
 
   return (
-    <View style={styles.container}>
+    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={[styles.container, { alignItems: 'center' }]}>
       {LanguageToggle()}
       <View style={styles.inputsContainer}>
         <View style={styles.inputRow}>
@@ -103,11 +104,42 @@ const NewPatient = (props) => {
           />
         </View>
         <View style={styles.inputRow}>
-          <TextInput
-            style={styles.inputs}
-            placeholder="DOB yyyy-mm-dd"
-            onChangeText={(text) => setDob(text)}
-            value={dob}
+          <DatePicker
+            style={{
+              backgroundColor: '#FFFFFF',
+              margin: 10,
+              paddingHorizontal: 10,
+              height: 40,
+              borderRadius: 12,
+              borderColor: '#EAEAEA',
+              borderWidth: .5,
+              width: '100%',
+              flex: 1,
+              elevation: 5,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+            }}
+            date={dob}
+            mode="date"
+            placeholder="Select DOB"
+            format="YYYY-MM-DD"
+            minDate="1900-05-01"
+            maxDate="2016-06-01"
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+            customStyles={{
+              dateInput: {
+                alignItems: 'flex-start',
+                borderWidth: 0
+              }
+            }}
+            androidMode='spinner'
+            onDateChange={(date) => setDob(date)}
           />
           <View >
             <Text style={[{ color: '#FFFFFF' }]}>Gender</Text>
@@ -146,7 +178,7 @@ const NewPatient = (props) => {
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
 
 
   );

@@ -7,6 +7,7 @@ import { database } from "../database/Database";
 import loginValidator from '../validators/loginValidator';
 import { StringContent } from '../types/StringContent';
 import { NewUser, User } from '../types/User';
+import LinearGradient from 'react-native-linear-gradient';
 
 import DatabaseSync from '../database/Sync'
 import { Clinic } from '../types/Clinic';
@@ -87,7 +88,7 @@ const Login = (props) => {
   };
 
   return (
-    <View style={styles.loginContainer}>
+    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.loginContainer}>
       <View >
         <Image source={require('../images/logo.png')} style={styles.logo} />
       </View>
@@ -111,7 +112,7 @@ const Login = (props) => {
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 

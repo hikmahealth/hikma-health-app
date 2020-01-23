@@ -7,6 +7,7 @@ import { database } from "../database/Database";
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
 import { uuid } from 'uuidv4';
+import LinearGradient from 'react-native-linear-gradient';
 
 
 const EditPatient = (props) => {
@@ -28,7 +29,7 @@ const EditPatient = (props) => {
   };
 
   return (
-    <View style={[styles.container, {justifyContent: 'flex-start'}]}>
+    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={[styles.container, {justifyContent: 'flex-start'}]}>
       <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit')}>
         <Text style={styles.text}>{`< BACK`}</Text>
       </TouchableOpacity>
@@ -45,7 +46,7 @@ const EditPatient = (props) => {
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
 
 
   );

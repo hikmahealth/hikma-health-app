@@ -4,6 +4,7 @@ import { database } from "../database/Database";
 import DatabaseSync from "../database/Sync";
 import styles from './Style';
 import { iconHash } from '../services/hash'
+import LinearGradient from 'react-native-linear-gradient';
 
 const PatientList = (props) => {
   const databaseSync: DatabaseSync = new DatabaseSync();
@@ -96,7 +97,7 @@ const PatientList = (props) => {
   )
 
   return (
-    <View style={styles.main}>
+    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.main}>
       <View style={styles.listContainer}>
         <View style={styles.searchBar}>
           <TextInput
@@ -136,7 +137,7 @@ const PatientList = (props) => {
         </View>
 
       </View>
-    </View>
+    </LinearGradient>
   )
 
 }

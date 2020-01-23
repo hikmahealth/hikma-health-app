@@ -5,7 +5,6 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#31BBF3',
   },
   loginInputsContainer: {
     width: '90%',
@@ -35,8 +34,6 @@ export default StyleSheet.create({
     paddingBottom: 20,
     justifyContent: 'space-between',
     flex: 1,
-    backgroundColor: '#31BBF3',
-    alignItems: 'center'
   },
   inputsContainer: {
     flex: 1,
@@ -46,6 +43,7 @@ export default StyleSheet.create({
   inputRow: {
     maxWidth: '90%',
     flexDirection: 'row',
+    alignItems: 'center',
   },
   inputs: {
     backgroundColor: '#FFFFFF',
@@ -74,7 +72,6 @@ export default StyleSheet.create({
     flex: 1
   },
   listContainer: {
-    backgroundColor: '#31BBF3',
     flexDirection: 'column',
     flex: 1,
     alignContent: 'flex-start'
@@ -117,7 +114,8 @@ export default StyleSheet.create({
   },
   actionButton: {
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 20,
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     margin: 4,

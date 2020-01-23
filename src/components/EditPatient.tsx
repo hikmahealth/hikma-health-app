@@ -5,6 +5,7 @@ import {
 
 import { database } from "../database/Database";
 import styles from './Style';
+import LinearGradient from 'react-native-linear-gradient';
 
 
 const EditPatient = (props) => {
@@ -86,7 +87,7 @@ const EditPatient = (props) => {
   }
 
   return (
-    <View style={styles.container}>
+    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={[styles.container, { alignItems: 'center' }]}>
       {LanguageToggle()}
       <View style={styles.inputsContainer}>
         <View style={styles.inputRow}>
@@ -149,7 +150,7 @@ const EditPatient = (props) => {
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
 
 
   );
