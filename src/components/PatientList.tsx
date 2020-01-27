@@ -22,6 +22,7 @@ const PatientList = (props) => {
     database.getPatients().then(patients => {
       setList(patients);
       setFilteredList(patients);
+      setQuery('');
     })
   }, [props.navigation.state.params.reloadPatientsToggle, language])
 

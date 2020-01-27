@@ -5,16 +5,16 @@ import {
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
 import LinearGradient from 'react-native-linear-gradient';
-
+import { database } from "../database/Database";
+import { uuid } from "uuidv4";
 
 const NewVisit = (props) => {
   const [camp, setCamp] = useState('');
-  const [seenBy, setSeenBy] = useState('');
-  const [visitDate, setVisitDate] = useState('');
   const [visitType, setVisitType] = useState('');
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
-  const [patient, setPatient] = useState(props.navigation.getParam('patient'));
+  const patient = props.navigation.getParam('patient');
   const visitId = props.navigation.getParam('visitId');
+  const userName = props.navigation.getParam('userName');
 
   const LanguageToggle = () => {
     return (
@@ -34,6 +34,16 @@ const NewVisit = (props) => {
     props.navigation.navigate('OpenTextEvent', { patientId: patient.id, visitId: visitId, eventType: eventType })
   }
 
+  const handleSaveCamp = () => {
+    database.addEvent({
+      id: uuid(),
+      patient_id: patient.id,
+      visit_id: visitId,
+      event_type: EventTypes.Camp,
+      event_metadata: camp
+    }).then(() => console.log('camp saved'))
+  }
+
   return (
     <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
       <View style={styles.searchBar}>
@@ -49,33 +59,38 @@ const NewVisit = (props) => {
             style={styles.inputs}
             placeholder="Camp"
             onChangeText={setCamp}
+            onEndEditing={handleSaveCamp}
             value={camp}
           />
-          <TextInput
+          {/* <TextInput
             style={styles.inputs}
             placeholder="Seen By"
             onChangeText={setSeenBy}
             value={seenBy}
-          />
+          /> */}
+          <Text style={styles.inputs}>
+            {userName}
+          </Text>
         </View>
         <View style={styles.inputRow}>
-          <TextInput
-            style={styles.inputs}
-            placeholder="Date"
-            onChangeText={setVisitDate}
-            value={visitDate}
-          />
-          <TextInput
+          <Text style={styles.inputs}>
+            {new Date().toISOString().split("T")[0]}
+          </Text>
+          {/* <TextInput
             style={styles.inputs}
             placeholder="Visit Type/EMA#"
             onChangeText={setVisitType}
             value={visitType}
-          />
+          /> */}
+          <Text style={styles.inputs}>
+            Visit Type/EMA#
+          </Text>
         </View>
       </View>
 
       <View style={styles.gridContainer}>
         <TouchableOpacity style={styles.actionButton} onPress={() => props.navigation.navigate('Vitals', { patientId: patient.id, visitId: visitId })}>
+          <Image source={require('../images/vitals.png')} style={{ width: 66, height: 31, marginBottom: 5 }} />
           <Text>Vitals</Text>
         </TouchableOpacity>
 

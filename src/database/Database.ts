@@ -26,6 +26,7 @@ export interface Database {
   getLatestPatientEventByType(patient_id: string, event_type: string): Promise<string>;
   addEvent(event: Event): Promise<void>;
   addVisit(visit: Visit): Promise<void>;
+  getUser(user_id: string): Promise<User>;
 }
 
 class DatabaseImpl implements Database {
@@ -313,6 +314,28 @@ class DatabaseImpl implements Database {
           `[db] Edited patient with id: "${id}"!`
         );
         return editedPatient;
+      });
+  }
+
+  public getUser(user_id: string): Promise<User> {
+    console.log("[db] Fetching user from the db...");
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql("SELECT id, name, role, email FROM users WHERE id = ?;", [user_id])
+      )
+      .then(async ([results]) => {
+        if (results === undefined) {
+          return;
+        }
+        const row = results.rows.item(0);
+        const { id, name, role, email } = row;
+        const nameContent = await this.languageStringDataById(name)
+
+        const user: User = { id, name: nameContent, role, email };
+        console.log(
+          `[db] Retrieved user with id: "${id}"!`
+        );
+        return user;
       });
   }
 

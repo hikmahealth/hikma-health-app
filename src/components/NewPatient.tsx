@@ -129,7 +129,7 @@ const NewPatient = (props) => {
             placeholder="Select DOB"
             format="YYYY-MM-DD"
             minDate="1900-05-01"
-            maxDate="2016-06-01"
+            maxDate="2020-01-27"
             confirmBtnText="Confirm"
             cancelBtnText="Cancel"
             customStyles={{

@@ -5,12 +5,14 @@ import styles from './Style';
 import { uuid } from "uuidv4";
 import { EventTypes } from "../enums/EventTypes";
 import { iconHash } from '../services/hash'
+import { User } from "../types/User";
 
 const PatientView = (props) => {
 
   const [patient, setPatient] = useState(props.navigation.getParam('patient'));
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
   const [isEditingSummary, setIsEditingSummary] = useState(false);
+  const [userName, setUserName] = useState('');
   const [summary, setSummary] = useState('no content yet')
   const clinicId = props.navigation.state.params.clinicId;
   const userId = props.navigation.state.params.userId;
@@ -23,6 +25,16 @@ const PatientView = (props) => {
       }
     })
   }, [props])
+
+  useEffect(() => {
+    database.getUser(userId).then((user: User) => {
+      if (!!user.name.content[language]) {
+        setUserName(user.name.content[language])
+      } else {
+        setUserName(user.name.content[Object.keys(user.name.content)[0]])
+      }
+    })
+  }, [])
 
   const LanguageToggle = () => {
     return (
@@ -180,6 +192,7 @@ const PatientView = (props) => {
                 language: language,
                 patient: patient,
                 visitId: newVisitId.replace(/-/g, ""),
+                userName: userName
               }
             )
           }}>

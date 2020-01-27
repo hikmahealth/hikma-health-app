@@ -6,7 +6,7 @@ import {
 import { database } from "../database/Database";
 import styles from './Style';
 import LinearGradient from 'react-native-linear-gradient';
-
+import DatePicker from 'react-native-datepicker'
 
 const EditPatient = (props) => {
 
@@ -107,11 +107,42 @@ const EditPatient = (props) => {
           />
         </View>
         <View style={styles.inputRow}>
-          <TextInput
-            style={styles.inputs}
-            placeholder="DOB yyyy-mm-dd"
-            onChangeText={setDob}
-            value={dob}
+        <DatePicker
+            style={{
+              backgroundColor: '#FFFFFF',
+              margin: 10,
+              paddingHorizontal: 10,
+              height: 40,
+              borderRadius: 12,
+              borderColor: '#EAEAEA',
+              borderWidth: .5,
+              width: '100%',
+              flex: 1,
+              elevation: 5,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+            }}
+            date={dob}
+            mode="date"
+            placeholder="Select DOB"
+            format="YYYY-MM-DD"
+            minDate="1900-05-01"
+            maxDate="2020-01-27"
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+            customStyles={{
+              dateInput: {
+                alignItems: 'flex-start',
+                borderWidth: 0
+              }
+            }}
+            androidMode='spinner'
+            onDateChange={(date) => setDob(date)}
           />
           <View >
             <Text style={[{ color: '#FFFFFF' }]}>Gender</Text>

@@ -7,7 +7,7 @@ import { database } from "../database/Database";
 import { uuid } from 'uuidv4';
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
-import { LinearGradient } from 'react-native-linear-gradient';
+import LinearGradient from 'react-native-linear-gradient';
 
 const Vitals = (props) => {
   const [heartRate, setHeartRate] = useState(null);

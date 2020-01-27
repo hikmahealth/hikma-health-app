@@ -25,7 +25,6 @@ const rootNavigator = createStackNavigator(
       navigationOptions: () => ({
         title: `PatientList`,
         header: null,
-
       })
     },
     NewPatient: {
