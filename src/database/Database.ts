@@ -188,7 +188,7 @@ class DatabaseImpl implements Database {
   }
 
   // gets clinics from database
-  public getClinics(): Promise<Clinic[]> {
+  public async getClinics(): Promise<Clinic[]> {
     console.log("[db] Fetching clinics from the db...");
     return this.getDatabase()
       .then(db =>
@@ -339,7 +339,7 @@ class DatabaseImpl implements Database {
       });
   }
 
-  public applyScript(syncResponse: SyncResponse): Promise<void> {
+  public async applyScript(syncResponse: SyncResponse): Promise<void> {
 
     return this.getDatabase().then(db => {
       db.transaction((transaction: SQLite.Transaction) => {

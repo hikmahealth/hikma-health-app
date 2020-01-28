@@ -50,6 +50,7 @@ const Vitals = (props) => {
             placeholder="HR"
             onChangeText={(text) => setHeartRate(text)}
             value={heartRate}
+            keyboardType='numeric'
           />
           <Text>BPM</Text>
         </View>
@@ -59,6 +60,7 @@ const Vitals = (props) => {
             placeholder="Systolic"
             onChangeText={(text) => setSystolic(text)}
             value={systolic}
+            keyboardType='numeric'
           />
           <Text>/</Text>
           <TextInput
@@ -66,6 +68,7 @@ const Vitals = (props) => {
             placeholder="Diastolic"
             onChangeText={(text) => setDiastolic(text)}
             value={diastolic}
+            keyboardType='numeric'
           />
         </View>
         <View style={styles.inputRow}>
@@ -74,6 +77,7 @@ const Vitals = (props) => {
             placeholder="Sats"
             onChangeText={(text) => setSats(text)}
             value={sats}
+            keyboardType='numeric'
           />
           <Text>%</Text>
         </View>
@@ -83,6 +87,7 @@ const Vitals = (props) => {
             placeholder="Temp"
             onChangeText={(text) => setTemp(text)}
             value={temp}
+            keyboardType='numeric'
           />
           <Text>°C</Text>
           <TextInput
@@ -90,6 +95,7 @@ const Vitals = (props) => {
             placeholder="RR"
             onChangeText={(text) => setRespiratoryRate(text)}
             value={respiratoryRate}
+            keyboardType='numeric'
           />
         </View>
         <View style={styles.inputRow}>
@@ -98,6 +104,7 @@ const Vitals = (props) => {
             placeholder="BG"
             onChangeText={(text) => setBloodGlucose(text)}
             value={bloodGlucose}
+            keyboardType='numeric'
           />
         </View>
       </View>
@@ -107,8 +114,6 @@ const Vitals = (props) => {
         </TouchableOpacity>
       </View>
     </LinearGradient>
-
-
   );
 };
 

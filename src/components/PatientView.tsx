@@ -18,8 +18,9 @@ const PatientView = (props) => {
   const userId = props.navigation.state.params.userId;
 
   useEffect(() => {
-    setPatient(props.navigation.getParam('patient'));
-    database.getLatestPatientEventByType(props.navigation.getParam('patient').id, EventTypes.PatientSummary).then((response: string) => {
+    setPatient(props.navigation.state.params.patient);
+    let patientId = props.navigation.state.params.patient.id;
+    database.getLatestPatientEventByType(patientId, EventTypes.PatientSummary).then((response: string) => {
       if (response.length > 0) {
         setSummary(response)
       }

@@ -9,24 +9,24 @@ import { SyncResponse } from "../types/syncResponse";
 export default class DatabaseSync {
 
   // private url = 'https://demo-api.hikmahealth.org/api/sync';
-  private url  = 'http://216.21.162.104:42069/api/sync';
+  private url = 'http://216.21.162.104:42069/api/sync';
 
-  public performSync(email: string, password: string): Promise<any> {
+  public async performSync(email: string, password: string): Promise<any> {
     // const target = this.getCompressionTargetPath()
     const target = this.getLocalDBFilePath()
 
     // this.compressDB(this.getCompressionSourcePath(), target)
 
-    return this.syncDB(email, password, target)
-    .then((response) => {
-      const responseData = JSON.parse(response.data);
-      responseData.to_execute.forEach((element: SyncResponse) => {
-        database.applyScript(element)
-      });
+    await this.syncDB(email, password, target)
+      .then((response) => {
+        const responseData = JSON.parse(response.data);
+        responseData.to_execute.forEach(async (element: SyncResponse) => {
+          await database.applyScript(element)
+        });
 
-    }).catch(error => {
-      console.error("Database sync error!", error);
-    });
+      }).catch(error => {
+        console.error("Database sync error!", error);
+      });
   }
 
   private compressDB(
@@ -43,7 +43,7 @@ export default class DatabaseSync {
 
   }
 
-  private syncDB(
+  private async syncDB(
     email: string,
     password: string,
     localFilePath: string,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  View, Text, Image, TextInput, StyleSheet, Button, TouchableOpacity
+  View, Text, Image, TextInput, TouchableOpacity
 } from 'react-native';
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
@@ -133,8 +133,6 @@ const NewVisit = (props) => {
         </TouchableOpacity>
       </View>
     </LinearGradient>
-
-
   );
 };
 

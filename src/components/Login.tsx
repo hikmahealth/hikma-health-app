@@ -72,18 +72,17 @@ const Login = (props) => {
       userId = user.id
     }
 
-    database.getClinics().then((clinics: Clinic[]) => {
+    database.getClinics().then(async (clinics: Clinic[]) => {
       if (clinics.length == 0) {
-        databaseSync.performSync(email, password).then(() => {
-          database.getClinics().then((clinics: Clinic[]) => {
-            clinicId = clinics[0].id
-          })
-        })
+        await databaseSync.performSync(email, password)
+        const clinicsResponse: Clinic[] = await database.getClinics()
+        clinicId = clinicsResponse[0].id
       } else {
         clinicId = clinics[0].id
       }
-      props.navigation.navigate('PatientList', { email: email, password: password, reloadPatientsToggle: false, clinicId: clinicId, userId: userId })
-    })
+    }).then(() => {
+        props.navigation.navigate('PatientList', { email: email, password: password, reloadPatientsToggle: false, clinicId: clinicId, userId: userId })
+      })
 
   };
 
