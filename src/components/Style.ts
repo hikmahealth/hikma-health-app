@@ -114,8 +114,9 @@ export default StyleSheet.create({
   },
   actionButton: {
     flexDirection: 'column',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     paddingBottom: 20,
+    paddingTop: 10,
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     margin: 4,
@@ -133,6 +134,14 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+  },
+  actionText: {
+    textAlign: 'center'
+  },
+  actionIcon: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    flex: 1
   },
   button: {
     margin: 10,

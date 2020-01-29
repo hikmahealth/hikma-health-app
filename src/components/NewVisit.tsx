@@ -90,46 +90,65 @@ const NewVisit = (props) => {
 
       <View style={styles.gridContainer}>
         <TouchableOpacity style={styles.actionButton} onPress={() => props.navigation.navigate('Vitals', { patientId: patient.id, visitId: visitId })}>
-          <Image source={require('../images/vitals.png')} style={{ width: 66, height: 31, marginBottom: 5 }} />
-          <Text>Vitals</Text>
+          <View style={styles.actionIcon}>
+            <Image source={require('../images/vitals.png')} style={{ width: 66, height: 31 }} />
+          </View>
+          <Text style={styles.actionText}>Vitals</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.ExaminationNotes)}>
-          <Image source={require('../images/stethoscope.png')} style={{ width: 43, height: 47 }} />
-          <Text>Examination Notes</Text>
+          <View style={styles.actionIcon}>
+            <Image source={require('../images/stethoscope.png')} style={{ width: 43, height: 47 }} />
+          </View>
+          <Text style={styles.actionText}>Examination Notes</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.Complaint)}>
-          <Image source={require('../images/complaint.png')} style={{ width: 50, height: 50 }} />
-          <Text>Complaint</Text>
+          <View style={styles.actionIcon}>
+            <Image source={require('../images/complaint.png')} style={{ width: 50, height: 50 }} />
+          </View>
+          <Text style={styles.actionText}>Complaint</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.gridContainer}>
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.Treatment)}>
-          <Image source={require('../images/doctor.png')} style={{ width: 40, height: 48 }} />
-          <Text>Treatment</Text>
+
+          <View style={styles.actionIcon}>
+            <Image source={require('../images/doctor.png')} style={{ width: 40, height: 48 }} />
+          </View>
+          <Text style={styles.actionText}>Treatment</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.Diagnosis)}>
-          <Image source={require('../images/diagnosis.png')} style={{ width: 42, height: 52 }} />
-          <Text>Diagnosis</Text>
+          <View style={styles.actionIcon}>
+            <Image source={require('../images/diagnosis.png')} style={{ width: 42, height: 52 }} />
+          </View>
+          <Text style={styles.actionText}>Diagnosis</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.MedicineDispensed)}>
-          <Image source={require('../images/medicine.png')} style={{ width: 77, height: 38 }} />
-          <Text>Medicine Dispensed</Text>
+          <View style={styles.actionIcon}>
+            <Image source={require('../images/medicine.png')} style={{ width: 77, height: 38 }} />
+          </View>
+          <Text style={styles.actionText}>Medicine Dispensed</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.gridContainer}>
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.Prescriptions)}>
-          <Image source={require('../images/prescriptions.png')} style={{ width: 50, height: 50 }} />
-          <Text>Prescriptions</Text>
+          <View style={styles.actionIcon}>
+            <Image source={require('../images/prescriptions.png')} style={{ width: 50, height: 50 }} />
+          </View>
+          <Text style={styles.actionText}>Prescriptions</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.Allergies)}>
-          <Image source={require('../images/fee.png')} style={{ width: 50, height: 41 }} />
-          <Text>Allergies</Text>
+          <View style={styles.actionIcon}>
+            <Image source={require('../images/fee.png')} style={{ width: 50, height: 41 }} />
+          </View>
+          <Text style={styles.actionText}>Allergies</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.MedicalHistory)}>
-          <Image source={require('../images/medicalHistory.png')} style={{ width: 53, height: 51 }} />
-          <Text>Medical History</Text>
+          <View style={styles.actionIcon}>
+            <Image source={require('../images/medicalHistory.png')} style={{ width: 53, height: 51 }} />
+          </View>
+          <Text style={styles.actionText}>Medical History</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>

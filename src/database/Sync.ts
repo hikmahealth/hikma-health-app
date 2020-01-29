@@ -17,16 +17,16 @@ export default class DatabaseSync {
 
     // this.compressDB(this.getCompressionSourcePath(), target)
 
-    await this.syncDB(email, password, target)
-      .then((response) => {
-        const responseData = JSON.parse(response.data);
-        responseData.to_execute.forEach(async (element: SyncResponse) => {
-          await database.applyScript(element)
-        });
-
-      }).catch(error => {
-        console.error("Database sync error!", error);
+    try {
+      const response = await this.syncDB(email, password, target)
+      const responseData = JSON.parse(response.data);
+      responseData.to_execute.forEach(async (element: SyncResponse) => {
+        await database.applyScript(element)
       });
+    }
+    catch (error) {
+      console.error("Database sync error!", error);
+    };
   }
 
   private compressDB(
