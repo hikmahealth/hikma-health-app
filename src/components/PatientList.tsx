@@ -1,7 +1,7 @@
 import React, { Component, useState, useEffect } from "react";
 import { View, Text, Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase, ImageSourcePropType } from "react-native";
 import { database } from "../database/Database";
-import DatabaseSync from "../database/Sync";
+import { DatabaseSync } from "../database/Sync";
 import styles from './Style';
 import { iconHash } from '../services/hash'
 import LinearGradient from 'react-native-linear-gradient';
@@ -125,7 +125,7 @@ const PatientList = (props) => {
             <Image source={require('../images/add.png')} style={{ width: 25, height: 25 }} />
 
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => databaseSync.performSync(email, password)}>
+          <TouchableOpacity onPress={async () => await databaseSync.performSync(email, password)}>
             <Image source={require('../images/sync.png')} style={{ width: 30, height: 30 }} />
           </TouchableOpacity>
         </View>

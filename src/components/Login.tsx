@@ -9,12 +9,12 @@ import { StringContent } from '../types/StringContent';
 import { NewUser, User } from '../types/User';
 import LinearGradient from 'react-native-linear-gradient';
 
-import DatabaseSync from '../database/Sync'
+import { DatabaseSync } from '../database/Sync'
 import { Clinic } from '../types/Clinic';
 import styles from './Style';
 
 const Login = (props) => {
-  const databaseSync: DatabaseSync = new DatabaseSync();
+  const databaseSync = new DatabaseSync();
   const [email, setEmail] = useState(props.email || 'sam@hikmahealth.org');
   const [password, setPassword] = useState(props.password || 'c43171c8a242');
   let userId = '';
@@ -66,23 +66,21 @@ const Login = (props) => {
         role: responseJson.role,
         email: responseJson.email
       }
-      userId = responseJson.id
+      userId = responseJson.id.replace(/-/g, "");
       await database.addUser(newUser, password)
     } else {
       userId = user.id
     }
 
-    database.getClinics().then(async (clinics: Clinic[]) => {
-      if (clinics.length == 0) {
-        await databaseSync.performSync(email, password)
-        const clinicsResponse: Clinic[] = await database.getClinics()
-        clinicId = clinicsResponse[0].id
-      } else {
-        clinicId = clinics[0].id
-      }
-    }).then(() => {
-        props.navigation.navigate('PatientList', { email: email, password: password, reloadPatientsToggle: false, clinicId: clinicId, userId: userId })
-      })
+    const clinics: Clinic[] = await database.getClinics();
+    if (clinics.length == 0) {
+      await databaseSync.performSync(email, password)
+      const clinicsResponse: Clinic[] = await database.getClinics()
+      clinicId = clinicsResponse[0].id
+    } else {
+      clinicId = clinics[0].id
+    }
+    props.navigation.navigate('PatientList', { email: email, password: password, reloadPatientsToggle: false, clinicId: clinicId, userId: userId })
 
   };
 
@@ -107,7 +105,7 @@ const Login = (props) => {
       </View>
 
       <View >
-        <TouchableOpacity onPress={() => handleLogin()}>
+        <TouchableOpacity onPress={handleLogin}>
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>
       </View>

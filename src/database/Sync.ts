@@ -6,7 +6,7 @@ import { database } from "../database/Database";
 import { SyncResponse } from "../types/syncResponse";
 
 
-export default class DatabaseSync {
+export class DatabaseSync {
 
   // private url = 'https://demo-api.hikmahealth.org/api/sync';
   private url = 'http://216.21.162.104:42069/api/sync';

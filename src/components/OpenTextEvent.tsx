@@ -39,6 +39,7 @@ const EditPatient = (props) => {
         placeholder="Enter Text here"
         onChangeText={setResponseText}
         value={responseText}
+        multiline={true}
       />
 
       <View >
