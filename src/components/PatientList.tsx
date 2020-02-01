@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { Component, useState, useEffect, useRef } from "react";
 import { View, Text, Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase, ImageSourcePropType } from "react-native";
 import { database } from "../database/Database";
 import { DatabaseSync } from "../database/Sync";
@@ -16,7 +16,8 @@ const PatientList = (props) => {
   const [query, setQuery] = useState('');
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
-  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
+  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
+  const search = useRef(null);
 
   useEffect(() => {
     database.getPatients().then(patients => {
@@ -107,24 +108,17 @@ const PatientList = (props) => {
             placeholder="Patients"
             onChangeText={(text) => setQuery(text)}
             value={query}
+            ref={search}
           />
-          <Image source={require('../images/search.jpg')} style={{ width: 30, height: 30 }} />
+          <TouchableOpacity onPress={() => search.current.focus()}>
+            <Image source={require('../images/search.jpg')} style={{ width: 30, height: 30 }} />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.searchBar}>
           <Text style={styles.text}>{`Welcome Back, ${email}`}</Text>
 
           {LanguageToggle()}
-
-          <TouchableOpacity onPress={() => props.navigation.navigate('NewPatient',
-            {
-              reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle,
-              language: language
-            })
-          }>
-            <Image source={require('../images/add.png')} style={{ width: 25, height: 25 }} />
-
-          </TouchableOpacity>
           <TouchableOpacity onPress={async () => await databaseSync.performSync(email, password)}>
             <Image source={require('../images/sync.png')} style={{ width: 30, height: 30 }} />
           </TouchableOpacity>
@@ -137,6 +131,16 @@ const PatientList = (props) => {
           />
         </View>
 
+        <View style={{ position: 'absolute', bottom: 20, right: 20 }}>
+          <TouchableOpacity onPress={() => props.navigation.navigate('NewPatient',
+            {
+              reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle,
+              language: language
+            }
+          )}>
+            <Image source={require('../images/newVisit.png')} style={{ width: 75, height: 75 }} />
+          </TouchableOpacity>
+        </View>
       </View>
     </LinearGradient>
   )
