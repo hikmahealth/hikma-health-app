@@ -7,6 +7,7 @@ import { EventTypes } from '../enums/EventTypes';
 import LinearGradient from 'react-native-linear-gradient';
 import { database } from "../database/Database";
 import { uuid } from "uuidv4";
+import { LocalizedStrings } from '../enums/LocalizedStrings';
 
 const NewVisit = (props) => {
   const [camp, setCamp] = useState('');
@@ -31,7 +32,7 @@ const NewVisit = (props) => {
   }
 
   const openTextEvent = (eventType: string) => {
-    props.navigation.navigate('OpenTextEvent', { patientId: patient.id, visitId: visitId, eventType: eventType })
+    props.navigation.navigate('OpenTextEvent', { patientId: patient.id, visitId: visitId, eventType: eventType, language: language })
   }
 
   const handleSaveCamp = () => {
@@ -48,7 +49,7 @@ const NewVisit = (props) => {
     <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
       <View style={styles.searchBar}>
         <TouchableOpacity onPress={() => props.navigation.navigate('PatientView', { language: language, patient: patient })}>
-          <Text style={styles.text}>{`< BACK`}</Text>
+          <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
         </TouchableOpacity>
         {LanguageToggle()}
       </View>
@@ -57,7 +58,7 @@ const NewVisit = (props) => {
         <View style={styles.inputRow}>
           <TextInput
             style={styles.inputs}
-            placeholder="Camp"
+            placeholder={LocalizedStrings[language].camp}
             onChangeText={setCamp}
             onEndEditing={handleSaveCamp}
             value={camp}
@@ -93,20 +94,20 @@ const NewVisit = (props) => {
           <View style={styles.actionIcon}>
             <Image source={require('../images/vitals.png')} style={{ width: 66, height: 31 }} />
           </View>
-          <Text style={styles.actionText}>Vitals</Text>
+          <Text style={styles.actionText}>{LocalizedStrings[language].vitals}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.ExaminationNotes)}>
           <View style={styles.actionIcon}>
             <Image source={require('../images/stethoscope.png')} style={{ width: 43, height: 47 }} />
           </View>
-          <Text style={styles.actionText}>Examination Notes</Text>
+          <Text style={styles.actionText}>{LocalizedStrings[language].examinationNotes}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.Complaint)}>
           <View style={styles.actionIcon}>
             <Image source={require('../images/complaint.png')} style={{ width: 50, height: 50 }} />
           </View>
-          <Text style={styles.actionText}>Complaint</Text>
+          <Text style={styles.actionText}>{LocalizedStrings[language].complaint}</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.gridContainer}>
@@ -115,20 +116,20 @@ const NewVisit = (props) => {
           <View style={styles.actionIcon}>
             <Image source={require('../images/doctor.png')} style={{ width: 40, height: 48 }} />
           </View>
-          <Text style={styles.actionText}>Treatment</Text>
+          <Text style={styles.actionText}>{LocalizedStrings[language].treatment}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.Diagnosis)}>
           <View style={styles.actionIcon}>
             <Image source={require('../images/diagnosis.png')} style={{ width: 42, height: 52 }} />
           </View>
-          <Text style={styles.actionText}>Diagnosis</Text>
+          <Text style={styles.actionText}>{LocalizedStrings[language].diagnosis}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.MedicineDispensed)}>
           <View style={styles.actionIcon}>
             <Image source={require('../images/medicine.png')} style={{ width: 77, height: 38 }} />
           </View>
-          <Text style={styles.actionText}>Medicine Dispensed</Text>
+          <Text style={styles.actionText}>{LocalizedStrings[language].medicineDispensed}</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.gridContainer}>
@@ -136,19 +137,19 @@ const NewVisit = (props) => {
           <View style={styles.actionIcon}>
             <Image source={require('../images/prescriptions.png')} style={{ width: 50, height: 50 }} />
           </View>
-          <Text style={styles.actionText}>Prescriptions</Text>
+          <Text style={styles.actionText}>{LocalizedStrings[language].prescriptions}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.Allergies)}>
           <View style={styles.actionIcon}>
             <Image source={require('../images/fee.png')} style={{ width: 50, height: 41 }} />
           </View>
-          <Text style={styles.actionText}>Allergies</Text>
+          <Text style={styles.actionText}>{LocalizedStrings[language].allergies}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.MedicalHistory)}>
           <View style={styles.actionIcon}>
             <Image source={require('../images/medicalHistory.png')} style={{ width: 53, height: 51 }} />
           </View>
-          <Text style={styles.actionText}>Medical History</Text>
+          <Text style={styles.actionText}>{LocalizedStrings[language].medicalHistory}</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>

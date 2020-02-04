@@ -5,6 +5,7 @@ import { DatabaseSync } from "../database/Sync";
 import styles from './Style';
 import { iconHash } from '../services/hash'
 import LinearGradient from 'react-native-linear-gradient';
+import { LocalizedStrings } from '../enums/LocalizedStrings'
 
 const PatientList = (props) => {
   const databaseSync: DatabaseSync = new DatabaseSync();
@@ -91,8 +92,8 @@ const PatientList = (props) => {
               borderBottomWidth: 1,
             }}
           />
-          <Text>{`Date of birth:  ${item.date_of_birth}`}</Text>
-          <Text>{`Sex:  ${item.sex}`}</Text>
+          <Text>{`${LocalizedStrings[language].dob}:  ${item.date_of_birth}`}</Text>
+          <Text>{`${LocalizedStrings[language].sex}:  ${item.sex}`}</Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -105,7 +106,7 @@ const PatientList = (props) => {
           <TextInput
             style={styles.searchInput}
             placeholderTextColor='#FFFFFF'
-            placeholder="Patients"
+            placeholder={LocalizedStrings[language].patients}
             onChangeText={(text) => setQuery(text)}
             value={query}
             ref={search}
@@ -116,7 +117,7 @@ const PatientList = (props) => {
         </View>
 
         <View style={styles.searchBar}>
-          <Text style={styles.text}>{`Welcome Back, ${email}`}</Text>
+          <Text style={styles.text}>{`${LocalizedStrings[language].welcome}, ${email}`}</Text>
 
           {LanguageToggle()}
           <TouchableOpacity onPress={async () => await databaseSync.performSync(email, password)}>

@@ -8,6 +8,7 @@ import { uuid } from 'uuidv4';
 import styles from './Style';
 import DatePicker from 'react-native-datepicker'
 import LinearGradient from 'react-native-linear-gradient';
+import { LocalizedStrings } from '../enums/LocalizedStrings';
 
 const NewPatient = (props) => {
   const [givenName, setGivenName] = useState('');
@@ -90,7 +91,7 @@ const NewPatient = (props) => {
         <View style={styles.inputRow}>
           <TextInput
             style={styles.inputs}
-            placeholder="First Name"
+            placeholder={LocalizedStrings[language].firstName}
             onChangeText={(text) => setGivenName(text)}
             value={givenName}
           />
@@ -98,7 +99,7 @@ const NewPatient = (props) => {
         <View style={styles.inputRow}>
           <TextInput
             style={styles.inputs}
-            placeholder="Surname"
+            placeholder={LocalizedStrings[language].surname}
             onChangeText={(text) => setSurname(text)}
             value={surname}
           />
@@ -126,12 +127,12 @@ const NewPatient = (props) => {
             }}
             date={dob}
             mode="date"
-            placeholder="Select DOB"
+            placeholder={LocalizedStrings[language].selectDob}
             format="YYYY-MM-DD"
             minDate="1900-05-01"
             maxDate="2020-01-27"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
+            confirmBtnText={LocalizedStrings[language].confirm}
+            cancelBtnText={LocalizedStrings[language].cancel}
             customStyles={{
               dateInput: {
                 alignItems: 'flex-start',
@@ -142,23 +143,23 @@ const NewPatient = (props) => {
             onDateChange={(date) => setDob(date)}
           />
           <View >
-            <Text style={[{ color: '#FFFFFF' }]}>Gender</Text>
+            <Text style={[{ color: '#FFFFFF' }]}>{LocalizedStrings[language].gender}</Text>
             <View style={[{ flexDirection: 'row' }]}>
-              {RadioButton({ selected: male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>Male</Text>
-              {RadioButton({ selected: !male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>Female</Text>
+              {RadioButton({ selected: male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>M</Text>
+              {RadioButton({ selected: !male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>F</Text>
             </View>
           </View>
         </View>
         <View style={styles.inputRow}>
           <TextInput
             style={styles.inputs}
-            placeholder="Country"
+            placeholder={LocalizedStrings[language].country}
             onChangeText={(text) => setCountry(text)}
             value={country}
           />
           <TextInput
             style={styles.inputs}
-            placeholder="Hometown"
+            placeholder={LocalizedStrings[language].hometown}
             onChangeText={(text) => setHometown(text)}
             value={hometown}
           />
@@ -167,7 +168,7 @@ const NewPatient = (props) => {
 
           <TextInput
             style={styles.inputs}
-            placeholder="Phone no"
+            placeholder={LocalizedStrings[language].phone}
             onChangeText={(text) => setPhone(text)}
             value={phone}
           />

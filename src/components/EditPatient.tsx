@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, Image, TextInput, TouchableOpacity
 } from 'react-native';
@@ -7,6 +7,7 @@ import { database } from "../database/Database";
 import styles from './Style';
 import LinearGradient from 'react-native-linear-gradient';
 import DatePicker from 'react-native-datepicker'
+import { LocalizedStrings } from '../enums/LocalizedStrings';
 
 const EditPatient = (props) => {
 
@@ -23,10 +24,18 @@ const EditPatient = (props) => {
   const [phone, setPhone] = useState(props.navigation.state.params.patient.phone || '');
 
   const editPatient = async () => {
-    await database.editStringContent([{ language: language, content: givenNameText }], patient.given_name.id)
-    await database.editStringContent([{ language: language, content: surnameText }], patient.surname.id)
-    await database.editStringContent([{ language: language, content: countryText }], patient.country.id)
-    await database.editStringContent([{ language: language, content: hometownText }], patient.hometown.id)
+    if (!!patient.given_name.content[language]) {
+      await database.editStringContent([{ language: language, content: givenNameText }], patient.given_name.id)
+      await database.editStringContent([{ language: language, content: surnameText }], patient.surname.id)
+      await database.editStringContent([{ language: language, content: countryText }], patient.country.id)
+      await database.editStringContent([{ language: language, content: hometownText }], patient.hometown.id)
+    } else {
+      await database.saveStringContent([{ language: language, content: givenNameText }], patient.given_name.id, true)
+      await database.saveStringContent([{ language: language, content: surnameText }], patient.surname.id, true)
+      await database.saveStringContent([{ language: language, content: countryText }], patient.country.id, true)
+      await database.saveStringContent([{ language: language, content: hometownText }], patient.hometown.id, true)
+    }
+
 
 
     database.editPatient({
@@ -42,8 +51,14 @@ const EditPatient = (props) => {
       patient: updatedPatient,
       language: language
     }))
-
   };
+
+  useEffect(() => {
+    setGivenNameText(patient.given_name.content[language] || '');
+    setSurnameText(patient.surname.content[language] || '');
+    setCountryText(patient.country.content[language] || '');
+    setHometownText(patient.hometown.content[language] || '');
+  }, [language])
 
   const LanguageToggle = () => {
     return (
@@ -93,7 +108,7 @@ const EditPatient = (props) => {
         <View style={styles.inputRow}>
           <TextInput
             style={styles.inputs}
-            placeholder="First Name"
+            placeholder={LocalizedStrings[language].firstName}
             onChangeText={setGivenNameText}
             value={givenNameText}
           />
@@ -101,13 +116,13 @@ const EditPatient = (props) => {
         <View style={styles.inputRow}>
           <TextInput
             style={styles.inputs}
-            placeholder="Surname"
+            placeholder={LocalizedStrings[language].surname}
             onChangeText={setSurnameText}
             value={surnameText}
           />
         </View>
         <View style={styles.inputRow}>
-        <DatePicker
+          <DatePicker
             style={{
               backgroundColor: '#FFFFFF',
               margin: 10,
@@ -129,12 +144,12 @@ const EditPatient = (props) => {
             }}
             date={dob}
             mode="date"
-            placeholder="Select DOB"
+            placeholder={LocalizedStrings[language].selectDob}
             format="YYYY-MM-DD"
             minDate="1900-05-01"
             maxDate="2020-01-27"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
+            confirmBtnText={LocalizedStrings[language].confirm}
+            cancelBtnText={LocalizedStrings[language].cancel}
             customStyles={{
               dateInput: {
                 alignItems: 'flex-start',
@@ -145,23 +160,23 @@ const EditPatient = (props) => {
             onDateChange={(date) => setDob(date)}
           />
           <View >
-            <Text style={[{ color: '#FFFFFF' }]}>Gender</Text>
+            <Text style={[{ color: '#FFFFFF' }]}>{LocalizedStrings[language].gender}</Text>
             <View style={[{ flexDirection: 'row' }]}>
-              {RadioButton({ selected: male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>Male</Text>
-              {RadioButton({ selected: !male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>Female</Text>
+              {RadioButton({ selected: male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>M</Text>
+              {RadioButton({ selected: !male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>F</Text>
             </View>
           </View>
         </View>
         <View style={styles.inputRow}>
           <TextInput
             style={styles.inputs}
-            placeholder="Country"
+            placeholder={LocalizedStrings[language].country}
             onChangeText={setCountryText}
             value={countryText}
           />
           <TextInput
             style={styles.inputs}
-            placeholder="Hometown"
+            placeholder={LocalizedStrings[language].hometown}
             onChangeText={setHometownText}
             value={hometownText}
           />
@@ -170,7 +185,7 @@ const EditPatient = (props) => {
 
           <TextInput
             style={styles.inputs}
-            placeholder="Phone no"
+            placeholder={LocalizedStrings[language].phone}
             onChangeText={(text) => setPhone(text)}
             value={phone}
           />

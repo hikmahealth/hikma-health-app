@@ -48,6 +48,7 @@ export class DatabaseSync {
     password: string,
     localFilePath: string,
   ): Promise<FetchBlobResponse> {
+    database.close();
     console.log(
       `Syncing DB!`
     );

@@ -6,6 +6,7 @@ import { uuid } from "uuidv4";
 import { EventTypes } from "../enums/EventTypes";
 import { iconHash } from '../services/hash'
 import { User } from "../types/User";
+import { LocalizedStrings } from "../enums/LocalizedStrings";
 
 const PatientView = (props) => {
 
@@ -13,7 +14,7 @@ const PatientView = (props) => {
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
   const [isEditingSummary, setIsEditingSummary] = useState(false);
   const [userName, setUserName] = useState('');
-  const [summary, setSummary] = useState('no content yet')
+  const [summary, setSummary] = useState(LocalizedStrings[(props.navigation.getParam('language', 'en'))].noContent)
   const clinicId = props.navigation.state.params.clinicId;
   const userId = props.navigation.state.params.userId;
 
@@ -82,10 +83,10 @@ const PatientView = (props) => {
       <View style={styles.viewContainer}>
         <View style={styles.searchBar}>
           <TouchableOpacity onPress={() => props.navigation.navigate('PatientList', { language: language, reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle })}>
-            <Text style={{ margin: 20 }}>{`< PATIENTS`}</Text>
+            <Text style={{ margin: 20 }}>{LocalizedStrings[language].PATIENTS}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => props.navigation.navigate('EditPatient', { language: language, patient: patient })}>
-            <Text style={{ margin: 20 }}>{`Edit`}</Text>
+            <Text style={{ margin: 20 }}>{`${LocalizedStrings[language].edit}`}</Text>
           </TouchableOpacity>
         </View>
 
@@ -107,8 +108,6 @@ const PatientView = (props) => {
                 borderBottomWidth: 1,
               }}
             />
-            <Text>{`Date of birth:  ${patient.date_of_birth}`}</Text>
-            <Text>{`Sex:  ${patient.sex}`}</Text>
           </View>
         </View>
         <View style={styles.buttonBar}>
@@ -142,25 +141,24 @@ const PatientView = (props) => {
         <View style={styles.gridContainer}>
           <View style={styles.gridItem}>
             <Text style={styles.gridItemText}>{patient.date_of_birth}</Text>
-            <Text style={styles.gridItemLabel}>DOB</Text>
+            <Text style={styles.gridItemLabel}>{LocalizedStrings[language].DOB}</Text>
           </View>
           <View style={styles.gridItem}>
             <Text style={styles.gridItemText}>{getPatientAge(patient.date_of_birth)}</Text>
-            <Text style={styles.gridItemLabel}>AGE</Text>
+            <Text style={styles.gridItemLabel}>{LocalizedStrings[language].age}</Text>
           </View>
           <View style={styles.gridItem}>
             <Text style={styles.gridItemText}>{patient.sex}</Text>
-            <Text style={styles.gridItemLabel}>GENDER</Text>
+            <Text style={styles.gridItemLabel}>{LocalizedStrings[language].GENDER}</Text>
           </View>
         </View>
         <View>
-          <Text style={[styles.gridItemLabel, styles.title]}>Patient Summary</Text>
+          <Text style={[styles.gridItemLabel, styles.title]}>{LocalizedStrings[language].patientSummary}</Text>
           <TouchableOpacity onLongPress={() => setIsEditingSummary(true)}>
             {isEditingSummary ?
               <View>
                 <TextInput
                   style={styles.paragraph}
-                  placeholder="First Name"
                   onChangeText={setSummary}
                   value={summary}
                 />
@@ -170,7 +168,7 @@ const PatientView = (props) => {
                     handleSaveSummary();
                     setIsEditingSummary(false);
                   }}>
-                  <Text style={{ color: '#31BBF3' }}>SAVE</Text>
+                  <Text style={{ color: '#31BBF3' }}>{LocalizedStrings[language].save}</Text>
                 </TouchableOpacity>
               </View> :
               <Text style={styles.paragraph}>

@@ -19,7 +19,7 @@ export interface Database {
   getPatients(): Promise<Patient[]>;
   addUser(user: NewUser, password: string): Promise<void>;
   editStringContent(stringContent: StringContent[], id: string): Promise<string>;
-  saveStringContent(stringContent: StringContent[], id?: string): Promise<string>;
+  saveStringContent(stringContent: StringContent[], id?: string, addLanguage?: boolean): Promise<string>;
   applyScript(script: SyncResponse): Promise<void>;
   addPatient(patient: NewPatient): Promise<void>;
   editPatient(patient: NewPatient): Promise<Patient>;
@@ -68,11 +68,13 @@ class DatabaseImpl implements Database {
     });
   }
 
-  public async saveStringContent(stringContent: StringContent[], id?: string): Promise<string> {
+  public async saveStringContent(stringContent: StringContent[], id?: string, addLanguage?: boolean): Promise<string> {
     const contentId = id || uuid();
     var stringId = contentId.replace(/-/g, "");
     const db = await this.getDatabase();
-    await db.executeSql(`INSERT INTO string_ids (id) VALUES (?);`, [stringId]);
+    if (!addLanguage) {
+      await db.executeSql(`INSERT INTO string_ids (id) VALUES (?);`, [stringId]);
+    }
     stringContent.forEach(async element => {
       await this.saveStringWithId(element, stringId);
     })
@@ -82,15 +84,15 @@ class DatabaseImpl implements Database {
   public async editStringContent(stringContent: StringContent[], id: string): Promise<string> {
     const db = await this.getDatabase();
     stringContent.forEach(async element => {
-      await this.editStringwithId(element, id);
+      await this.editStringWithId(element, id);
     })
     return id;
   }
 
-  private async editStringwithId(stringContent: StringContent, id: string): Promise<string> {
+  private async editStringWithId(stringContent: StringContent, id: string): Promise<string> {
     const date = new Date().toISOString();
     const db = await this.getDatabase();
-    await db.executeSql(`UPDATE string_content SET language = ?, content = ?, edited_at = ? WHERE id = ?`, [stringContent.language, stringContent.content, date, id]);
+    await db.executeSql(`UPDATE string_content SET content = ?, edited_at = ? WHERE id = ? AND language = ?`, [stringContent.content, date, id, stringContent.language]);
     return id;
   }
 
