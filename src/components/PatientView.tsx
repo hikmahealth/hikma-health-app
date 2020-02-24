@@ -126,15 +126,7 @@ const PatientView = (props) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => {
-              Alert.alert(
-                'Under construction',
-                '',
-                [
-                  { text: 'OK' },
-                ],
-              );
-            }}>
+            onPress={() => props.navigation.navigate('VisitHistory', { language: language, patient: patient })}>
             <Text style={{ color: '#31BBF3' }}>VISIT HISTORY</Text>
           </TouchableOpacity>
         </View>

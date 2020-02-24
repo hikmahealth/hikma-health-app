@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, Image, TextInput, TouchableOpacity
 } from 'react-native';
@@ -9,7 +9,6 @@ import { uuid } from 'uuidv4';
 import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 
-
 const EditPatient = (props) => {
 
   const eventType = props.navigation.getParam('eventType');
@@ -18,6 +17,14 @@ const EditPatient = (props) => {
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
 
   const [responseText, setResponseText] = useState('');
+
+  useEffect(() => {
+    database.getLatestPatientEventByType(patientId, eventType).then((response: string) => {
+      if (response.length > 0) {
+        setResponseText(response)
+      }
+    })
+  }, [props])
 
   const addEvent = async () => {
     database.addEvent({

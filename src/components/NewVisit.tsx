@@ -17,6 +17,15 @@ const NewVisit = (props) => {
   const visitId = props.navigation.getParam('visitId');
   const userName = props.navigation.getParam('userName');
 
+  useEffect(() => {
+    let patientId = props.navigation.state.params.patient.id;
+    database.getLatestPatientEventByType(patientId, EventTypes.Camp).then((response: string) => {
+      if (response.length > 0) {
+        setCamp(response)
+      }
+    })
+  }, [props])
+
   const LanguageToggle = () => {
     return (
       <TouchableOpacity onPress={() => {

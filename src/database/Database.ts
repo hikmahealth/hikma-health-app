@@ -27,6 +27,7 @@ export interface Database {
   addEvent(event: Event): Promise<void>;
   addVisit(visit: Visit): Promise<void>;
   getUser(user_id: string): Promise<User>;
+  getVisits(patient_id: string): Promise<Visit[]>;
 }
 
 class DatabaseImpl implements Database {
@@ -338,6 +339,28 @@ class DatabaseImpl implements Database {
           `[db] Retrieved user with id: "${id}"!`
         );
         return user;
+      });
+  }
+
+  public getVisits(patient_id: string): Promise<Visit[]> {
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql("SELECT v.id, v.patient_id, v.clinic_id, v.provider_id, v.check_in_timestamp, u.name FROM visits as v INNER JOIN users as u ON v.provider_id=u.id WHERE patient_id = ? ORDER BY check_in_timestamp DESC;", [patient_id])
+      )
+      .then( async ([results]) => {
+        if (results === undefined) {
+          return [];
+        }
+        const count = results.rows.length;
+        const visits: Visit[] = [];
+        for (let i = 0; i < count; i++) {
+          const row = results.rows.item(i);
+          const { id, patient_id, clinic_id, provider_id, check_in_timestamp, name } = row;
+          const nameContent = await this.languageStringDataById(name)
+
+          visits.push({ id, patient_id, clinic_id, provider_id, check_in_timestamp, provider_name: nameContent });
+        }
+        return visits;
       });
   }
 

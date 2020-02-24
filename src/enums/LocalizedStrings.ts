@@ -34,7 +34,9 @@ export const LocalizedStrings = {
     prescriptions: "Prescriptions",
     allergies: "Allergies",
     medicalHistory: "Medical History",
-    enterTextHere: "Enter text here."
+    enterTextHere: "Enter text here.",
+    visitDate: "Visit Date",
+    provider: "Provider"
   },
   "ar": {
     patients: "المرضى",
@@ -71,6 +73,8 @@ export const LocalizedStrings = {
     prescriptions: "وصفات",
     allergies: "الحساسية",
     medicalHistory: "تاريخ طبى",
-    enterTextHere: "أدخل النص هنا"
+    enterTextHere: "أدخل النص هنا",
+    visitDate: "موعد زيارة",
+    provider: "طبيب"
   }
 };
