@@ -39,6 +39,12 @@ const PatientList = (props) => {
     setFilteredList(newList);
   }, [query]);
 
+  useEffect(() => {
+    if (!!props.navigation.getParam('language') && language !== props.navigation.getParam('language')) {
+      setLanguage(props.navigation.getParam('language'));
+    }
+  }, [props])
+
   const keyExtractor = (item, index) => index.toString()
 
   const LanguageToggle = () => {

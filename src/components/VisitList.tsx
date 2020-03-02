@@ -1,22 +1,27 @@
-import React, { Component, useState, useEffect, useRef } from "react";
-import { View, Text, Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase, ImageSourcePropType } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, FlatList, TouchableOpacity} from "react-native";
 import { database } from "../database/Database";
-import { DatabaseSync } from "../database/Sync";
 import styles from './Style';
 import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings'
 
-const VisitHistory = (props) => {
-  const [patient, setPatient] = useState(props.navigation.getParam('patient'));
+const VisitList = (props) => {
+  const patient = props.navigation.getParam('patient');
 
   const [list, setList] = useState([]);
-  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
+  const [language, setLanguage] = useState(props.navigation.getParam('language'));
 
   useEffect(() => {
     database.getVisits(patient.id).then(visits => {
       setList(visits);
     })
   }, [props, language])
+  
+  useEffect(() => {
+    if (language !== props.navigation.getParam('language')) {
+      setLanguage(props.navigation.getParam('language'));
+    }
+  }, [props])
 
   const keyExtractor = (item, index) => index.toString()
 
@@ -38,7 +43,14 @@ const VisitHistory = (props) => {
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
-        <View style={{margin: 10}}>
+      <TouchableOpacity style={styles.cardContent} onPress={() => props.navigation.navigate('EventList',
+        {
+          language: language,
+          patient: patient,
+          visit: item
+        }
+      )}>
+        <View style={{ margin: 10 }}>
           {displayPatientName(patient)}
           <View
             style={{
@@ -50,6 +62,7 @@ const VisitHistory = (props) => {
           {displayProviderName(item)}
           <Text>{`${LocalizedStrings[language].visitDate}: ${item.check_in_timestamp}`}</Text>
         </View>
+      </TouchableOpacity>
     </View>
   )
 
@@ -69,11 +82,14 @@ const VisitHistory = (props) => {
 
   return (
     <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.main}>
-    <View style={styles.searchBar}>
+      <View style={styles.searchBar}>
         <TouchableOpacity onPress={() => props.navigation.navigate('PatientView', { language: language, patient: patient })}>
           <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
         </TouchableOpacity>
         {LanguageToggle()}
+      </View>
+      <View style={styles.buttonBar}>
+        <Text style={styles.text}>{LocalizedStrings[language].visitHistory}</Text>
       </View>
       <View style={styles.listContainer}>
 
@@ -91,4 +107,4 @@ const VisitHistory = (props) => {
 
 }
 
-export default VisitHistory;
+export default VisitList;

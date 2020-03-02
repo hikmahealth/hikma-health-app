@@ -24,8 +24,16 @@ const PatientView = (props) => {
     database.getLatestPatientEventByType(patientId, EventTypes.PatientSummary).then((response: string) => {
       if (response.length > 0) {
         setSummary(response)
+      } else {
+        setSummary(LocalizedStrings[language].noContent)
       }
     })
+  }, [props, language])
+
+  useEffect(() => {
+    if (language !== props.navigation.getParam('language')) {
+      setLanguage(props.navigation.getParam('language'));
+    }
   }, [props])
 
   useEffect(() => {
@@ -47,7 +55,7 @@ const PatientView = (props) => {
           setLanguage('en')
         }
       }}>
-        <Text style={styles.text}>{language}</Text>
+        <Text>{language}</Text>
       </TouchableOpacity>
     )
   }
@@ -88,6 +96,9 @@ const PatientView = (props) => {
           <TouchableOpacity onPress={() => props.navigation.navigate('EditPatient', { language: language, patient: patient })}>
             <Text style={{ margin: 20 }}>{`${LocalizedStrings[language].edit}`}</Text>
           </TouchableOpacity>
+          <View style={{ margin: 20 }}>
+            {LanguageToggle()}
+          </View>
         </View>
 
         <View style={styles.cardContent}>
@@ -122,12 +133,12 @@ const PatientView = (props) => {
                 ],
               );
             }}>
-            <Text style={{ color: '#31BBF3' }}>TRENDS</Text>
+            <Text style={{ color: '#31BBF3' }}>{LocalizedStrings[language].trends}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => props.navigation.navigate('VisitHistory', { language: language, patient: patient })}>
-            <Text style={{ color: '#31BBF3' }}>VISIT HISTORY</Text>
+            onPress={() => props.navigation.navigate('VisitList', { language: language, patient: patient })}>
+            <Text style={{ color: '#31BBF3' }}>{LocalizedStrings[language].visitHistory}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.gridContainer}>

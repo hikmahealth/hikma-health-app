@@ -28,6 +28,7 @@ export interface Database {
   addVisit(visit: Visit): Promise<void>;
   getUser(user_id: string): Promise<User>;
   getVisits(patient_id: string): Promise<Visit[]>;
+  getEvents(visit_id: string): Promise<Event[]>;
 }
 
 class DatabaseImpl implements Database {
@@ -361,6 +362,27 @@ class DatabaseImpl implements Database {
           visits.push({ id, patient_id, clinic_id, provider_id, check_in_timestamp, provider_name: nameContent });
         }
         return visits;
+      });
+  }
+
+  public getEvents(visit_id: string): Promise<Event[]> {
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql("SELECT id, patient_id, event_type, event_metadata FROM events WHERE visit_id = ? GROUP BY event_type ORDER BY event_timestamp DESC;", [visit_id])
+      )
+      .then(([results]) => {
+        if (results === undefined) {
+          return [];
+        }
+        const count = results.rows.length;
+        const events: Event[] = [];
+        for (let i = 0; i < count; i++) {
+          const row = results.rows.item(i);
+          const { id, patient_id, event_type, event_metadata } = row;
+
+          events.push({ id, patient_id, event_type, event_metadata });
+        }
+        return events;
       });
   }
 

@@ -36,6 +36,10 @@ export const LocalizedStrings = {
     medicalHistory: "Medical History",
     enterTextHere: "Enter text here.",
     visitDate: "Visit Date",
+    visitHistory: "VISIT HISTORY",
+    visitEvents: "Visit Events",
+    trends: "TRENDS",
+    eventType: "Event Type",
     provider: "Provider"
   },
   "ar": {
@@ -75,6 +79,10 @@ export const LocalizedStrings = {
     medicalHistory: "تاريخ طبى",
     enterTextHere: "أدخل النص هنا",
     visitDate: "موعد زيارة",
+    visitHistory: "زيارة التاريخ",
+    visitEvents: "زيارة الأحداث",
+    trends: "اتجاهات",
+    eventType: "نوع الحدث",
     provider: "طبيب"
   }
 };
