@@ -88,12 +88,12 @@ export class DatabaseInitialization {
 
     // Clinics table
     transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS visits (id varchar(32) PRIMARY KEY, patient_id varchar(32) REFERENCES patients(id) ON DELETE CASCADE, clinic_id varchar(32) REFERENCES clinics(id) ON DELETE CASCADE, provider_id varchar(32) REFERENCES users(id) ON DELETE CASCADE, check_in_timestamp text);"
+      "CREATE TABLE IF NOT EXISTS visits (id varchar(32) PRIMARY KEY, patient_id varchar(32) REFERENCES patients(id) ON DELETE CASCADE, clinic_id varchar(32) REFERENCES clinics(id) ON DELETE CASCADE, provider_id varchar(32) REFERENCES users(id) ON DELETE CASCADE, check_in_timestamp text, edited_at text);"
     );
 
     // Users table
     transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS events (id varchar(32) PRIMARY KEY, patient_id varchar(32) REFERENCES patients(id) ON DELETE CASCADE, visit_id varchar(32) REFERENCES visits(id) ON DELETE CASCADE, event_type text, event_timestamp text, event_metadata text);"
+      "CREATE TABLE IF NOT EXISTS events (id varchar(32) PRIMARY KEY, patient_id varchar(32) REFERENCES patients(id) ON DELETE CASCADE, visit_id varchar(32) REFERENCES visits(id) ON DELETE CASCADE, event_type text, event_timestamp text, edited_at text, event_metadata text);"
     );
   }
 

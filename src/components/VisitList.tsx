@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, TouchableOpacity} from "react-native";
+import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import { database } from "../database/Database";
 import styles from './Style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -16,7 +16,7 @@ const VisitList = (props) => {
       setList(visits);
     })
   }, [props, language])
-  
+
   useEffect(() => {
     if (language !== props.navigation.getParam('language')) {
       setLanguage(props.navigation.getParam('language'));
@@ -42,14 +42,14 @@ const VisitList = (props) => {
   }
 
   const renderItem = ({ item }) => (
-    <View style={styles.card}>
-      <TouchableOpacity style={styles.cardContent} onPress={() => props.navigation.navigate('EventList',
-        {
-          language: language,
-          patient: patient,
-          visit: item
-        }
-      )}>
+    <TouchableOpacity style={styles.card} onPress={() => props.navigation.navigate('EventList',
+      {
+        language: language,
+        patient: patient,
+        visit: item
+      }
+    )}>
+      <View style={styles.cardContent} >
         <View style={{ margin: 10 }}>
           {displayPatientName(patient)}
           <View
@@ -62,8 +62,8 @@ const VisitList = (props) => {
           {displayProviderName(item)}
           <Text>{`${LocalizedStrings[language].visitDate}: ${item.check_in_timestamp}`}</Text>
         </View>
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   )
 
   const LanguageToggle = () => {

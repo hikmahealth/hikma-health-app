@@ -197,7 +197,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     textAlign: 'center',
     alignItems: 'center',
-    justifyContent: 'space-around'
+    justifyContent: 'flex-start'
   },
   paragraph: {
     marginHorizontal: 20,

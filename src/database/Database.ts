@@ -150,7 +150,7 @@ class DatabaseImpl implements Database {
     const id = event.id.replace(/-/g, "")
     return this.getDatabase()
       .then(db =>
-        db.executeSql(`INSERT INTO events (id, patient_id, visit_id, event_type, event_timestamp, event_metadata) VALUES (?, ?, ?, ?, ?, ?);`, [id, event.patient_id, event.visit_id, event.event_type, date, event.event_metadata])
+        db.executeSql(`INSERT INTO events (id, patient_id, visit_id, event_type, event_timestamp, edited_at, event_metadata) VALUES (?, ?, ?, ?, ?, ?, ?);`, [id, event.patient_id, event.visit_id, event.event_type, date, date, event.event_metadata])
       )
       .then(([results]) => {
         console.log(
@@ -164,7 +164,7 @@ class DatabaseImpl implements Database {
     const id = visit.id.replace(/-/g, "")
     return this.getDatabase()
       .then(db =>
-        db.executeSql(`INSERT INTO visits (id, patient_id, clinic_id, provider_id, check_in_timestamp) VALUES (?, ?, ?, ?, ?);`, [id, visit.patient_id, visit.clinic_id, visit.provider_id, date])
+        db.executeSql(`INSERT INTO visits (id, patient_id, clinic_id, provider_id, check_in_timestamp, edited_at) VALUES (?, ?, ?, ?, ?, ?);`, [id, visit.patient_id, visit.clinic_id, visit.provider_id, date, date])
       )
       .then(([results]) => {
         console.log(

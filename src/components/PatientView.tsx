@@ -110,7 +110,7 @@ const PatientView = (props) => {
             </View> */}
           </ImageBackground>
 
-          <View>
+          <View style={{marginLeft: 20}}>
             {displayName(patient)}
             <View
               style={{

@@ -71,16 +71,16 @@ const PatientList = (props) => {
   }
 
   const renderItem = ({ item }) => (
-    <View style={styles.card}>
-      <TouchableOpacity style={styles.cardContent} onPress={() => props.navigation.navigate('PatientView',
-        {
-          language: language,
-          patient: item,
-          reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle,
-          clinicId: clinicId,
-          userId: userId
-        }
-      )}>
+    <TouchableOpacity style={styles.card} onPress={() => props.navigation.navigate('PatientView',
+      {
+        language: language,
+        patient: item,
+        reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle,
+        clinicId: clinicId,
+        userId: userId
+      }
+    )}>
+      <View style={styles.cardContent} >
         <ImageBackground source={{ uri: iconHash(item.id) }} style={{ width: 100, height: 105, justifyContent: 'center' }}>
           {/* <View style={styles.hexagon}>
             <View style={styles.hexagonInner} />
@@ -89,7 +89,7 @@ const PatientList = (props) => {
           </View> */}
         </ImageBackground>
 
-        <View>
+        <View style={{marginLeft: 20}}>
           {displayName(item)}
           <View
             style={{
@@ -101,8 +101,8 @@ const PatientList = (props) => {
           <Text>{`${LocalizedStrings[language].dob}:  ${item.date_of_birth}`}</Text>
           <Text>{`${LocalizedStrings[language].sex}:  ${item.sex}`}</Text>
         </View>
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   )
 
   return (

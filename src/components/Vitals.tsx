@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, Image, TextInput, TouchableOpacity
 } from 'react-native';
@@ -21,9 +21,44 @@ const Vitals = (props) => {
   const patientId = props.navigation.getParam('patientId');
   const visitId = props.navigation.getParam('visitId');
 
+  useEffect(() => {
+    database.getLatestPatientEventByType(patientId, EventTypes.HR).then((response: string) => {
+      if (!!response) {
+        setHeartRate(response)
+      }
+    })
+    database.getLatestPatientEventByType(patientId, EventTypes.BP).then((response: string) => {
+      if (!!response) {
+        const bp = response.split("/");
+        setSystolic(bp[0])
+        setDiastolic(bp[1])
+      }
+    })
+    database.getLatestPatientEventByType(patientId, EventTypes.Sats).then((response: string) => {
+      if (!!response) {
+        setSats(response)
+      }
+    })
+    database.getLatestPatientEventByType(patientId, EventTypes.Temp).then((response: string) => {
+      if (!!response) {
+        setTemp(response)
+      }
+    })
+    database.getLatestPatientEventByType(patientId, EventTypes.RR).then((response: string) => {
+      if (!!response) {
+        setRespiratoryRate(response)
+      }
+    })
+    database.getLatestPatientEventByType(patientId, EventTypes.BG).then((response: string) => {
+      if (!!response) {
+        setBloodGlucose(response)
+      }
+    })
+  }, [props])
+
   const setVitals = async () => {
     await addEvent(heartRate, EventTypes.HR);
-    await addEvent(`${systolic}/${diastolic}`, EventTypes.BP);
+    await addEvent(!!systolic && !!diastolic ? `${systolic}/${diastolic}` : null, EventTypes.BP);
     await addEvent(sats, EventTypes.Sats);
     await addEvent(temp, EventTypes.Temp);
     await addEvent(respiratoryRate, EventTypes.RR);

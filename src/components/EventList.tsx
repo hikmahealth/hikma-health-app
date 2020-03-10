@@ -14,7 +14,10 @@ const EventList = (props) => {
 
   useEffect(() => {
     database.getEvents(visit.id).then(events => {
-      setList(events);
+      const filteredEvents = events.filter(event => {
+        return !!event.event_metadata;
+      })
+      setList(filteredEvents);
     })
   }, [props, language])
 
@@ -29,16 +32,18 @@ const EventList = (props) => {
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
-      <View style={{ margin: 10 }}>
-      <Text>{`${LocalizedStrings[language].eventType}: ${item.event_type}`}</Text>
-        <View
-          style={{
-            marginVertical: 5,
-            borderBottomColor: 'black',
-            borderBottomWidth: 1,
-          }}
-        />
-        <Text>{item.event_metadata}</Text>
+      <View style={styles.cardContent} >
+        <View style={{ margin: 10 }}>
+          <Text>{`${LocalizedStrings[language].eventType}: ${item.event_type}`}</Text>
+          <View
+            style={{
+              marginVertical: 5,
+              borderBottomColor: 'black',
+              borderBottomWidth: 1,
+            }}
+          />
+          <Text>{item.event_metadata}</Text>
+        </View>
       </View>
     </View>
   )
