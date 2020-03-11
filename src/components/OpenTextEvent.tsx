@@ -50,14 +50,12 @@ const EditPatient = (props) => {
         multiline={true}
       />
 
-      <View >
+      <View>
         <TouchableOpacity onPress={() => addEvent()}>
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>
       </View>
     </LinearGradient>
-
-
   );
 };
 

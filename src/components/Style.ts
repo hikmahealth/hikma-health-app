@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
-
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { Platform } from 'react-native';
 export default StyleSheet.create({
   loginContainer: {
     flex: 1,
@@ -7,6 +8,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   loginInputsContainer: {
+    padding: 10,
     width: '90%',
     borderRadius: 12,
     backgroundColor: '#FFFFFF',
@@ -28,9 +30,8 @@ export default StyleSheet.create({
     height: 140,
     resizeMode: 'stretch'
   },
-  
   container: {
-    paddingTop: 20,
+    paddingTop: Platform.OS === 'ios' ? getStatusBarHeight() : 0,
     paddingBottom: 20,
     justifyContent: 'space-between',
     flex: 1,
@@ -69,6 +70,7 @@ export default StyleSheet.create({
     color: '#FFFFFF'
   },
   main: {
+    paddingTop: Platform.OS === 'ios' ? getStatusBarHeight() : 0,
     flex: 1
   },
   listContainer: {

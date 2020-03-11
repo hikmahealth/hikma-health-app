@@ -77,73 +77,71 @@ const Vitals = (props) => {
   };
 
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={[styles.container, {alignItems: 'center'}]}>
-      <View style={styles.inputsContainer}>
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.inputs}
-            placeholder="HR"
-            onChangeText={(text) => setHeartRate(text)}
-            value={heartRate}
-            keyboardType='numeric'
-          />
-          <Text>BPM</Text>
-        </View>
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.inputs}
-            placeholder="Systolic"
-            onChangeText={(text) => setSystolic(text)}
-            value={systolic}
-            keyboardType='numeric'
-          />
-          <Text>/</Text>
-          <TextInput
-            style={styles.inputs}
-            placeholder="Diastolic"
-            onChangeText={(text) => setDiastolic(text)}
-            value={diastolic}
-            keyboardType='numeric'
-          />
-        </View>
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.inputs}
-            placeholder="Sats"
-            onChangeText={(text) => setSats(text)}
-            value={sats}
-            keyboardType='numeric'
-          />
-          <Text>%</Text>
-        </View>
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.inputs}
-            placeholder="Temp"
-            onChangeText={(text) => setTemp(text)}
-            value={temp}
-            keyboardType='numeric'
-          />
-          <Text>°C</Text>
-          <TextInput
-            style={styles.inputs}
-            placeholder="RR"
-            onChangeText={(text) => setRespiratoryRate(text)}
-            value={respiratoryRate}
-            keyboardType='numeric'
-          />
-        </View>
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.inputs}
-            placeholder="BG"
-            onChangeText={(text) => setBloodGlucose(text)}
-            value={bloodGlucose}
-            keyboardType='numeric'
-          />
-        </View>
+    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={[styles.container, { justifyContent: 'flex-start', alignItems: 'center' }]}>
+      <View style={[styles.inputRow, {marginTop: 30}]}>
+        <TextInput
+          style={styles.inputs}
+          placeholder="HR"
+          onChangeText={(text) => setHeartRate(text)}
+          value={heartRate}
+          keyboardType='numeric'
+        />
+        <Text>BPM</Text>
       </View>
-      <View >
+      <View style={styles.inputRow}>
+        <TextInput
+          style={styles.inputs}
+          placeholder="Systolic"
+          onChangeText={(text) => setSystolic(text)}
+          value={systolic}
+          keyboardType='numeric'
+        />
+        <Text>/</Text>
+        <TextInput
+          style={styles.inputs}
+          placeholder="Diastolic"
+          onChangeText={(text) => setDiastolic(text)}
+          value={diastolic}
+          keyboardType='numeric'
+        />
+      </View>
+      <View style={styles.inputRow}>
+        <TextInput
+          style={styles.inputs}
+          placeholder="Sats"
+          onChangeText={(text) => setSats(text)}
+          value={sats}
+          keyboardType='numeric'
+        />
+        <Text>%</Text>
+      </View>
+      <View style={styles.inputRow}>
+        <TextInput
+          style={styles.inputs}
+          placeholder="Temp"
+          onChangeText={(text) => setTemp(text)}
+          value={temp}
+          keyboardType='numeric'
+        />
+        <Text>°C</Text>
+        <TextInput
+          style={styles.inputs}
+          placeholder="RR"
+          onChangeText={(text) => setRespiratoryRate(text)}
+          value={respiratoryRate}
+          keyboardType='numeric'
+        />
+      </View>
+      <View style={styles.inputRow}>
+        <TextInput
+          style={styles.inputs}
+          placeholder="BG"
+          onChangeText={(text) => setBloodGlucose(text)}
+          value={bloodGlucose}
+          keyboardType='numeric'
+        />
+      </View>
+      <View style={{marginTop: 30}}>
         <TouchableOpacity onPress={() => setVitals()}>
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>

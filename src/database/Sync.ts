@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import RNFS from "react-native-fs";
 import RNFetchBlob, { FetchBlobResponse } from "rn-fetch-blob";
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
@@ -13,7 +14,7 @@ export class DatabaseSync {
 
   public async performSync(email: string, password: string): Promise<any> {
     // const target = this.getCompressionTargetPath()
-    const target = this.getLocalDBFilePath()
+    const target = Platform.OS === 'ios' ? this.getLocalDBFilePathIOS() : this.getLocalDBFilePathAndroid()
 
     // this.compressDB(this.getCompressionSourcePath(), target)
 
@@ -98,9 +99,15 @@ export class DatabaseSync {
     return DATABASE.COMPRESSED_FILE_NAME;
   }
 
-  private getLocalDBFilePath(): string {
+  private getLocalDBFilePathAndroid(): string {
     return (
       RNFS.DocumentDirectoryPath + "/../databases/" + this.getDatabaseName()
+    );
+  }
+
+  private getLocalDBFilePathIOS(): string {
+    return (
+      RNFS.LibraryDirectoryPath + "/LocalDatabase/" + this.getDatabaseName()
     );
   }
 

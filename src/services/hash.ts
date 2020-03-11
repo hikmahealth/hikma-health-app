@@ -1,7 +1,7 @@
-export const iconHash = (id: string): string => {
+export const iconHash = (id: string): number => {
   let hash = 0, i, chr;
   if (id.length === 0) {
-    return ''
+    return null
   }
   for (i = 0; i < id.length; i++) {
     chr = id.charCodeAt(i);
@@ -9,5 +9,5 @@ export const iconHash = (id: string): string => {
     hash |= 0; // Convert to 32bit integer
   }
   let iconId = Math.abs(hash % 50);
-  return 'icon' + iconId.toString()
+  return iconId;
 };

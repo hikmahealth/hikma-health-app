@@ -5,6 +5,7 @@ import styles from './Style';
 import { uuid } from "uuidv4";
 import { EventTypes } from "../enums/EventTypes";
 import { iconHash } from '../services/hash'
+import { icons } from '../enums/Icons';
 import { User } from "../types/User";
 import { LocalizedStrings } from "../enums/LocalizedStrings";
 
@@ -55,7 +56,7 @@ const PatientView = (props) => {
           setLanguage('en')
         }
       }}>
-        <Text>{language}</Text>
+        <Text style={{ padding: 20 }} >{language}</Text>
       </TouchableOpacity>
     )
   }
@@ -91,18 +92,16 @@ const PatientView = (props) => {
       <View style={styles.viewContainer}>
         <View style={styles.searchBar}>
           <TouchableOpacity onPress={() => props.navigation.navigate('PatientList', { language: language, reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle })}>
-            <Text style={{ margin: 20 }}>{LocalizedStrings[language].PATIENTS}</Text>
+            <Text style={{ padding: 20 }}>{LocalizedStrings[language].PATIENTS}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => props.navigation.navigate('EditPatient', { language: language, patient: patient })}>
-            <Text style={{ margin: 20 }}>{`${LocalizedStrings[language].edit}`}</Text>
+            <Text style={{ padding: 20 }}>{`${LocalizedStrings[language].edit}`}</Text>
           </TouchableOpacity>
-          <View style={{ margin: 20 }}>
-            {LanguageToggle()}
-          </View>
+          {LanguageToggle()}
         </View>
 
         <View style={styles.cardContent}>
-          <ImageBackground source={{ uri: iconHash(patient.id) }} style={{ width: 100, height: 105, justifyContent: 'center' }}>
+          <ImageBackground source={icons[iconHash(patient.id)]} style={{ width: 100, height: 105, justifyContent: 'center' }}>
             {/* <View style={styles.hexagon}>
               <View style={styles.hexagonInner} />
               <View style={styles.hexagonBefore} />

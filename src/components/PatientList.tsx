@@ -5,7 +5,8 @@ import { DatabaseSync } from "../database/Sync";
 import styles from './Style';
 import { iconHash } from '../services/hash'
 import LinearGradient from 'react-native-linear-gradient';
-import { LocalizedStrings } from '../enums/LocalizedStrings'
+import { LocalizedStrings } from '../enums/LocalizedStrings';
+import { icons } from '../enums/Icons';
 
 const PatientList = (props) => {
   const databaseSync: DatabaseSync = new DatabaseSync();
@@ -81,7 +82,7 @@ const PatientList = (props) => {
       }
     )}>
       <View style={styles.cardContent} >
-        <ImageBackground source={{ uri: iconHash(item.id) }} style={{ width: 100, height: 105, justifyContent: 'center' }}>
+        <ImageBackground source={icons[iconHash(item.id)]} style={{ width: 100, height: 105, justifyContent: 'center' }}>
           {/* <View style={styles.hexagon}>
             <View style={styles.hexagonInner} />
             <View style={styles.hexagonBefore} />
