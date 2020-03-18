@@ -106,11 +106,11 @@ const NewVisit = (props) => {
           <Text style={styles.actionText}>{LocalizedStrings[language].vitals}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.ExaminationNotes)}>
+        <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.Examination)}>
           <View style={styles.actionIcon}>
             <Image source={require('../images/stethoscope.png')} style={{ width: 43, height: 47 }} />
           </View>
-          <Text style={styles.actionText}>{LocalizedStrings[language].examinationNotes}</Text>
+          <Text style={styles.actionText}>{LocalizedStrings[language].examination}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.Complaint)}>
           <View style={styles.actionIcon}>
@@ -159,6 +159,14 @@ const NewVisit = (props) => {
             <Image source={require('../images/medicalHistory.png')} style={{ width: 53, height: 51 }} />
           </View>
           <Text style={styles.actionText}>{LocalizedStrings[language].medicalHistory}</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={[styles.gridContainer, {width: '33%'}]}>
+        <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.Notes)}>
+          <View style={styles.actionIcon}>
+            <Image source={require('../images/notes.png')} style={{ width: 43, height: 47 }} />
+          </View>
+          <Text style={styles.actionText}>{LocalizedStrings[language].notes}</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>

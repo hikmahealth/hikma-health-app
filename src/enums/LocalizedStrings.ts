@@ -26,7 +26,8 @@ export const LocalizedStrings = {
 
     camp: "Camp",
     vitals: "Vitals",
-    examinationNotes: "Examination Notes",
+    examination: "Examination",
+    notes: "Notes",
     complaint: "Complaint",
     treatment: "Treatment",
     diagnosis: "Diagnosis",
@@ -69,7 +70,8 @@ export const LocalizedStrings = {
 
     camp: "مخيم",
     vitals: "الأعضاء الحيوية",
-    examinationNotes: "ملاحظات الفحص",
+    examination: "فحص",
+    notes: "ملاحظات",
     complaint: "شكوى",
     treatment: "علاج او معاملة",
     diagnosis: "التشخيص",

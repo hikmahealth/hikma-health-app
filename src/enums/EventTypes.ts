@@ -6,7 +6,7 @@ export enum EventTypes {
   Temp = 'Temp',
   RR = 'RR',
   BG = 'BG',
-  ExaminationNotes = 'Examination Notes',
+  Examination = 'Examination',
   Complaint = 'Complaint',
   Treatment = 'Treatment',
   Diagnosis = 'Diagnosis',
@@ -14,5 +14,6 @@ export enum EventTypes {
   Prescriptions = 'Prescriptions',
   Allergies = 'Allergies',
   MedicalHistory = 'Medical History',
-  Camp = 'Camp'
+  Camp = 'Camp',
+  Notes = 'Notes'
 }
