@@ -117,12 +117,11 @@ export default StyleSheet.create({
   actionButton: {
     flexDirection: 'column',
     justifyContent: 'space-between',
-    paddingBottom: 20,
-    paddingTop: 10,
+    padding: 5,
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    margin: 4,
-    height: 120,
+    margin: 5,
+    height: 100,
     borderRadius: 12,
     borderColor: '#EAEAEA',
     borderWidth: .5,
@@ -174,7 +173,6 @@ export default StyleSheet.create({
     height: 50,
   },
   gridContainer: {
-    paddingTop: 20,
     flexDirection: 'row',
   },
   gridItem: {
