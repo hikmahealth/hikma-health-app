@@ -21,8 +21,8 @@ const Login = (props) => {
   let clinicId = '';
 
   const remoteLogin = async (): Promise<any> => {
-    // fetch('https://demo-api.hikmahealth.org/api/login', {
-    const response = await fetch('http://216.21.162.104:42069/api/login', {
+    const response = await fetch('https://demo-api.hikmahealth.org/api/login', {
+    // const response = await fetch('http://216.21.162.104:42069/api/login', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

@@ -24,6 +24,10 @@ const NewVisit = (props) => {
         setCamp(response)
       }
     })
+
+    if (!!props.navigation.getParam('language') && language !== props.navigation.getParam('language')) {
+      setLanguage(props.navigation.getParam('language'));
+    }
   }, [props])
 
   const LanguageToggle = () => {
@@ -158,12 +162,18 @@ const NewVisit = (props) => {
           <Text style={styles.actionText}>{LocalizedStrings[language].prescriptions}</Text>
         </TouchableOpacity>
       </View>
-      <View style={[styles.gridContainer, { width: '33%' }]}>
+      <View style={[styles.gridContainer, { width: '66%' }]}>
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.Notes)}>
           <View style={styles.actionIcon}>
             <Image source={require('../images/notes.png')} style={{ width: 43, height: 47 }} />
           </View>
           <Text style={styles.actionText}>{LocalizedStrings[language].notes}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.actionButton} onPress={() => props.navigation.navigate('Covid19Form', { language: language, patient: patient, visitId: visitId })}>
+          <View style={styles.actionIcon}>
+            <Image source={require('../images/covid.png')} style={{ width: 43, height: 47 }} />
+          </View>
+          <Text style={styles.actionText}>COVID-19 Screening</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>

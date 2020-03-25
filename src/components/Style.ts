@@ -42,9 +42,10 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   inputRow: {
-    maxWidth: '90%',
+    // maxWidth: '90%',
     flexDirection: 'row',
     alignItems: 'center',
+    padding: 10
   },
   inputs: {
     backgroundColor: '#FFFFFF',
@@ -206,6 +207,41 @@ export default StyleSheet.create({
   title: {
     marginHorizontal: 20,
     marginTop: 20
+  },
+  outerRadioButton: {
+    height: 24,
+    width: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 5
+  },
+  selectedRadioButton: {
+    height: 12,
+    width: 12,
+    borderRadius: 6,
+    backgroundColor: 'green',
+  },
+  datePicker: {
+    backgroundColor: '#FFFFFF',
+    margin: 10,
+    paddingHorizontal: 10,
+    height: 40,
+    borderRadius: 12,
+    borderColor: '#EAEAEA',
+    borderWidth: .5,
+    width: '100%',
+    flex: 1,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   hexagon: {
     width: 100,

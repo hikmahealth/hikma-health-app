@@ -8,6 +8,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
+    "@react-native-community/slider": "^2.0.9",
     "@types/react-native-datepicker": "^1.7.0",
     "@types/react-native-elements": "^0.18.0",
     "@types/react-native-fs": "^2.13.0",

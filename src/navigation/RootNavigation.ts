@@ -7,6 +7,7 @@ import PatientList from '../components/PatientList';
 import NewPatient from '../components/NewPatient';
 import PatientView from '../components/PatientView';
 import NewVisit from '../components/NewVisit';
+import Covid19Form from '../components/Covid19Form';
 import EditPatient from '../components/EditPatient';
 import OpenTextEvent from '../components/OpenTextEvent';
 import Vitals from '../components/Vitals';
@@ -55,6 +56,13 @@ const rootNavigator = createStackNavigator(
       navigationOptions: () => ({
         title: `NewVisit`,
         header: null,
+      })
+    },
+    Covid19Form: {
+      screen: Covid19Form,
+      navigationOptions: () => ({
+        title: `Covid19Form`,
+        header: null
       })
     },
     OpenTextEvent: {
