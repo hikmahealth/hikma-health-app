@@ -37,7 +37,7 @@ const EditPatient = (props) => {
   };
 
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={[styles.container, { justifyContent: 'flex-start', alignItems: 'center' }]}>
+    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
       <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit')}>
         <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
       </TouchableOpacity>

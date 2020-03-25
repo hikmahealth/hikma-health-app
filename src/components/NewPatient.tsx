@@ -61,85 +61,83 @@ const NewPatient = (props) => {
     return (
       <TouchableOpacity onPress={() => setMale(!male)}>
         <View style={styles.outerRadioButton}>
-          { props.selected ? <View style={styles.selectedRadioButton} /> : null }
+          {props.selected ? <View style={styles.selectedRadioButton} /> : null}
         </View>
       </TouchableOpacity>
     );
   }
 
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={[styles.container, { alignItems: 'center' }]}>
+    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
       {LanguageToggle()}
-      <View style={styles.inputsContainer}>
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.inputs}
-            placeholder={LocalizedStrings[language].firstName}
-            onChangeText={(text) => setGivenName(text)}
-            value={givenName}
-          />
-        </View>
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.inputs}
-            placeholder={LocalizedStrings[language].surname}
-            onChangeText={(text) => setSurname(text)}
-            value={surname}
-          />
-        </View>
-        <View style={styles.inputRow}>
-          <DatePicker
-            style={styles.datePicker}
-            date={dob}
-            mode="date"
-            placeholder={LocalizedStrings[language].selectDob}
-            format="YYYY-MM-DD"
-            minDate="1900-05-01"
-            maxDate="2020-03-27"
-            confirmBtnText={LocalizedStrings[language].confirm}
-            cancelBtnText={LocalizedStrings[language].cancel}
-            customStyles={{
-              dateInput: {
-                alignItems: 'flex-start',
-                borderWidth: 0
-              }
-            }}
-            androidMode='spinner'
-            onDateChange={(date) => setDob(date)}
-          />
-          <View >
-            <Text style={[{ color: '#FFFFFF' }]}>{LocalizedStrings[language].gender}</Text>
-            <View style={[{ flexDirection: 'row' }]}>
-              {RadioButton({ selected: male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>M</Text>
-              {RadioButton({ selected: !male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>F</Text>
-            </View>
+      <View style={styles.inputRow}>
+        <TextInput
+          style={styles.inputs}
+          placeholder={LocalizedStrings[language].firstName}
+          onChangeText={(text) => setGivenName(text)}
+          value={givenName}
+        />
+      </View>
+      <View style={styles.inputRow}>
+        <TextInput
+          style={styles.inputs}
+          placeholder={LocalizedStrings[language].surname}
+          onChangeText={(text) => setSurname(text)}
+          value={surname}
+        />
+      </View>
+      <View style={styles.inputRow}>
+        <DatePicker
+          style={styles.datePicker}
+          date={dob}
+          mode="date"
+          placeholder={LocalizedStrings[language].selectDob}
+          format="YYYY-MM-DD"
+          minDate="1900-05-01"
+          maxDate="2020-03-27"
+          confirmBtnText={LocalizedStrings[language].confirm}
+          cancelBtnText={LocalizedStrings[language].cancel}
+          customStyles={{
+            dateInput: {
+              alignItems: 'flex-start',
+              borderWidth: 0
+            }
+          }}
+          androidMode='spinner'
+          onDateChange={(date) => setDob(date)}
+        />
+        <View >
+          <Text style={[{ color: '#FFFFFF' }]}>{LocalizedStrings[language].gender}</Text>
+          <View style={[{ flexDirection: 'row' }]}>
+            {RadioButton({ selected: male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>M</Text>
+            {RadioButton({ selected: !male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>F</Text>
           </View>
         </View>
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.inputs}
-            placeholder={LocalizedStrings[language].country}
-            onChangeText={(text) => setCountry(text)}
-            value={country}
-          />
-          <TextInput
-            style={styles.inputs}
-            placeholder={LocalizedStrings[language].hometown}
-            onChangeText={(text) => setHometown(text)}
-            value={hometown}
-          />
-        </View>
-        <View style={styles.inputRow}>
-
-          <TextInput
-            style={styles.inputs}
-            placeholder={LocalizedStrings[language].phone}
-            onChangeText={(text) => setPhone(text)}
-            value={phone}
-          />
-        </View>
       </View>
-      <View >
+      <View style={styles.inputRow}>
+        <TextInput
+          style={styles.inputs}
+          placeholder={LocalizedStrings[language].country}
+          onChangeText={(text) => setCountry(text)}
+          value={country}
+        />
+        <TextInput
+          style={styles.inputs}
+          placeholder={LocalizedStrings[language].hometown}
+          onChangeText={(text) => setHometown(text)}
+          value={hometown}
+        />
+      </View>
+      <View style={styles.inputRow}>
+
+        <TextInput
+          style={styles.inputs}
+          placeholder={LocalizedStrings[language].phone}
+          onChangeText={(text) => setPhone(text)}
+          value={phone}
+        />
+      </View>
+      <View style={{ marginTop: 30 }}>
         <TouchableOpacity onPress={() => addPatient()}>
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>

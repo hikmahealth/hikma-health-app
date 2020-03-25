@@ -33,7 +33,14 @@ export default StyleSheet.create({
   container: {
     paddingTop: Platform.OS === 'ios' ? getStatusBarHeight() : 0,
     paddingBottom: 20,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flex: 1,
+  },
+  containerLeft: {
+    paddingTop: Platform.OS === 'ios' ? getStatusBarHeight() : 0,
+    paddingBottom: 20,
+    justifyContent: 'flex-start',
     flex: 1,
   },
   inputsContainer: {
@@ -42,8 +49,13 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   inputRow: {
-    // maxWidth: '90%',
+    maxWidth: '90%',
     flexDirection: 'row',
+    alignItems: 'center',
+  },
+  responseRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
     padding: 10
   },

@@ -4,6 +4,7 @@ import { database } from "../database/Database";
 import styles from './Style';
 import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings'
+import { EventTypes } from "../enums/EventTypes";
 
 const EventList = (props) => {
   const visit = props.navigation.getParam('visit');
@@ -42,11 +43,20 @@ const EventList = (props) => {
               borderBottomWidth: 1,
             }}
           />
-          <Text>{item.event_metadata}</Text>
+          {renderMetadata(item.event_type, item.event_metadata)}
         </View>
       </View>
     </View>
   )
+
+  const renderMetadata = (type: EventTypes, metadata: string) => {
+    if (type === EventTypes.Covid19Screening) {
+      const metadataObj = JSON.parse(metadata)
+      return (<Text>Test/Isolate Patient: {metadataObj.testAndIsolate.toString()}</Text>)
+    } else {
+      return(<Text>{metadata}</Text>)
+    }
+  }
 
   const LanguageToggle = () => {
     return (

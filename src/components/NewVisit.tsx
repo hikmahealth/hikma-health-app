@@ -59,7 +59,7 @@ const NewVisit = (props) => {
   }
 
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
+    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
       <View style={styles.searchBar}>
         <TouchableOpacity onPress={() => props.navigation.navigate('PatientView', { language: language, patient: patient })}>
           <Text style={styles.text}>{LocalizedStrings[language].back}</Text>

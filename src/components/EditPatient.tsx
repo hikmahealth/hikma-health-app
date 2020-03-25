@@ -102,96 +102,94 @@ const EditPatient = (props) => {
   }
 
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={[styles.container, { alignItems: 'center' }]}>
+    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
       {LanguageToggle()}
-      <View style={styles.inputsContainer}>
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.inputs}
-            placeholder={LocalizedStrings[language].firstName}
-            onChangeText={setGivenNameText}
-            value={givenNameText}
-          />
-        </View>
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.inputs}
-            placeholder={LocalizedStrings[language].surname}
-            onChangeText={setSurnameText}
-            value={surnameText}
-          />
-        </View>
-        <View style={styles.inputRow}>
-          <DatePicker
-            style={{
-              backgroundColor: '#FFFFFF',
-              margin: 10,
-              paddingHorizontal: 10,
-              height: 40,
-              borderRadius: 12,
-              borderColor: '#EAEAEA',
-              borderWidth: .5,
-              width: '100%',
-              flex: 1,
-              elevation: 5,
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-            }}
-            date={dob}
-            mode="date"
-            placeholder={LocalizedStrings[language].selectDob}
-            format="YYYY-MM-DD"
-            minDate="1900-05-01"
-            maxDate="2020-01-27"
-            confirmBtnText={LocalizedStrings[language].confirm}
-            cancelBtnText={LocalizedStrings[language].cancel}
-            customStyles={{
-              dateInput: {
-                alignItems: 'flex-start',
-                borderWidth: 0
-              }
-            }}
-            androidMode='spinner'
-            onDateChange={(date) => setDob(date)}
-          />
-          <View >
-            <Text style={[{ color: '#FFFFFF' }]}>{LocalizedStrings[language].gender}</Text>
-            <View style={[{ flexDirection: 'row' }]}>
-              {RadioButton({ selected: male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>M</Text>
-              {RadioButton({ selected: !male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>F</Text>
-            </View>
+      <View style={styles.inputRow}>
+        <TextInput
+          style={styles.inputs}
+          placeholder={LocalizedStrings[language].firstName}
+          onChangeText={setGivenNameText}
+          value={givenNameText}
+        />
+      </View>
+      <View style={styles.inputRow}>
+        <TextInput
+          style={styles.inputs}
+          placeholder={LocalizedStrings[language].surname}
+          onChangeText={setSurnameText}
+          value={surnameText}
+        />
+      </View>
+      <View style={styles.inputRow}>
+        <DatePicker
+          style={{
+            backgroundColor: '#FFFFFF',
+            margin: 10,
+            paddingHorizontal: 10,
+            height: 40,
+            borderRadius: 12,
+            borderColor: '#EAEAEA',
+            borderWidth: .5,
+            width: '100%',
+            flex: 1,
+            elevation: 5,
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+          }}
+          date={dob}
+          mode="date"
+          placeholder={LocalizedStrings[language].selectDob}
+          format="YYYY-MM-DD"
+          minDate="1900-05-01"
+          maxDate="2020-01-27"
+          confirmBtnText={LocalizedStrings[language].confirm}
+          cancelBtnText={LocalizedStrings[language].cancel}
+          customStyles={{
+            dateInput: {
+              alignItems: 'flex-start',
+              borderWidth: 0
+            }
+          }}
+          androidMode='spinner'
+          onDateChange={(date) => setDob(date)}
+        />
+        <View >
+          <Text style={[{ color: '#FFFFFF' }]}>{LocalizedStrings[language].gender}</Text>
+          <View style={[{ flexDirection: 'row' }]}>
+            {RadioButton({ selected: male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>M</Text>
+            {RadioButton({ selected: !male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>F</Text>
           </View>
         </View>
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.inputs}
-            placeholder={LocalizedStrings[language].country}
-            onChangeText={setCountryText}
-            value={countryText}
-          />
-          <TextInput
-            style={styles.inputs}
-            placeholder={LocalizedStrings[language].hometown}
-            onChangeText={setHometownText}
-            value={hometownText}
-          />
-        </View>
-        <View style={styles.inputRow}>
-
-          <TextInput
-            style={styles.inputs}
-            placeholder={LocalizedStrings[language].phone}
-            onChangeText={(text) => setPhone(text)}
-            value={phone}
-          />
-        </View>
       </View>
-      <View >
+      <View style={styles.inputRow}>
+        <TextInput
+          style={styles.inputs}
+          placeholder={LocalizedStrings[language].country}
+          onChangeText={setCountryText}
+          value={countryText}
+        />
+        <TextInput
+          style={styles.inputs}
+          placeholder={LocalizedStrings[language].hometown}
+          onChangeText={setHometownText}
+          value={hometownText}
+        />
+      </View>
+      <View style={styles.inputRow}>
+
+        <TextInput
+          style={styles.inputs}
+          placeholder={LocalizedStrings[language].phone}
+          onChangeText={(text) => setPhone(text)}
+          value={phone}
+        />
+      </View>
+      <View style={{marginTop: 30}}>
         <TouchableOpacity onPress={() => editPatient()}>
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>

@@ -59,9 +59,9 @@ const Covid19Form = (props) => {
 
   const result = () => {
     let testIsolate = false;
-    if ((getPatientAge(patient.dob) > 18 && (chestPain || confusion || bluish))
+    if ((getPatientAge(patient.date_of_birth) > 18 && (chestPain || confusion || bluish))
       || ((dryCough || diffBreathing || soreThroat) && fever)
-      || exposureKnown || exposureSuspected || travel || travelIran || getPatientAge(patient.dob) > 55 || diabetes || cardioDisease || pulmonaryDisease || renalDisease || malignancy || pregnant || immunocompromised) {
+      || exposureKnown || exposureSuspected || travel || travelIran || getPatientAge(patient.date_of_birth) > 55 || diabetes || cardioDisease || pulmonaryDisease || renalDisease || malignancy || pregnant || immunocompromised) {
       testIsolate = true
     }
     return testIsolate;
@@ -121,7 +121,7 @@ const Covid19Form = (props) => {
   const slider = (props) => {
     return (
       <View style={{ flexDirection: 'row' }}>
-        <Text style={{ color: '#FFFFFF', padding: 10 }}>Severity: {props.severity}</Text>
+        <Text style={styles.text}>Severity: {props.severity}</Text>
         <Slider
           style={{ width: 200, height: 40 }}
           step={1}
@@ -160,7 +160,7 @@ const Covid19Form = (props) => {
         achesDate,
         headache,
         headacheDate,
-        age: getPatientAge(patient.dob),
+        age: getPatientAge(patient.date_of_birth),
         diabetes,
         cardioDisease,
         pulmonaryDisease,
@@ -186,7 +186,7 @@ const Covid19Form = (props) => {
 
   return (
     <ScrollView>
-      <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
+      <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
         <View style={styles.searchBar}>
           <TouchableOpacity onPress={() => {
             props.navigation.navigate('NewVisit', { language: language })
@@ -198,7 +198,7 @@ const Covid19Form = (props) => {
         </View>
 
         <View style={[styles.inputsContainer, { alignItems: 'flex-start' }]}>
-          <View style={styles.inputRow}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Fever?</Text>
               <TouchableOpacity onPress={() => setFever(!fever)}>
@@ -215,7 +215,7 @@ const Covid19Form = (props) => {
             <View style={{ paddingLeft: 20 }}>{fever ? datePicker({ placeholder: "Date Onset", date: feverDate, action: setFeverDate }) : null}</View>
           </View>
 
-          <View style={[styles.inputRow, { flexWrap: 'wrap' }]}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Dry Cough?</Text>
               <TouchableOpacity onPress={() => setDryCough(!dryCough)}>
@@ -233,7 +233,7 @@ const Covid19Form = (props) => {
             <View style={{ paddingLeft: 20 }}>{dryCough ? slider({ severity: coughSeverity, action: setCoughSeverity }) : null}</View>
           </View>
 
-          <View style={[styles.inputRow, { flexWrap: 'wrap' }]}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Difficulty Breathing?</Text>
               <TouchableOpacity onPress={() => setDiffBreathing(!diffBreathing)}>
@@ -251,7 +251,7 @@ const Covid19Form = (props) => {
             <View style={{ paddingLeft: 20 }}>{diffBreathing ? slider({ severity: diffBreathingSeverity, action: setDiffBreathingSeverity }) : null}</View>
           </View>
 
-          <View style={[styles.inputRow, { flexWrap: 'wrap' }]}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Sore Throat?</Text>
               <TouchableOpacity onPress={() => setSoreThroat(!soreThroat)}>
@@ -269,7 +269,7 @@ const Covid19Form = (props) => {
             <View style={{ paddingLeft: 20 }}>{soreThroat ? slider({ severity: soreThroatSeverity, action: setSoreThroatSeverity }) : null}</View>
           </View>
 
-          <View style={styles.inputRow}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Chest Pain?</Text>
               <TouchableOpacity onPress={() => setChestPain(!chestPain)}>
@@ -285,7 +285,7 @@ const Covid19Form = (props) => {
             </View>
           </View>
 
-          <View style={styles.inputRow}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>New Confusion?</Text>
               <TouchableOpacity onPress={() => setConfusion(!confusion)}>
@@ -301,7 +301,7 @@ const Covid19Form = (props) => {
             </View>
           </View>
 
-          <View style={styles.inputRow}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Bluish Lips or Face?</Text>
               <TouchableOpacity onPress={() => setBluish(!bluish)}>
@@ -317,7 +317,7 @@ const Covid19Form = (props) => {
             </View>
           </View>
 
-          <View style={[styles.inputRow, { flexWrap: 'wrap' }]}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Fatigue?</Text>
               <TouchableOpacity onPress={() => setFatigue(!fatigue)}>
@@ -334,7 +334,7 @@ const Covid19Form = (props) => {
             <View style={{ paddingLeft: 10 }}>{fatigue ? datePicker({ placeholder: "Date Onset", date: fatigueDate, action: setFatigueDate }) : null}</View>
           </View>
 
-          <View style={[styles.inputRow, { flexWrap: 'wrap' }]}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Aches and Pains?</Text>
               <TouchableOpacity onPress={() => setAches(!aches)}>
@@ -351,7 +351,7 @@ const Covid19Form = (props) => {
             <View style={{ paddingLeft: 10 }}>{aches ? datePicker({ placeholder: "Date Onset", date: achesDate, action: setAchesDate }) : null}</View>
           </View>
 
-          <View style={styles.inputRow}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Headache?</Text>
               <TouchableOpacity onPress={() => setHeadache(!headache)}>
@@ -371,7 +371,7 @@ const Covid19Form = (props) => {
 
           {/* Age */}
 
-          <View style={styles.inputRow}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Diabetes?</Text>
               <TouchableOpacity onPress={() => setDiabetes(!diabetes)}>
@@ -387,7 +387,7 @@ const Covid19Form = (props) => {
             </View>
           </View>
 
-          <View style={styles.inputRow}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Cardiovascular Disease?</Text>
               <TouchableOpacity onPress={() => setCardioDisease(!cardioDisease)}>
@@ -403,7 +403,7 @@ const Covid19Form = (props) => {
             </View>
           </View>
 
-          <View style={styles.inputRow}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Pulmonary Disease?</Text>
               <TouchableOpacity onPress={() => setPulmonaryDisease(!pulmonaryDisease)}>
@@ -419,7 +419,7 @@ const Covid19Form = (props) => {
             </View>
           </View>
 
-          <View style={styles.inputRow}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Renal Disease?</Text>
               <TouchableOpacity onPress={() => setRenalDisease(!renalDisease)}>
@@ -435,7 +435,7 @@ const Covid19Form = (props) => {
             </View>
           </View>
 
-          <View style={styles.inputRow}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Malignancy?</Text>
               <TouchableOpacity onPress={() => setMalignancy(!malignancy)}>
@@ -451,7 +451,7 @@ const Covid19Form = (props) => {
             </View>
           </View>
 
-          <View style={styles.inputRow}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Pregnant or 2 weeks postpartum?</Text>
               <TouchableOpacity onPress={() => setPregnant(!pregnant)}>
@@ -467,7 +467,7 @@ const Covid19Form = (props) => {
             </View>
           </View>
 
-          <View style={styles.inputRow}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Immunocompromised?</Text>
               <TouchableOpacity onPress={() => setImmunocompromised(!immunocompromised)}>
@@ -483,7 +483,7 @@ const Covid19Form = (props) => {
             </View>
           </View>
 
-          <View style={styles.inputRow}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row', flexWrap: 'wrap' }]}>
               <Text style={{ color: '#FFFFFF' }}>Recent contact with individuals with known COVID-19?</Text>
               <TouchableOpacity onPress={() => setExposureKnown(!exposureKnown)}>
@@ -499,7 +499,7 @@ const Covid19Form = (props) => {
             </View>
           </View>
 
-          <View style={styles.inputRow}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row', flexWrap: 'wrap' }]}>
               <Text style={{ color: '#FFFFFF' }}>Recent contact with individuals with suspected COVID-19?</Text>
               <TouchableOpacity onPress={() => setExposureSuspected(!exposureSuspected)}>
@@ -515,7 +515,7 @@ const Covid19Form = (props) => {
             </View>
           </View>
 
-          <View style={[styles.inputRow, { flexWrap: 'wrap' }]}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Recent travel to Iran?</Text>
               <TouchableOpacity onPress={() => setTravelIran(!travelIran)}>
@@ -534,7 +534,7 @@ const Covid19Form = (props) => {
             <View style={{ paddingLeft: 20 }}>{travelIran ? datePicker({ placeholder: "Return", date: travelIranReturn, action: setTravelIranReturn }) : null}</View>
           </View>
 
-          <View style={[styles.inputRow, { flexWrap: 'wrap' }]}>
+          <View style={styles.responseRow}>
             <View style={[{ flexDirection: 'row' }]}>
               <Text style={{ color: '#FFFFFF' }}>Recent travel out of Lebanon?</Text>
               <TouchableOpacity onPress={() => setTravel(!travel)}>

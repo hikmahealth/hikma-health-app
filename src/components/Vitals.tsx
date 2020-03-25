@@ -77,7 +77,7 @@ const Vitals = (props) => {
   };
 
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={[styles.container, { justifyContent: 'flex-start', alignItems: 'center' }]}>
+    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
       <View style={[styles.inputRow, {marginTop: 30}]}>
         <TextInput
           style={styles.inputs}
@@ -86,7 +86,7 @@ const Vitals = (props) => {
           value={heartRate}
           keyboardType='numeric'
         />
-        <Text>BPM</Text>
+        <Text style={{color: '#FFFFFF'}}>BPM</Text>
       </View>
       <View style={styles.inputRow}>
         <TextInput
@@ -96,7 +96,7 @@ const Vitals = (props) => {
           value={systolic}
           keyboardType='numeric'
         />
-        <Text>/</Text>
+        <Text style={{color: '#FFFFFF'}}>/</Text>
         <TextInput
           style={styles.inputs}
           placeholder="Diastolic"
@@ -113,7 +113,7 @@ const Vitals = (props) => {
           value={sats}
           keyboardType='numeric'
         />
-        <Text>%</Text>
+        <Text style={{color: '#FFFFFF'}}>%</Text>
       </View>
       <View style={styles.inputRow}>
         <TextInput
@@ -123,7 +123,7 @@ const Vitals = (props) => {
           value={temp}
           keyboardType='numeric'
         />
-        <Text>°C</Text>
+        <Text style={{color: '#FFFFFF'}}>°C</Text>
         <TextInput
           style={styles.inputs}
           placeholder="RR"
