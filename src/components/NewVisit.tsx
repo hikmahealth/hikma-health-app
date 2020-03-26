@@ -173,7 +173,7 @@ const NewVisit = (props) => {
           <View style={styles.actionIcon}>
             <Image source={require('../images/covid.png')} style={{ width: 43, height: 47 }} />
           </View>
-          <Text style={styles.actionText}>COVID-19 Screening</Text>
+          <Text style={styles.actionText}>{LocalizedStrings[language].covidScreening}</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>

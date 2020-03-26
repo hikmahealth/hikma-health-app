@@ -19,13 +19,13 @@ const NewPatient = (props) => {
   const [hometown, setHometown] = useState('');
   const [phone, setPhone] = useState('');
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
+  const today = new Date();
 
   const addPatient = async () => {
     const givenNameId = await database.saveStringContent([{ language: language, content: givenName }])
     const surnameId = await database.saveStringContent([{ language: language, content: surname }])
     const countryId = await database.saveStringContent([{ language: language, content: country }])
     const hometownId = await database.saveStringContent([{ language: language, content: hometown }])
-
 
     database.addPatient({
       id: uuid(),
@@ -94,7 +94,7 @@ const NewPatient = (props) => {
           placeholder={LocalizedStrings[language].selectDob}
           format="YYYY-MM-DD"
           minDate="1900-05-01"
-          maxDate="2020-03-27"
+          maxDate={today.toISOString().split('T')[0]}
           confirmBtnText={LocalizedStrings[language].confirm}
           cancelBtnText={LocalizedStrings[language].cancel}
           customStyles={{

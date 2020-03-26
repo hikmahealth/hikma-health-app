@@ -89,6 +89,7 @@ const Covid19Form = (props) => {
   }
 
   const datePicker = (props) => {
+    const today = new Date();
     return (
       <DatePicker
         style={{ width: 120 }}
@@ -97,7 +98,7 @@ const Covid19Form = (props) => {
         placeholder={props.placeholder}
         format="YYYY-MM-DD"
         minDate="1900-05-01"
-        maxDate="2020-03-27"
+        maxDate={today.toISOString().split('T')[0]}
         confirmBtnText={LocalizedStrings[language].confirm}
         cancelBtnText={LocalizedStrings[language].cancel}
         customStyles={{
@@ -110,6 +111,12 @@ const Covid19Form = (props) => {
           },
           dateText: {
             color: '#FFFFFF'
+          },
+          btnTextConfirm: {
+            height: 20
+          },
+          btnTextCancel: {
+            height: 20
           }
         }}
         androidMode='spinner'
@@ -121,7 +128,7 @@ const Covid19Form = (props) => {
   const slider = (props) => {
     return (
       <View style={{ flexDirection: 'row' }}>
-        <Text style={styles.text}>Severity: {props.severity}</Text>
+        <Text style={styles.text}>{LocalizedStrings[language].severity} : {props.severity}</Text>
         <Slider
           style={{ width: 200, height: 40 }}
           step={1}
@@ -130,6 +137,30 @@ const Covid19Form = (props) => {
           maximumValue={3}
           onValueChange={(value) => props.action(value)}
         />
+      </View>
+    )
+  }
+
+  const radioButtons = (props) => {
+    return (
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+        <Text style={{ color: '#FFFFFF' }}>{props.prompt}</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <TouchableOpacity onPress={() => props.action(!props.field)}>
+            <View style={styles.outerRadioButton}>
+              {props.field ? <View style={styles.selectedRadioButton} /> : null}
+            </View>
+          </TouchableOpacity>
+          <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].yes}</Text>
+        </View>
+        <View style={{ flexDirection: 'row' }}>
+          <TouchableOpacity onPress={() => props.action(!props.field)}>
+            <View style={styles.outerRadioButton}>
+              {!props.field ? <View style={styles.selectedRadioButton} /> : null}
+            </View>
+          </TouchableOpacity>
+          <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].no}</Text>
+        </View>
       </View>
     )
   }
@@ -188,10 +219,7 @@ const Covid19Form = (props) => {
     <ScrollView>
       <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
         <View style={styles.searchBar}>
-          <TouchableOpacity onPress={() => {
-            props.navigation.navigate('NewVisit', { language: language })
-          }
-          }>
+          <TouchableOpacity onPress={() => { props.navigation.navigate('NewVisit', { language: language }) }}>
             <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
           </TouchableOpacity>
           {LanguageToggle()}
@@ -199,362 +227,86 @@ const Covid19Form = (props) => {
 
         <View style={[styles.inputsContainer, { alignItems: 'flex-start' }]}>
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Fever?</Text>
-              <TouchableOpacity onPress={() => setFever(!fever)}>
-                <View style={styles.outerRadioButton}>
-                  {fever ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setFever(!fever)}>
-                <View style={styles.outerRadioButton}>
-                  {!fever ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
-            <View style={{ paddingLeft: 20 }}>{fever ? datePicker({ placeholder: "Date Onset", date: feverDate, action: setFeverDate }) : null}</View>
+            {radioButtons({ field: fever, action: setFever, prompt: LocalizedStrings[language].fever })}
+            <View style={{ paddingLeft: 20 }}>{fever ? datePicker({ placeholder: LocalizedStrings[language].onsetDate, date: feverDate, action: setFeverDate }) : null}</View>
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Dry Cough?</Text>
-              <TouchableOpacity onPress={() => setDryCough(!dryCough)}>
-                <View style={styles.outerRadioButton}>
-                  {dryCough ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setDryCough(!dryCough)}>
-                <View style={styles.outerRadioButton}>
-                  {!dryCough ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
-            <View style={{ paddingLeft: 10 }}>{dryCough ? datePicker({ placeholder: "Date Onset", date: coughDate, action: setCoughDate }) : null}</View>
+            {radioButtons({ field: dryCough, action: setDryCough, prompt: LocalizedStrings[language].dryCough })}
+            <View style={{ paddingLeft: 10 }}>{dryCough ? datePicker({ placeholder: LocalizedStrings[language].onsetDate, date: coughDate, action: setCoughDate }) : null}</View>
             <View style={{ paddingLeft: 20 }}>{dryCough ? slider({ severity: coughSeverity, action: setCoughSeverity }) : null}</View>
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Difficulty Breathing?</Text>
-              <TouchableOpacity onPress={() => setDiffBreathing(!diffBreathing)}>
-                <View style={styles.outerRadioButton}>
-                  {diffBreathing ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setDiffBreathing(!diffBreathing)}>
-                <View style={styles.outerRadioButton}>
-                  {!diffBreathing ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
-            <View style={{ paddingLeft: 20 }}>{diffBreathing ? datePicker({ placeholder: "Date Onset", date: diffBreathingDate, action: setDiffBreathingDate }) : null}</View>
+            {radioButtons({ field: diffBreathing, action: setDiffBreathing, prompt: LocalizedStrings[language].diffBreathing })}
+            <View style={{ paddingLeft: 20 }}>{diffBreathing ? datePicker({ placeholder: LocalizedStrings[language].onsetDate, date: diffBreathingDate, action: setDiffBreathingDate }) : null}</View>
             <View style={{ paddingLeft: 20 }}>{diffBreathing ? slider({ severity: diffBreathingSeverity, action: setDiffBreathingSeverity }) : null}</View>
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Sore Throat?</Text>
-              <TouchableOpacity onPress={() => setSoreThroat(!soreThroat)}>
-                <View style={styles.outerRadioButton}>
-                  {soreThroat ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setSoreThroat(!soreThroat)}>
-                <View style={styles.outerRadioButton}>
-                  {!soreThroat ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
-            <View style={{ paddingLeft: 20 }}>{soreThroat ? datePicker({ placeholder: "Date Onset", date: soreThroatDate, action: setSoreThroatDate }) : null}</View>
+            {radioButtons({ field: soreThroat, action: setSoreThroat, prompt: LocalizedStrings[language].soreThroat })}
+            <View style={{ paddingLeft: 20 }}>{soreThroat ? datePicker({ placeholder: LocalizedStrings[language].onsetDate, date: soreThroatDate, action: setSoreThroatDate }) : null}</View>
             <View style={{ paddingLeft: 20 }}>{soreThroat ? slider({ severity: soreThroatSeverity, action: setSoreThroatSeverity }) : null}</View>
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Chest Pain?</Text>
-              <TouchableOpacity onPress={() => setChestPain(!chestPain)}>
-                <View style={styles.outerRadioButton}>
-                  {chestPain ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setChestPain(!chestPain)}>
-                <View style={styles.outerRadioButton}>
-                  {!chestPain ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
+            {radioButtons({ field: chestPain, action: setChestPain, prompt: LocalizedStrings[language].chestPain })}
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>New Confusion?</Text>
-              <TouchableOpacity onPress={() => setConfusion(!confusion)}>
-                <View style={styles.outerRadioButton}>
-                  {confusion ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setConfusion(!confusion)}>
-                <View style={styles.outerRadioButton}>
-                  {!confusion ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
+            {radioButtons({ field: confusion, action: setConfusion, prompt: LocalizedStrings[language].confusion })}
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Bluish Lips or Face?</Text>
-              <TouchableOpacity onPress={() => setBluish(!bluish)}>
-                <View style={styles.outerRadioButton}>
-                  {bluish ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setBluish(!bluish)}>
-                <View style={styles.outerRadioButton}>
-                  {!bluish ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
+            {radioButtons({ field: bluish, action: setBluish, prompt: LocalizedStrings[language].bluish })}
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Fatigue?</Text>
-              <TouchableOpacity onPress={() => setFatigue(!fatigue)}>
-                <View style={styles.outerRadioButton}>
-                  {fatigue ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setFatigue(!fatigue)}>
-                <View style={styles.outerRadioButton}>
-                  {!fatigue ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
-            <View style={{ paddingLeft: 10 }}>{fatigue ? datePicker({ placeholder: "Date Onset", date: fatigueDate, action: setFatigueDate }) : null}</View>
+            {radioButtons({ field: fatigue, action: setFatigue, prompt: LocalizedStrings[language].fatigue })}
+            <View style={{ paddingLeft: 10 }}>{fatigue ? datePicker({ placeholder: LocalizedStrings[language].onsetDate, date: fatigueDate, action: setFatigueDate }) : null}</View>
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Aches and Pains?</Text>
-              <TouchableOpacity onPress={() => setAches(!aches)}>
-                <View style={styles.outerRadioButton}>
-                  {aches ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setAches(!aches)}>
-                <View style={styles.outerRadioButton}>
-                  {!aches ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
-            <View style={{ paddingLeft: 10 }}>{aches ? datePicker({ placeholder: "Date Onset", date: achesDate, action: setAchesDate }) : null}</View>
+            {radioButtons({ field: aches, action: setAches, prompt: LocalizedStrings[language].aches })}
+            <View style={{ paddingLeft: 10 }}>{aches ? datePicker({ placeholder: LocalizedStrings[language].onsetDate, date: achesDate, action: setAchesDate }) : null}</View>
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Headache?</Text>
-              <TouchableOpacity onPress={() => setHeadache(!headache)}>
-                <View style={styles.outerRadioButton}>
-                  {headache ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setHeadache(!headache)}>
-                <View style={styles.outerRadioButton}>
-                  {!headache ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
-            <View style={{ paddingLeft: 10 }}>{headache ? datePicker({ placeholder: "Date Onset", date: headacheDate, action: setHeadacheDate }) : null}</View>
-
+            {radioButtons({ field: headache, action: setHeadache, prompt: LocalizedStrings[language].headache })}
+            <View style={{ paddingLeft: 10 }}>{headache ? datePicker({ placeholder: LocalizedStrings[language].onsetDate, date: headacheDate, action: setHeadacheDate }) : null}</View>
           </View>
-
-          {/* Age */}
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Diabetes?</Text>
-              <TouchableOpacity onPress={() => setDiabetes(!diabetes)}>
-                <View style={styles.outerRadioButton}>
-                  {diabetes ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setDiabetes(!diabetes)}>
-                <View style={styles.outerRadioButton}>
-                  {!diabetes ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
+            {radioButtons({ field: diabetes, action: setDiabetes, prompt: LocalizedStrings[language].diabetes })}
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Cardiovascular Disease?</Text>
-              <TouchableOpacity onPress={() => setCardioDisease(!cardioDisease)}>
-                <View style={styles.outerRadioButton}>
-                  {cardioDisease ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setCardioDisease(!cardioDisease)}>
-                <View style={styles.outerRadioButton}>
-                  {!cardioDisease ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
+            {radioButtons({ field: cardioDisease, action: setCardioDisease, prompt: LocalizedStrings[language].cardioDisease })}
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Pulmonary Disease?</Text>
-              <TouchableOpacity onPress={() => setPulmonaryDisease(!pulmonaryDisease)}>
-                <View style={styles.outerRadioButton}>
-                  {pulmonaryDisease ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setPulmonaryDisease(!pulmonaryDisease)}>
-                <View style={styles.outerRadioButton}>
-                  {!pulmonaryDisease ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
+            {radioButtons({ field: pulmonaryDisease, action: setPulmonaryDisease, prompt: LocalizedStrings[language].pulmonaryDisease })}
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Renal Disease?</Text>
-              <TouchableOpacity onPress={() => setRenalDisease(!renalDisease)}>
-                <View style={styles.outerRadioButton}>
-                  {renalDisease ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setRenalDisease(!renalDisease)}>
-                <View style={styles.outerRadioButton}>
-                  {!renalDisease ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
+            {radioButtons({ field: renalDisease, action: setRenalDisease, prompt: LocalizedStrings[language].renalDisease })}
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Malignancy?</Text>
-              <TouchableOpacity onPress={() => setMalignancy(!malignancy)}>
-                <View style={styles.outerRadioButton}>
-                  {malignancy ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setMalignancy(!malignancy)}>
-                <View style={styles.outerRadioButton}>
-                  {!malignancy ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
+            {radioButtons({ field: malignancy, action: setMalignancy, prompt: LocalizedStrings[language].malignancy })}
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Pregnant or 2 weeks postpartum?</Text>
-              <TouchableOpacity onPress={() => setPregnant(!pregnant)}>
-                <View style={styles.outerRadioButton}>
-                  {pregnant ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setPregnant(!pregnant)}>
-                <View style={styles.outerRadioButton}>
-                  {!pregnant ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
+            {radioButtons({ field: pregnant, action: setPregnant, prompt: LocalizedStrings[language].pregnant })}
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Immunocompromised?</Text>
-              <TouchableOpacity onPress={() => setImmunocompromised(!immunocompromised)}>
-                <View style={styles.outerRadioButton}>
-                  {immunocompromised ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setImmunocompromised(!immunocompromised)}>
-                <View style={styles.outerRadioButton}>
-                  {!immunocompromised ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
+            {radioButtons({ field: immunocompromised, action: setImmunocompromised, prompt: LocalizedStrings[language].immunocompromised })}
           </View>
-
+          <View style={[styles.responseRow, { maxWidth: '90%' }]}>
+            {radioButtons({ field: exposureKnown, action: setExposureKnown, prompt: LocalizedStrings[language].exposureKnown })}
+          </View>
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row', flexWrap: 'wrap' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Recent contact with individuals with known COVID-19?</Text>
-              <TouchableOpacity onPress={() => setExposureKnown(!exposureKnown)}>
-                <View style={styles.outerRadioButton}>
-                  {exposureKnown ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setExposureKnown(!exposureKnown)}>
-                <View style={styles.outerRadioButton}>
-                  {!exposureKnown ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
+            {radioButtons({ field: exposureSuspected, action: setExposureSuspected, prompt: LocalizedStrings[language].exposureSuspected })}
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row', flexWrap: 'wrap' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Recent contact with individuals with suspected COVID-19?</Text>
-              <TouchableOpacity onPress={() => setExposureSuspected(!exposureSuspected)}>
-                <View style={styles.outerRadioButton}>
-                  {exposureSuspected ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setExposureSuspected(!exposureSuspected)}>
-                <View style={styles.outerRadioButton}>
-                  {!exposureSuspected ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
+            {radioButtons({ field: travelIran, action: setTravelIran, prompt: LocalizedStrings[language].travelIran })}
+            <View style={{ paddingLeft: 20 }}>{travelIran ? datePicker({ placeholder: LocalizedStrings[language].departure, date: travelIranDeparture, action: setTravelIranDeparture }) : null}</View>
+            {travelIran ? <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].to}</Text> : null}
+            <View style={{ paddingLeft: 20 }}>{travelIran ? datePicker({ placeholder: LocalizedStrings[language].return, date: travelIranReturn, action: setTravelIranReturn }) : null}</View>
           </View>
-
           <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Recent travel to Iran?</Text>
-              <TouchableOpacity onPress={() => setTravelIran(!travelIran)}>
-                <View style={styles.outerRadioButton}>
-                  {travelIran ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setTravelIran(!travelIran)}>
-                <View style={styles.outerRadioButton}>
-                  {!travelIran ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
-            <View style={{ paddingLeft: 20 }}>{travelIran ? datePicker({ placeholder: "Departure", date: travelIranDeparture, action: setTravelIranDeparture }) : null}</View>
-            {travelIran ? <Text style={{ color: '#FFFFFF' }}>to</Text> : null}
-            <View style={{ paddingLeft: 20 }}>{travelIran ? datePicker({ placeholder: "Return", date: travelIranReturn, action: setTravelIranReturn }) : null}</View>
+            {radioButtons({ field: travel, action: setTravel, prompt: LocalizedStrings[language].travel })}
+            <View style={{ paddingLeft: 20 }}>{travel ? datePicker({ placeholder: LocalizedStrings[language].departure, date: travelDeparture, action: setTravelDeparture }) : null}</View>
+            {travel ? <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].to}</Text> : null}
+            <View style={{ paddingLeft: 20 }}>{travel ? datePicker({ placeholder: LocalizedStrings[language].return, date: travelReturn, action: setTravelReturn }) : null}</View>
           </View>
-
-          <View style={styles.responseRow}>
-            <View style={[{ flexDirection: 'row' }]}>
-              <Text style={{ color: '#FFFFFF' }}>Recent travel out of Lebanon?</Text>
-              <TouchableOpacity onPress={() => setTravel(!travel)}>
-                <View style={styles.outerRadioButton}>
-                  {travel ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>Y</Text>
-              <TouchableOpacity onPress={() => setTravel(!travel)}>
-                <View style={styles.outerRadioButton}>
-                  {!travel ? <View style={styles.selectedRadioButton} /> : null}
-                </View>
-              </TouchableOpacity><Text style={{ color: '#FFFFFF' }}>N</Text>
-            </View>
-            <View style={{ paddingLeft: 20 }}>{travel ? datePicker({ placeholder: "Departure", date: travelDeparture, action: setTravelDeparture }) : null}</View>
-            {travel ? <Text style={{ color: '#FFFFFF' }}>to</Text> : null}
-            <View style={{ paddingLeft: 20 }}>{travel ? datePicker({ placeholder: "Return", date: travelReturn, action: setTravelReturn }) : null}</View>
-          </View>
-
         </View>
-        <View style={{alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           <TouchableOpacity onPress={() => handleSaveScreeningEvent()}>
             <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
           </TouchableOpacity>

@@ -6,7 +6,6 @@ import { DATABASE } from "../database/Constants";
 import { database } from "../database/Database";
 import { SyncResponse } from "../types/syncResponse";
 
-
 export class DatabaseSync {
 
   private url = 'https://demo-api.hikmahealth.org/api/sync';

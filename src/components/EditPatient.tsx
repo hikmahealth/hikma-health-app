@@ -22,6 +22,7 @@ const EditPatient = (props) => {
   const [countryText, setCountryText] = useState(props.navigation.state.params.patient.country.content[language] || '');
   const [hometownText, setHometownText] = useState(props.navigation.state.params.patient.hometown.content[language] || '');
   const [phone, setPhone] = useState(props.navigation.state.params.patient.phone || '');
+  const today = new Date();
 
   const editPatient = async () => {
     if (!!patient.given_name.content[language]) {
@@ -122,31 +123,13 @@ const EditPatient = (props) => {
       </View>
       <View style={styles.inputRow}>
         <DatePicker
-          style={{
-            backgroundColor: '#FFFFFF',
-            margin: 10,
-            paddingHorizontal: 10,
-            height: 40,
-            borderRadius: 12,
-            borderColor: '#EAEAEA',
-            borderWidth: .5,
-            width: '100%',
-            flex: 1,
-            elevation: 5,
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-          }}
+          style={styles.datePicker}
           date={dob}
           mode="date"
           placeholder={LocalizedStrings[language].selectDob}
           format="YYYY-MM-DD"
           minDate="1900-05-01"
-          maxDate="2020-01-27"
+          maxDate={today.toISOString().split('T')[0]}
           confirmBtnText={LocalizedStrings[language].confirm}
           cancelBtnText={LocalizedStrings[language].cancel}
           customStyles={{
