@@ -72,6 +72,8 @@ export const LocalizedStrings = {
     exposureSuspected: "Recent contact with individuals with suspected COVID-19?",
     travelIran: "Recent travel to Iran?",
     travel: "Recent travel to High Risk Countries?",
+    testIsolate: "Test/Isolate Patient",
+    noAction: "No Action Necessary"
   },
   "ar": {
     patients: "المرضى",
@@ -146,5 +148,7 @@ export const LocalizedStrings = {
     exposureSuspected: "الاتصال الأخير مع الأفراد الذين يشتبه أنهم فيروس التاجي؟",
     travelIran: "السفر الأخير إلى إيران؟",
     travel: "السفر الأخير إلى البلدان عالية المخاطر؟",
+    testIsolate: "اختبار وعزل المريض",
+    noAction: "لا رد فعل"
   }
 };

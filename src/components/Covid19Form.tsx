@@ -52,6 +52,7 @@ const Covid19Form = (props) => {
   const [travel, setTravel] = useState(false);
   const [travelDeparture, setTravelDeparture] = useState('');
   const [travelReturn, setTravelReturn] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
   const patient = props.navigation.getParam('patient');
@@ -211,13 +212,14 @@ const Covid19Form = (props) => {
       })
     }).then(() => {
       console.log('Screening event saved')
-      props.navigation.navigate('NewVisit', { language: language })
+      setSubmitted(true)
+      // props.navigation.navigate('NewVisit', { language: language })
     })
   }
 
-  return (
+  return !submitted ? (
     <ScrollView>
-      <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
+      <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={[styles.containerLeft]}>
         <View style={styles.searchBar}>
           <TouchableOpacity onPress={() => { props.navigation.navigate('NewVisit', { language: language }) }}>
             <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
@@ -313,7 +315,20 @@ const Covid19Form = (props) => {
         </View>
       </LinearGradient>
     </ScrollView>
-  );
+  ) : (
+      <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
+        <View style={styles.searchBar}>
+          <TouchableOpacity onPress={() => { setSubmitted(false) }}>
+            <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
+          </TouchableOpacity>
+          {LanguageToggle()}
+        </View>
+
+        <View style={{ alignItems: 'center' }}>
+          {result() ? <Text style={{ color: '#FFFFFF', fontSize: 20 }}>{LocalizedStrings[language].testIsolate}</Text> : <Text style={{ color: '#FFFFFF', fontSize: 20 }}>{LocalizedStrings[language].noAction}</Text>}
+        </View>
+      </LinearGradient>
+    );
 };
 
 export default Covid19Form;
