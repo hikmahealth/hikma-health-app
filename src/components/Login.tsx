@@ -15,14 +15,13 @@ import styles from './Style';
 
 const Login = (props) => {
   const databaseSync = new DatabaseSync();
-  const [email, setEmail] = useState(props.email || 'sam@hikmahealth.org');
-  const [password, setPassword] = useState(props.password || 'c43171c8a242');
+  const [email, setEmail] = useState(props.email);
+  const [password, setPassword] = useState(props.password);
   let userId = '';
   let clinicId = '';
 
   const remoteLogin = async (): Promise<any> => {
     const response = await fetch('https://demo-api.hikmahealth.org/api/login', {
-    // const response = await fetch('http://216.21.162.104:42069/api/login', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

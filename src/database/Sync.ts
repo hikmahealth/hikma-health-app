@@ -9,7 +9,6 @@ import { SyncResponse } from "../types/syncResponse";
 export class DatabaseSync {
 
   private url = 'https://demo-api.hikmahealth.org/api/sync';
-  // private url = 'http://216.21.162.104:42069/api/sync';
 
   public async performSync(email: string, password: string): Promise<any> {
     // const target = this.getCompressionTargetPath()
