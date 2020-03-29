@@ -1,6 +1,6 @@
 # Hikma Mobile Application
 This repository the client-side code for Hikma Health's mobile application. It is an offline-first EHR system designed 
-to run on low-end mobile devices and in environments with limited connectivity.   
+to run on mobile devices and in environments with limited connectivity.   
 
 The corresponding server-side code is located at https://github.com/hikmahealth/hikma-health-backend. Please feel free 
 to file feature requests and bugs at either location.
