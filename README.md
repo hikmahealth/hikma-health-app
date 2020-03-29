@@ -1,5 +1,5 @@
 # Hikma Mobile Application
-This repository the client-side code for Hikma Health's mobile application. It is an offline-first EHR system designed 
+This repository contains the client-side code for Hikma Health's mobile application. It is an offline-first EHR system designed 
 to run on mobile devices and in environments with limited connectivity.   
 
 The corresponding server-side code is located at https://github.com/hikmahealth/hikma-health-backend. Please feel free 
@@ -12,5 +12,5 @@ This app is built using React Native and can be compiled for either iOS or Andro
 on Android. To install the app locally, run:
 
 1. `yarn install`
-2. Android Studio -> AVD manager -> Launch AVD in the emulator
+2. Plug in Android device with USB Debug enabled, OR in Android Studio, click AVD manager -> Launch AVD in the emulator
 3. `react-native run-android`
