@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
-  View, Text, Image, TextInput, TouchableOpacity
+  View, Text, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback
 } from 'react-native';
 
 import { database } from "../database/Database";
@@ -9,6 +9,8 @@ import styles from './Style';
 import DatePicker from 'react-native-datepicker'
 import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
+import { RNCamera } from 'react-native-camera';
+import { useCamera } from 'react-native-camera-hooks';
 
 const NewPatient = (props) => {
   const [givenName, setGivenName] = useState('');
@@ -19,6 +21,14 @@ const NewPatient = (props) => {
   const [hometown, setHometown] = useState('');
   const [phone, setPhone] = useState('');
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
+  const [
+    { cameraRef, type, ratio, autoFocusPoint },
+    { takePicture, toggleFacing, touchToFocus, facesDetected }
+  ] = useCamera()
+
+  const [cameraOpen, setCameraOpen] = useState(false);
+
+
   const today = new Date();
 
   const addPatient = async () => {
@@ -67,85 +77,142 @@ const NewPatient = (props) => {
     );
   }
 
-  return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
-      {LanguageToggle()}
-      <View style={styles.inputRow}>
-        <TextInput
-          style={styles.inputs}
-          placeholder={LocalizedStrings[language].firstName}
-          onChangeText={(text) => setGivenName(text)}
-          value={givenName}
-        />
-      </View>
-      <View style={styles.inputRow}>
-        <TextInput
-          style={styles.inputs}
-          placeholder={LocalizedStrings[language].surname}
-          onChangeText={(text) => setSurname(text)}
-          value={surname}
-        />
-      </View>
-      <View style={styles.inputRow}>
-        <DatePicker
-          style={styles.datePicker}
-          date={dob}
-          mode="date"
-          placeholder={LocalizedStrings[language].selectDob}
-          format="YYYY-MM-DD"
-          minDate="1900-05-01"
-          maxDate={today.toISOString().split('T')[0]}
-          confirmBtnText={LocalizedStrings[language].confirm}
-          cancelBtnText={LocalizedStrings[language].cancel}
-          customStyles={{
-            dateInput: {
-              alignItems: 'flex-start',
-              borderWidth: 0
+  // const takePicture = async () => {
+  //   if (this.camera) {
+  //     const options = { quality: 0.5, base64: true };
+  //     const data = await this.camera.takePictureAsync(options);
+  //     console.log(data.uri);
+  //   }
+  // };
+
+  return cameraOpen ? (
+    <View style={{ flex: 1 }}>
+      <TouchableOpacity onPress={() => setCameraOpen(true)}>
+        <Image source={require('../images/camera.png')} style={{ width: 40, height: 40 }} />
+      </TouchableOpacity>
+      <RNCamera
+        ref={cameraRef}
+        autoFocusPointOfInterest={autoFocusPoint.normalized}
+        type="back"
+        autoFocus="on"
+        ratio={ratio}
+        style={{ flex: 1 }}
+        onFacesDetected={facesDetected}
+      >
+
+        {/* <TouchableWithoutFeedback
+          style={{
+            flex: 1,
+          }}
+          onPress={touchToFocus}
+        /> */}
+
+        <TouchableOpacity
+          testID="button"
+          onPress={toggleFacing}
+          style={{ width: '100%', height: 45 }}>
+          <Text>{type}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={async () => {
+            try {
+              const data = await takePicture()
+              setCameraOpen(false)
+              console.warn('Picture time!', data);
+              console.log('Picture here:', data)
+            } catch (error) {
+              console.log('Fails here:', error)
+              console.warn(error);
             }
           }}
-          androidMode='spinner'
-          onDateChange={(date) => setDob(date)}
-        />
-        <View >
-          <Text style={[{ color: '#FFFFFF' }]}>{LocalizedStrings[language].gender}</Text>
-          <View style={[{ flexDirection: 'row' }]}>
-            {RadioButton({ selected: male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>M</Text>
-            {RadioButton({ selected: !male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>F</Text>
+        ><Image source={require('../images/shutter.png')} style={{ width: 30, height: 30 }} /></TouchableOpacity>
+      </RNCamera>
+    </View>
+  ) : (
+      <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
+        {LanguageToggle()}
+        <View style={styles.inputRow}>
+          <TouchableOpacity onPress={() => setCameraOpen(true)}>
+            <Image source={require('../images/camera.png')} style={{ width: 40, height: 40 }} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.inputRow}>
+          <TextInput
+            style={styles.inputs}
+            placeholder={LocalizedStrings[language].firstName}
+            onChangeText={(text) => setGivenName(text)}
+            value={givenName}
+          />
+        </View>
+        <View style={styles.inputRow}>
+          <TextInput
+            style={styles.inputs}
+            placeholder={LocalizedStrings[language].surname}
+            onChangeText={(text) => setSurname(text)}
+            value={surname}
+          />
+        </View>
+        <View style={styles.inputRow}>
+          <DatePicker
+            style={styles.datePicker}
+            date={dob}
+            mode="date"
+            placeholder={LocalizedStrings[language].selectDob}
+            format="YYYY-MM-DD"
+            minDate="1900-05-01"
+            maxDate={today.toISOString().split('T')[0]}
+            confirmBtnText={LocalizedStrings[language].confirm}
+            cancelBtnText={LocalizedStrings[language].cancel}
+            customStyles={{
+              dateInput: {
+                alignItems: 'flex-start',
+                borderWidth: 0
+              }
+            }}
+            androidMode='spinner'
+            onDateChange={(date) => setDob(date)}
+          />
+          <View >
+            <Text style={[{ color: '#FFFFFF' }]}>{LocalizedStrings[language].gender}</Text>
+            <View style={[{ flexDirection: 'row' }]}>
+              {RadioButton({ selected: male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>M</Text>
+              {RadioButton({ selected: !male })}<Text style={[{ color: '#FFFFFF', paddingHorizontal: 5 }]}>F</Text>
+            </View>
           </View>
         </View>
-      </View>
-      <View style={styles.inputRow}>
-        <TextInput
-          style={styles.inputs}
-          placeholder={LocalizedStrings[language].country}
-          onChangeText={(text) => setCountry(text)}
-          value={country}
-        />
-        <TextInput
-          style={styles.inputs}
-          placeholder={LocalizedStrings[language].hometown}
-          onChangeText={(text) => setHometown(text)}
-          value={hometown}
-        />
-      </View>
-      <View style={styles.inputRow}>
+        <View style={styles.inputRow}>
+          <TextInput
+            style={styles.inputs}
+            placeholder={LocalizedStrings[language].country}
+            onChangeText={(text) => setCountry(text)}
+            value={country}
+          />
+          <TextInput
+            style={styles.inputs}
+            placeholder={LocalizedStrings[language].hometown}
+            onChangeText={(text) => setHometown(text)}
+            value={hometown}
+          />
+        </View>
+        <View style={styles.inputRow}>
 
-        <TextInput
-          style={styles.inputs}
-          placeholder={LocalizedStrings[language].phone}
-          onChangeText={(text) => setPhone(text)}
-          value={phone}
-        />
-      </View>
-      <View style={{ marginTop: 30 }}>
-        <TouchableOpacity onPress={() => addPatient()}>
-          <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
-        </TouchableOpacity>
-      </View>
-    </LinearGradient>
+          <TextInput
+            style={styles.inputs}
+            placeholder={LocalizedStrings[language].phone}
+            onChangeText={(text) => setPhone(text)}
+            value={phone}
+          />
+        </View>
+        <View style={{ marginTop: 30 }}>
+          <TouchableOpacity onPress={() => addPatient()}>
+            <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
 
 
-  );
+    );
 };
 
 export default NewPatient;
