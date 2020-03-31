@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import {
-  View, Text, Image, TextInput, StyleSheet, Button, TouchableOpacity
+  View, Text, Image, TextInput, TouchableOpacity
 } from 'react-native';
 
 import { database } from "../database/Database";
-import loginValidator from '../validators/loginValidator';
 import { StringContent } from '../types/StringContent';
-import { NewUser, User } from '../types/User';
+import { NewUser} from '../types/User';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { DatabaseSync } from '../database/Sync'
@@ -15,8 +14,10 @@ import styles from './Style';
 
 const Login = (props) => {
   const databaseSync = new DatabaseSync();
-  const [email, setEmail] = useState(props.email);
-  const [password, setPassword] = useState(props.password);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginFailed, setLoginFailed] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   let userId = '';
   let clinicId = '';
 
@@ -46,6 +47,12 @@ const Login = (props) => {
       const responseJson = await remoteLogin();
 
       console.log('response' + responseJson)
+
+      if (!!responseJson.message) {
+        setLoginFailed(true);
+        setErrorMsg(responseJson.message);
+        return;
+      }
 
       const contentArray = Object.keys(responseJson.name.content)
       const stringContentArray: StringContent[] = []
@@ -90,17 +97,25 @@ const Login = (props) => {
       </View>
       <View style={styles.loginInputsContainer}>
         <TextInput
-          style={styles.loginInputs}
+          style={loginFailed ? styles.loginInputsFailed : styles.loginInputs}
           placeholder="Email"
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={(text) => {
+            setEmail(text);
+            setLoginFailed(false);
+          }}
           value={email}
         />
         <TextInput
-          style={styles.loginInputs}
+          style={loginFailed ? styles.loginInputsFailed : styles.loginInputs}
           placeholder="Password"
-          onChangeText={(text) => setPassword(text)}
+          onChangeText={(text) => {
+            setPassword(text);
+            setLoginFailed(false);
+          }}
           value={password}
+          secureTextEntry={true}
         />
+        {loginFailed ? <Text style={{ color: '#FF0000', fontSize: 10, paddingLeft: 10 }}>Login Error: {errorMsg}</Text> : null}
       </View>
 
       <View >
