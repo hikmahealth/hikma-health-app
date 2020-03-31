@@ -107,14 +107,15 @@ const NewPatient = (props) => {
           onPress={touchToFocus}
         /> */}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           testID="button"
           onPress={toggleFacing}
           style={{ width: '100%', height: 45 }}>
           <Text>{type}</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
+          style={{ position: 'absolute', bottom: 20, right: '50%', transform: [{translateX: 20}] }}
           onPress={async () => {
             try {
               const data = await takePicture()
@@ -126,7 +127,8 @@ const NewPatient = (props) => {
               console.warn(error);
             }
           }}
-        ><Image source={require('../images/shutter.png')} style={{ width: 30, height: 30 }} /></TouchableOpacity>
+        ><Image source={require('../images/shutter.png')} style={{ width: 40, height: 40 }} />
+        </TouchableOpacity>
       </RNCamera>
     </View>
   ) : (
