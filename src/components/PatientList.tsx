@@ -14,7 +14,7 @@ const PatientList = (props) => {
   const email = props.navigation.state.params.email;
   const password = props.navigation.state.params.password;
   const clinicId = props.navigation.state.params.clinicId;
-  const userId = props.navigation.state.params.userId;
+  const [userId, setUserId] = useState(props.navigation.state.params.userId);
   const [query, setQuery] = useState('');
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
@@ -34,7 +34,12 @@ const PatientList = (props) => {
     const newList = list
       .filter((patient) =>
         ((!!patient.given_name.content[language] && patient.given_name.content[language].toLowerCase().includes(lowerCaseQuery))
-          || (!!patient.surname.content[language] && patient.surname.content[language].toLowerCase().includes(lowerCaseQuery)))
+          || (!!patient.surname.content[language] && patient.surname.content[language].toLowerCase().includes(lowerCaseQuery))
+          || (!!patient.given_name.content[language]
+            && !!patient.surname.content[language]
+            && `${patient.given_name.content[language].toLowerCase()} ${patient.surname.content[language].toLowerCase()}`.includes(lowerCaseQuery)
+          )
+        )
       );
 
     setFilteredList(newList);
@@ -60,6 +65,11 @@ const PatientList = (props) => {
         <Text style={styles.text}>{language}</Text>
       </TouchableOpacity>
     )
+  }
+
+  const logout = () => {
+    setUserId('')
+    props.navigation.navigate('Home')
   }
 
   const displayName = (item) => {
@@ -90,7 +100,7 @@ const PatientList = (props) => {
           </View> */}
         </ImageBackground>
 
-        <View style={{marginLeft: 20}}>
+        <View style={{ marginLeft: 20 }}>
           {displayName(item)}
           <View
             style={{
@@ -125,10 +135,15 @@ const PatientList = (props) => {
 
         <View style={styles.searchBar}>
           <Text style={styles.text}>{`${LocalizedStrings[language].welcome}, ${email}`}</Text>
-
+        </View>
+        <View style={[styles.searchBar, {marginTop: 0}]}>
           {LanguageToggle()}
           <TouchableOpacity onPress={async () => await databaseSync.performSync(email, password)}>
             <Image source={require('../images/sync.png')} style={{ width: 30, height: 30 }} />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => logout()}>
+            <Image source={require('../images/logout.png')} style={{ width: 30, height: 30 }} />
           </TouchableOpacity>
         </View>
         <View style={styles.scroll}>

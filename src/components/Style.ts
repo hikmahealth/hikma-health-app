@@ -25,6 +25,14 @@ export default StyleSheet.create({
     borderColor: '#EAEAEA',
     borderWidth: .5,
   },
+  loginInputsFailed: {
+    margin: 10,
+    padding: 10,
+    height: 40,
+    borderRadius: 12,
+    borderColor: '#FF0000',
+    borderWidth: 1,
+  },
   logo: {
     width: 110,
     height: 140,
