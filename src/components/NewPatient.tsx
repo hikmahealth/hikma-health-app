@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
 import {
-  View, Text, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback
+  View, Text, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, ImageBackground, Platform
 } from 'react-native';
-
-import { database } from "../database/Database";
+import RNFS from 'react-native-fs';
+import { dirPictures } from '../storage/Images'
+import { database } from "../storage/Database";
 import { uuid } from 'uuidv4';
 import styles from './Style';
 import DatePicker from 'react-native-datepicker'
@@ -11,6 +12,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import { RNCamera } from 'react-native-camera';
 import { useCamera } from 'react-native-camera-hooks';
+import moment from 'moment';
 
 const NewPatient = (props) => {
   const [givenName, setGivenName] = useState('');
@@ -23,13 +25,13 @@ const NewPatient = (props) => {
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
   const [
     { cameraRef, type, ratio, autoFocusPoint },
-    { takePicture, toggleFacing, touchToFocus, facesDetected }
+    { takePicture, toggleFacing, touchToFocus, facesDetected, }
   ] = useCamera()
 
   const [cameraOpen, setCameraOpen] = useState(false);
-
-
+  const [patientImageUri, setPatientImageUri] = useState('');
   const today = new Date();
+  const [patientId] = useState(uuid());
 
   const addPatient = async () => {
     const givenNameId = await database.saveStringContent([{ language: language, content: givenName }])
@@ -38,7 +40,7 @@ const NewPatient = (props) => {
     const hometownId = await database.saveStringContent([{ language: language, content: hometown }])
 
     database.addPatient({
-      id: uuid(),
+      id: patientId,
       given_name: givenNameId,
       surname: surnameId,
       date_of_birth: dob,
@@ -77,19 +79,56 @@ const NewPatient = (props) => {
     );
   }
 
-  // const takePicture = async () => {
-  //   if (this.camera) {
-  //     const options = { quality: 0.5, base64: true };
-  //     const data = await this.camera.takePictureAsync(options);
-  //     console.log(data.uri);
-  //   }
-  // };
+  const moveAttachment = async (filePath, newFilepath) => {
+    return new Promise((resolve, reject) => {
+      RNFS.mkdir(dirPictures)
+        .then(() => {
+          RNFS.moveFile(filePath, newFilepath)
+            .then(() => {
+              console.log('FILE MOVED', filePath, newFilepath);
+              resolve(true);
+            })
+            .catch(error => {
+              console.log('moveFile error', error);
+              reject(error);
+            });
+        })
+        .catch(err => {
+          console.log('mkdir error', err);
+          reject(err);
+        });
+    });
+  };
+
+  // -${moment().format('DDMMYY_HHmmSSS').replace(/_/g, '')}
+  const saveImage = async filePath => {
+    try {
+      const newImageName = `${patientId.replace(/-/g, '')}.jpg`;
+      const newFilepath = `${dirPictures}/${newImageName}`;
+      const imageMoved = await moveAttachment(filePath, newFilepath);
+      setPatientImageUri(Platform.select({
+        ios: newFilepath,
+        android: `file://${newFilepath}`
+      }))
+      console.log('image moved', imageMoved);
+      return newFilepath
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const capture = async () => {
+    try {
+      const data = await takePicture()
+      await saveImage(data.uri)
+      setCameraOpen(false)
+    } catch (error) {
+      console.warn(error);
+    }
+  };
 
   return cameraOpen ? (
     <View style={{ flex: 1 }}>
-      <TouchableOpacity onPress={() => setCameraOpen(true)}>
-        <Image source={require('../images/camera.png')} style={{ width: 40, height: 40 }} />
-      </TouchableOpacity>
       <RNCamera
         ref={cameraRef}
         autoFocusPointOfInterest={autoFocusPoint.normalized}
@@ -115,18 +154,8 @@ const NewPatient = (props) => {
         </TouchableOpacity> */}
 
         <TouchableOpacity
-          style={{ position: 'absolute', bottom: 20, right: '50%', transform: [{translateX: 20}] }}
-          onPress={async () => {
-            try {
-              const data = await takePicture()
-              setCameraOpen(false)
-              console.warn('Picture time!', data);
-              console.log('Picture here:', data)
-            } catch (error) {
-              console.log('Fails here:', error)
-              console.warn(error);
-            }
-          }}
+          style={{ position: 'absolute', bottom: 20, right: '50%', transform: [{ translateX: 20 }] }}
+          onPress={capture}
         ><Image source={require('../images/shutter.png')} style={{ width: 40, height: 40 }} />
         </TouchableOpacity>
       </RNCamera>
@@ -135,6 +164,9 @@ const NewPatient = (props) => {
       <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
         {LanguageToggle()}
         <View style={styles.inputRow}>
+          {patientImageUri.length > 0 ?
+            <Image source={{ uri: patientImageUri }} style={{ width: 100, height: 100, justifyContent: 'center', marginRight: 10 }}>
+            </Image> : null}
           <TouchableOpacity onPress={() => setCameraOpen(true)}>
             <Image source={require('../images/camera.png')} style={{ width: 40, height: 40 }} />
           </TouchableOpacity>
@@ -198,7 +230,6 @@ const NewPatient = (props) => {
           />
         </View>
         <View style={styles.inputRow}>
-
           <TextInput
             style={styles.inputs}
             placeholder={LocalizedStrings[language].phone}
@@ -212,8 +243,6 @@ const NewPatient = (props) => {
           </TouchableOpacity>
         </View>
       </LinearGradient>
-
-
     );
 };
 

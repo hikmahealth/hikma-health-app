@@ -2,7 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react';
 import {
   AppState
 } from 'react-native';
-import { database } from "./src/database/Database";
+import { database } from "./src/storage/Database";
 import RootNavigation from './src/navigation/RootNavigation';
 
 // Handle the app going from foreground to background, and vice versa.

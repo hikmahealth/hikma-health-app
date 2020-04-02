@@ -5,7 +5,7 @@ import {
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
 import LinearGradient from 'react-native-linear-gradient';
-import { database } from "../database/Database";
+import { database } from "../storage/Database";
 import { uuid } from "uuidv4";
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 
