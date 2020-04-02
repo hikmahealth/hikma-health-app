@@ -3,7 +3,7 @@ import {
   View, Text, Image, TextInput, TouchableOpacity
 } from 'react-native';
 
-import { database } from "../database/Database";
+import { database } from "../storage/Database";
 import styles from './Style';
 import { uuid } from 'uuidv4';
 import LinearGradient from 'react-native-linear-gradient';

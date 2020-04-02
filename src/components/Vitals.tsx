@@ -3,7 +3,7 @@ import {
   View, Text, Image, TextInput, TouchableOpacity
 } from 'react-native';
 
-import { database } from "../database/Database";
+import { database } from "../storage/Database";
 import { uuid } from 'uuidv4';
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';

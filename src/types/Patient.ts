@@ -9,6 +9,7 @@ export interface Patient {
   hometown: LanguageString
   sex: string
   phone: string
+  hasImage?: boolean
 }
 
 export interface NewPatient {

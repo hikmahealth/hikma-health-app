@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
-import { database } from "../database/Database";
+import { database } from "../storage/Database";
 import styles from './Style';
 import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings'

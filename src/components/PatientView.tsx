@@ -1,6 +1,7 @@
 import React, { Component, useState, useEffect } from "react";
-import { View, Text, Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase, Button, Alert } from "react-native";
-import { database } from "../database/Database";
+import { View, Text, Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase, Button, Alert, Platform } from "react-native";
+import { dirPictures } from '../storage/Images'
+import { database } from '../storage/Database';
 import styles from './Style';
 import { uuid } from "uuidv4";
 import { EventTypes } from "../enums/EventTypes";
@@ -87,6 +88,13 @@ const PatientView = (props) => {
     }).then(() => console.log('patient summary saved'))
   }
 
+  const imgURI = (id: string) => {
+    return Platform.select({
+      ios: `${dirPictures}/${id}.jpg`,
+      android: `file://${dirPictures}/${id}.jpg`
+    })
+  }
+
   return (
     <View style={styles.main}>
       <View style={styles.viewContainer}>
@@ -101,13 +109,16 @@ const PatientView = (props) => {
         </View>
 
         <View style={styles.cardContent}>
-          <ImageBackground source={icons[iconHash(patient.id)]} style={{ width: 100, height: 105, justifyContent: 'center' }}>
-            {/* <View style={styles.hexagon}>
-              <View style={styles.hexagonInner} />
-              <View style={styles.hexagonBefore} />
-              <View style={styles.hexagonAfter} />
-            </View> */}
-          </ImageBackground>
+        {patient.hasImage ? 
+        <ImageBackground source={{uri: imgURI(patient.id)}} style={{ width: 100, height: 100, justifyContent: 'center' }}>
+          <View style={styles.hexagon}>
+            <View style={styles.hexagonBefore} />
+            <View style={styles.hexagonAfter} />
+          </View>
+        </ImageBackground> : 
+        <Image source={icons[iconHash(patient.id)]} style={{ width: 100, height: 100, justifyContent: 'center' }}>
+          
+        </Image>}
 
           <View style={{marginLeft: 20}}>
             {displayName(patient)}

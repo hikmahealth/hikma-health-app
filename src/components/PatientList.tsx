@@ -1,16 +1,17 @@
 import React, { Component, useState, useEffect, useRef } from "react";
-import { View, Text, Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase, ImageSourcePropType } from "react-native";
-import { database } from "../database/Database";
-import { DatabaseSync } from "../database/Sync";
+import { View, Text, Image as Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase, ImageSourcePropType, Platform } from "react-native";
+import RNFS from 'react-native-fs';
+import LinearGradient from 'react-native-linear-gradient';
+import { database } from "../storage/Database";
+import { DatabaseSync } from "../storage/Sync";
+import { dirPictures } from '../storage/Images';
 import styles from './Style';
 import { iconHash } from '../services/hash'
-import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import { icons } from '../enums/Icons';
 
 const PatientList = (props) => {
   const databaseSync: DatabaseSync = new DatabaseSync();
-
   const email = props.navigation.state.params.email;
   const password = props.navigation.state.params.password;
   const clinicId = props.navigation.state.params.clinicId;
@@ -21,8 +22,17 @@ const PatientList = (props) => {
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
   const search = useRef(null);
 
+  const asyncForEach = async (array, callback) => {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index], index, array);
+    }
+  }
+
   useEffect(() => {
-    database.getPatients().then(patients => {
+    database.getPatients().then(async patients => {
+      await asyncForEach(patients, async (patient) => {
+        patient.hasImage = await RNFS.exists(imgURI(patient.id))
+      })
       setList(patients);
       setFilteredList(patients);
       setQuery('');
@@ -81,6 +91,13 @@ const PatientList = (props) => {
     }
   }
 
+  const imgURI = (id: string) => {
+    return Platform.select({
+      ios: `${dirPictures}/${id}.jpg`,
+      android: `file://${dirPictures}/${id}.jpg`
+    })
+  }
+
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.card} onPress={() => props.navigation.navigate('PatientView',
       {
@@ -91,15 +108,15 @@ const PatientList = (props) => {
         userId: userId
       }
     )}>
-      <View style={styles.cardContent} >
-        <ImageBackground source={icons[iconHash(item.id)]} style={{ width: 100, height: 105, justifyContent: 'center' }}>
-          {/* <View style={styles.hexagon}>
-            <View style={styles.hexagonInner} />
-            <View style={styles.hexagonBefore} />
-            <View style={styles.hexagonAfter} />
-          </View> */}
-        </ImageBackground>
-
+      <View style={styles.cardContent}>
+        {item.hasImage ?
+          <ImageBackground source={{ uri: imgURI(item.id) }} style={{ width: 100, height: 100, justifyContent: 'center' }}>
+            <View style={styles.hexagon}>
+              <View style={styles.hexagonBefore} />
+              <View style={styles.hexagonAfter} />
+            </View>
+          </ImageBackground> :
+          <Image source={icons[iconHash(item.id)]} style={{ width: 100, height: 100, justifyContent: 'center' }} />}
         <View style={{ marginLeft: 20 }}>
           {displayName(item)}
           <View
@@ -136,7 +153,7 @@ const PatientList = (props) => {
         <View style={styles.searchBar}>
           <Text style={styles.text}>{`${LocalizedStrings[language].welcome}, ${email}`}</Text>
         </View>
-        <View style={[styles.searchBar, {marginTop: 0}]}>
+        <View style={[styles.searchBar, { marginTop: 0 }]}>
           {LanguageToggle()}
           <TouchableOpacity onPress={async () => await databaseSync.performSync(email, password)}>
             <Image source={require('../images/sync.png')} style={{ width: 30, height: 30 }} />

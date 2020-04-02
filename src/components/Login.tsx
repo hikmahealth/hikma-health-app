@@ -3,12 +3,11 @@ import {
   View, Text, Image, TextInput, TouchableOpacity
 } from 'react-native';
 
-import { database } from "../database/Database";
+import { database } from "../storage/Database";
 import { StringContent } from '../types/StringContent';
 import { NewUser} from '../types/User';
 import LinearGradient from 'react-native-linear-gradient';
-
-import { DatabaseSync } from '../database/Sync'
+import { DatabaseSync } from '../storage/Sync'
 import { Clinic } from '../types/Clinic';
 import styles from './Style';
 
