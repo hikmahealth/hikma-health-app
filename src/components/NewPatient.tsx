@@ -22,6 +22,7 @@ const NewPatient = (props) => {
   const [country, setCountry] = useState('');
   const [hometown, setHometown] = useState('');
   const [phone, setPhone] = useState('');
+  const [imageTimestamp, setImageTimestamp] = useState('');
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
   const [
     { cameraRef, type, ratio, autoFocusPoint },
@@ -31,7 +32,7 @@ const NewPatient = (props) => {
   const [cameraOpen, setCameraOpen] = useState(false);
   const [patientImageUri, setPatientImageUri] = useState('');
   const today = new Date();
-  const [patientId] = useState(uuid());
+  const [patientId] = useState(uuid().replace(/-/g, ''));
 
   const addPatient = async () => {
     const givenNameId = await database.saveStringContent([{ language: language, content: givenName }])
@@ -47,7 +48,8 @@ const NewPatient = (props) => {
       country: countryId,
       hometown: hometownId,
       phone: phone,
-      sex: male ? 'M' : 'F'
+      sex: male ? 'M' : 'F',
+      image_timestamp: imageTimestamp
     }).then(() => props.navigation.navigate('PatientList', {
       reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle,
       language: language
@@ -79,9 +81,9 @@ const NewPatient = (props) => {
     );
   }
 
-  const moveAttachment = async (filePath, newFilepath) => {
+  const moveAttachment = async (patientId, filePath, newFilepath) => {
     return new Promise((resolve, reject) => {
-      RNFS.mkdir(dirPictures)
+      RNFS.mkdir(`${dirPictures}/${patientId}`)
         .then(() => {
           RNFS.moveFile(filePath, newFilepath)
             .then(() => {
@@ -100,12 +102,12 @@ const NewPatient = (props) => {
     });
   };
 
-  // -${moment().format('DDMMYY_HHmmSSS').replace(/_/g, '')}
-  const saveImage = async filePath => {
+  // -${moment().format('YYMMDDHHmmssSSS')}    new Date().getTime
+  const saveImage = async (filePath: string, timestamp: string) => {
     try {
-      const newImageName = `${patientId.replace(/-/g, '')}.jpg`;
+      const newImageName = `${patientId}/${timestamp}.jpg`;
       const newFilepath = `${dirPictures}/${newImageName}`;
-      const imageMoved = await moveAttachment(filePath, newFilepath);
+      const imageMoved = await moveAttachment(patientId, filePath, newFilepath);
       setPatientImageUri(Platform.select({
         ios: newFilepath,
         android: `file://${newFilepath}`
@@ -119,8 +121,10 @@ const NewPatient = (props) => {
 
   const capture = async () => {
     try {
+      let d = new Date().getTime().toString();
+      setImageTimestamp(d)
       const data = await takePicture()
-      await saveImage(data.uri)
+      await saveImage(data.uri, d)
       setCameraOpen(false)
     } catch (error) {
       console.warn(error);

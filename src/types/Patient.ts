@@ -9,7 +9,7 @@ export interface Patient {
   hometown: LanguageString
   sex: string
   phone: string
-  hasImage?: boolean
+  image_timestamp: string
 }
 
 export interface NewPatient {
@@ -21,4 +21,5 @@ export interface NewPatient {
   hometown: string
   sex: string
   phone: string
+  image_timestamp: string
 }

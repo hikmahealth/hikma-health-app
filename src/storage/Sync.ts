@@ -2,8 +2,8 @@ import { Platform } from "react-native";
 import RNFS from "react-native-fs";
 import RNFetchBlob, { FetchBlobResponse } from "rn-fetch-blob";
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
-import { DATABASE } from "../storage/Constants";
-import { database } from "../storage/Database";
+import { DATABASE } from "./Constants";
+import { database } from "./Database";
 import { SyncResponse } from "../types/syncResponse";
 
 export class DatabaseSync {

@@ -9,7 +9,6 @@ import { Patient, NewPatient } from "../types/Patient";
 import { LanguageString } from "../types/LanguageString";
 import { Event } from "../types/Event";
 import { Visit } from "../types/Visit";
-// import * as bcrypt from 'bcrypt';
 
 export interface Database {
   open(): Promise<SQLite.SQLiteDatabase>;
@@ -17,6 +16,7 @@ export interface Database {
   login(email: string, password: string): Promise<any>;
   getClinics(): Promise<Clinic[]>;
   getPatients(): Promise<Patient[]>;
+  getPatient(patient_id: string): Promise<Patient>;
   addUser(user: NewUser, password: string): Promise<void>;
   editStringContent(stringContent: StringContent[], id: string): Promise<string>;
   saveStringContent(stringContent: StringContent[], id?: string, addLanguage?: boolean): Promise<string>;
@@ -123,7 +123,7 @@ class DatabaseImpl implements Database {
     const id = patient.id.replace(/-/g, "")
     return this.getDatabase()
       .then(db =>
-        db.executeSql(`INSERT INTO patients (id, given_name, surname, date_of_birth, country, hometown, phone, sex, edited_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`, [id, patient.given_name, patient.surname, patient.date_of_birth, patient.country, patient.hometown, patient.phone, patient.sex, date])
+        db.executeSql(`INSERT INTO patients (id, given_name, surname, date_of_birth, country, hometown, phone, sex, image_timestamp, edited_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, [id, patient.given_name, patient.surname, patient.date_of_birth, patient.country, patient.hometown, patient.phone, patient.sex, patient.image_timestamp, date])
       )
       .then(([results]) => {
         console.log(
@@ -218,7 +218,7 @@ class DatabaseImpl implements Database {
     console.log("[db] Fetching patients from the db...");
     return this.getDatabase()
       .then(db =>
-        db.executeSql("SELECT id, given_name, surname, date_of_birth, country, hometown, sex, phone FROM patients;")
+        db.executeSql("SELECT id, given_name, surname, date_of_birth, country, hometown, sex, phone, image_timestamp FROM patients;")
       )
       .then(async ([results]) => {
         if (results === undefined) {
@@ -229,13 +229,13 @@ class DatabaseImpl implements Database {
         for (let i = 0; i < count; i++) {
 
           const row = results.rows.item(i);
-          const { id, given_name, surname, date_of_birth, country, hometown, sex, phone } = row;
+          const { id, given_name, surname, date_of_birth, country, hometown, sex, phone, image_timestamp } = row;
           const givenNameContent = await this.languageStringDataById(given_name)
           const surnameContent = await this.languageStringDataById(surname)
           const countryContent = await this.languageStringDataById(country)
           const hometownContent = await this.languageStringDataById(hometown)
           console.log(`[db] Patient name: ${given_name}, id: ${id}`);
-          patients.push({ id, given_name: givenNameContent, surname: surnameContent, date_of_birth, country: countryContent, hometown: hometownContent, sex, phone });
+          patients.push({ id, given_name: givenNameContent, surname: surnameContent, date_of_birth, country: countryContent, hometown: hometownContent, sex, phone, image_timestamp });
         }
         return patients;
       });
@@ -296,24 +296,24 @@ class DatabaseImpl implements Database {
       });
   }
 
-  private getPatient(patient_id: string): Promise<Patient> {
+  public getPatient(patient_id: string): Promise<Patient> {
     console.log("[db] Fetching patients from the db...");
     return this.getDatabase()
       .then(db =>
-        db.executeSql("SELECT id, given_name, surname, date_of_birth, country, hometown, sex, phone FROM patients WHERE id = ?;", [patient_id])
+        db.executeSql("SELECT id, given_name, surname, date_of_birth, country, hometown, sex, phone, image_timestamp FROM patients WHERE id = ?;", [patient_id])
       )
       .then(async ([results]) => {
         if (results === undefined) {
           return;
         }
         const row = results.rows.item(0);
-        const { id, given_name, surname, date_of_birth, country, hometown, sex, phone } = row;
+        const { id, given_name, surname, date_of_birth, country, hometown, sex, image_timestamp, phone } = row;
         const givenNameContent = await this.languageStringDataById(given_name)
         const surnameContent = await this.languageStringDataById(surname)
         const countryContent = await this.languageStringDataById(country)
         const hometownContent = await this.languageStringDataById(hometown)
 
-        const editedPatient: Patient = { id, given_name: givenNameContent, surname: surnameContent, date_of_birth, country: countryContent, hometown: hometownContent, sex, phone };
+        const editedPatient: Patient = { id, given_name: givenNameContent, surname: surnameContent, date_of_birth, country: countryContent, hometown: hometownContent, sex, phone, image_timestamp };
         console.log(
           `[db] Edited patient with id: "${id}"!`
         );
