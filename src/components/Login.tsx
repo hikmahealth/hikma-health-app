@@ -8,11 +8,13 @@ import { StringContent } from '../types/StringContent';
 import { NewUser} from '../types/User';
 import LinearGradient from 'react-native-linear-gradient';
 import { DatabaseSync } from '../storage/Sync'
+import { ImageSync } from '../storage/ImageSync'
 import { Clinic } from '../types/Clinic';
 import styles from './Style';
 
 const Login = (props) => {
   const databaseSync = new DatabaseSync();
+  const imageSync = new ImageSync();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
@@ -80,6 +82,7 @@ const Login = (props) => {
     const clinics: Clinic[] = await database.getClinics();
     if (clinics.length == 0) {
       await databaseSync.performSync(email, password)
+      await imageSync.syncPhotos(email, password)
       const clinicsResponse: Clinic[] = await database.getClinics()
       clinicId = clinicsResponse[0].id
     } else {

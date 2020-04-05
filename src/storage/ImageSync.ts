@@ -19,6 +19,40 @@ export class ImageSync {
     })
   }
 
+  public saveImage = async (patientId: string, filePath: string, timestamp: string) => {
+    try {
+      const newImageName = `${patientId}/${timestamp}.jpg`;
+      const newFilepath = `${dirPictures}/${newImageName}`;
+      const imageMoved = await this.moveAttachment(patientId, filePath, newFilepath);
+      
+      console.log('image moved', imageMoved);
+      return newFilepath
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  public moveAttachment = async (patientId, filePath, newFilepath) => {
+    return new Promise((resolve, reject) => {
+      RNFS.mkdir(`${dirPictures}/${patientId}`)
+        .then(() => {
+          RNFS.moveFile(filePath, newFilepath)
+            .then(() => {
+              console.log('FILE MOVED', filePath, newFilepath);
+              resolve(true);
+            })
+            .catch(error => {
+              console.log('moveFile error', error);
+              reject(error);
+            });
+        })
+        .catch(err => {
+          console.log('mkdir error', err);
+          reject(err);
+        });
+    });
+  };
+
   public syncPhotos = async (email: string, password: string): Promise<any> => {
 
 
@@ -29,7 +63,6 @@ export class ImageSync {
     let devicePhotoIds = []
 
     let metadata = await this.getPhotoMetadata(email, password)
-    //TODO send ids from server with no hyphens
     let serverPhotoIds = Object.keys(metadata)
 
 
@@ -77,13 +110,11 @@ export class ImageSync {
     //get photos
     photosToGet.forEach(async item => {
       let image = await this.getPhoto(email, password, item.id)
-
       RNFS.mkdir(`${dirPictures}/${item.id}`)
         .then(() => {
           RNFS.writeFile(`${dirPictures}/${item.id}/${item.imageTimestamp}.jpg`, image.data, 'base64')
         })
     })
-
   }
 
   private getPhotoMetadata = async (email: string, password: string): Promise<any> => {
@@ -106,9 +137,8 @@ export class ImageSync {
     password: string,
     patientId: string,
   ): Promise<FetchBlobResponse> {
-    database.close();
     console.log(
-      `Syncing DB!`
+      `Getting Photo!`
     );
     return RNFetchBlob.fetch(
       "POST",
@@ -128,21 +158,18 @@ export class ImageSync {
         }
       ]
 
-      // RNFetchBlob.wrap(localFilePath)
     ).then(fetchBlobResponse => {
-      console.log("Sync response: ", fetchBlobResponse);
+      console.log("Get Photo response: ", fetchBlobResponse);
       if (
         fetchBlobResponse.data &&
         fetchBlobResponse.respInfo &&
         fetchBlobResponse.respInfo.status === 200
       ) {
-        console.log("Sync SUCCESS!");
-        // const responseData = JSON.parse(fetchBlobResponse.data);
+        console.log("Get Photo SUCCESS!");
         return fetchBlobResponse;
-        // return responseData;
       } else {
         throw new Error(
-          "Sync failure! HTTP status: " +
+          "Get Photo failure! HTTP status: " +
           fetchBlobResponse.respInfo.status
         );
       }
@@ -156,9 +183,8 @@ export class ImageSync {
     filename: string,
     photoUri: string,
   ): Promise<FetchBlobResponse> {
-    database.close();
     console.log(
-      `Syncing DB!`
+      `Setting Photo!`
     );
     return RNFetchBlob.fetch(
       "POST",
@@ -180,37 +206,22 @@ export class ImageSync {
         }
       ]
     ).then(fetchBlobResponse => {
-      console.log("Sync response: ", fetchBlobResponse);
+      console.log("Set Photo response: ", fetchBlobResponse);
       if (
         fetchBlobResponse.data &&
         fetchBlobResponse.respInfo &&
         fetchBlobResponse.respInfo.status === 200
       ) {
-        console.log("Sync SUCCESS!");
+        console.log("Set Photo SUCCESS!");
         // const responseData = JSON.parse(fetchBlobResponse.data);
         return fetchBlobResponse;
         // return responseData;
       } else {
         throw new Error(
-          "Sync failure! HTTP status: " +
+          "Set Photo failure! HTTP status: " +
           fetchBlobResponse.respInfo.status
         );
       }
     });
   }
-
-
-  // private getLocalFilePathAndroid(): string {
-  //   return (
-  //     RNFS.DocumentDirectoryPath + "/../pictures/"
-  //   );
-  // }
-
-  // private getLocalFilePathIOS(): string {
-  //   return (
-  //     RNFS.LibraryDirectoryPath + "/pictures"
-  //   );
-  // }
-
-
 }
