@@ -2,9 +2,8 @@ import React, { useState, useRef } from 'react';
 import {
   View, Text, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, ImageBackground, Platform
 } from 'react-native';
-import RNFS from 'react-native-fs';
-import { dirPictures } from '../storage/Images'
 import { database } from "../storage/Database";
+import { ImageSync } from '../storage/ImageSync'
 import { uuid } from 'uuidv4';
 import styles from './Style';
 import DatePicker from 'react-native-datepicker'
@@ -15,6 +14,7 @@ import { useCamera } from 'react-native-camera-hooks';
 import moment from 'moment';
 
 const NewPatient = (props) => {
+  const imageSync = new ImageSync();
   const [givenName, setGivenName] = useState('');
   const [surname, setSurname] = useState('');
   const [dob, setDob] = useState('');
@@ -22,6 +22,7 @@ const NewPatient = (props) => {
   const [country, setCountry] = useState('');
   const [hometown, setHometown] = useState('');
   const [phone, setPhone] = useState('');
+  const [imageTimestamp, setImageTimestamp] = useState('');
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
   const [
     { cameraRef, type, ratio, autoFocusPoint },
@@ -29,9 +30,8 @@ const NewPatient = (props) => {
   ] = useCamera()
 
   const [cameraOpen, setCameraOpen] = useState(false);
-  const [patientImageUri, setPatientImageUri] = useState('');
   const today = new Date();
-  const [patientId] = useState(uuid());
+  const [patientId] = useState(uuid().replace(/-/g, ''));
 
   const addPatient = async () => {
     const givenNameId = await database.saveStringContent([{ language: language, content: givenName }])
@@ -47,7 +47,8 @@ const NewPatient = (props) => {
       country: countryId,
       hometown: hometownId,
       phone: phone,
-      sex: male ? 'M' : 'F'
+      sex: male ? 'M' : 'F',
+      image_timestamp: imageTimestamp
     }).then(() => props.navigation.navigate('PatientList', {
       reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle,
       language: language
@@ -79,48 +80,12 @@ const NewPatient = (props) => {
     );
   }
 
-  const moveAttachment = async (filePath, newFilepath) => {
-    return new Promise((resolve, reject) => {
-      RNFS.mkdir(dirPictures)
-        .then(() => {
-          RNFS.moveFile(filePath, newFilepath)
-            .then(() => {
-              console.log('FILE MOVED', filePath, newFilepath);
-              resolve(true);
-            })
-            .catch(error => {
-              console.log('moveFile error', error);
-              reject(error);
-            });
-        })
-        .catch(err => {
-          console.log('mkdir error', err);
-          reject(err);
-        });
-    });
-  };
-
-  // -${moment().format('DDMMYY_HHmmSSS').replace(/_/g, '')}
-  const saveImage = async filePath => {
-    try {
-      const newImageName = `${patientId.replace(/-/g, '')}.jpg`;
-      const newFilepath = `${dirPictures}/${newImageName}`;
-      const imageMoved = await moveAttachment(filePath, newFilepath);
-      setPatientImageUri(Platform.select({
-        ios: newFilepath,
-        android: `file://${newFilepath}`
-      }))
-      console.log('image moved', imageMoved);
-      return newFilepath
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const capture = async () => {
     try {
+      let d = today.getTime().toString();
+      setImageTimestamp(d)
       const data = await takePicture()
-      await saveImage(data.uri)
+      await imageSync.saveImage(patientId, data.uri, d)
       setCameraOpen(false)
     } catch (error) {
       console.warn(error);
@@ -164,8 +129,8 @@ const NewPatient = (props) => {
       <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
         {LanguageToggle()}
         <View style={styles.inputRow}>
-          {patientImageUri.length > 0 ?
-            <Image source={{ uri: patientImageUri }} style={{ width: 100, height: 100, justifyContent: 'center', marginRight: 10 }}>
+          {!!imageTimestamp ?
+            <Image source={{ uri: `${imageSync.imgURI(patientId)}/${imageTimestamp}.jpg` }} style={{ width: 100, height: 100, justifyContent: 'center', marginRight: 10 }}>
             </Image> : null}
           <TouchableOpacity onPress={() => setCameraOpen(true)}>
             <Image source={require('../images/camera.png')} style={{ width: 40, height: 40 }} />

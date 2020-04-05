@@ -1,6 +1,6 @@
 import React, { Component, useState, useEffect } from "react";
 import { View, Text, Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase, Button, Alert, Platform } from "react-native";
-import { dirPictures } from '../storage/Images'
+import { ImageSync } from '../storage/ImageSync';
 import { database } from '../storage/Database';
 import styles from './Style';
 import { uuid } from "uuidv4";
@@ -12,6 +12,7 @@ import { LocalizedStrings } from "../enums/LocalizedStrings";
 
 const PatientView = (props) => {
 
+  const imageSync: ImageSync = new ImageSync();
   const [patient, setPatient] = useState(props.navigation.getParam('patient'));
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
   const [isEditingSummary, setIsEditingSummary] = useState(false);
@@ -22,8 +23,7 @@ const PatientView = (props) => {
 
   useEffect(() => {
     setPatient(props.navigation.state.params.patient);
-    let patientId = props.navigation.state.params.patient.id;
-    database.getLatestPatientEventByType(patientId, EventTypes.PatientSummary).then((response: string) => {
+    database.getLatestPatientEventByType(patient.id, EventTypes.PatientSummary).then((response: string) => {
       if (response.length > 0) {
         setSummary(response)
       } else {
@@ -88,13 +88,6 @@ const PatientView = (props) => {
     }).then(() => console.log('patient summary saved'))
   }
 
-  const imgURI = (id: string) => {
-    return Platform.select({
-      ios: `${dirPictures}/${id}.jpg`,
-      android: `file://${dirPictures}/${id}.jpg`
-    })
-  }
-
   return (
     <View style={styles.main}>
       <View style={styles.viewContainer}>
@@ -109,8 +102,8 @@ const PatientView = (props) => {
         </View>
 
         <View style={styles.cardContent}>
-        {patient.hasImage ? 
-        <ImageBackground source={{uri: imgURI(patient.id)}} style={{ width: 100, height: 100, justifyContent: 'center' }}>
+        {!!patient.image_timestamp ? 
+        <ImageBackground source={{uri: `${imageSync.imgURI(patient.id)}/${patient.image_timestamp}.jpg`}} style={{ width: 100, height: 100, justifyContent: 'center' }}>
           <View style={styles.hexagon}>
             <View style={styles.hexagonBefore} />
             <View style={styles.hexagonAfter} />
