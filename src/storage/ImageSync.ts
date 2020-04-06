@@ -24,7 +24,7 @@ export class ImageSync {
       const newImageName = `${patientId}/${timestamp}.jpg`;
       const newFilepath = `${dirPictures}/${newImageName}`;
       const imageMoved = await this.moveAttachment(patientId, filePath, newFilepath);
-      
+
       console.log('image moved', imageMoved);
       return newFilepath
     } catch (error) {
@@ -61,6 +61,7 @@ export class ImageSync {
 
     let devicePhotos = []
     let devicePhotoIds = []
+    let devicePatientIds = []
 
     let metadata = await this.getPhotoMetadata(email, password)
     let serverPhotoIds = Object.keys(metadata)
@@ -68,13 +69,14 @@ export class ImageSync {
 
     let patients = await database.getPatients();
     patients.forEach(patient => {
+      devicePatientIds.push(patient.id)
       if (!!patient.image_timestamp) {
         devicePhotoIds.push(patient.id)
         devicePhotos.push({ id: patient.id, imageTimestamp: patient.image_timestamp })
       }
     })
 
-    let photoIdsToGet = serverPhotoIds.filter((id: string) => !devicePhotoIds.includes(id))
+    let photoIdsToGet = serverPhotoIds.filter((id: string) => ( !devicePhotoIds.includes(id) && devicePatientIds.includes(id)))
     let photoIdsToSet = devicePhotoIds.filter((id: string) => !serverPhotoIds.includes(id))
     let intersection = serverPhotoIds.filter((id: string) => devicePhotoIds.includes(id))
 
@@ -109,10 +111,12 @@ export class ImageSync {
 
     //get photos
     photosToGet.forEach(async item => {
+      await database.updatePatientImageTimestamp(item.id, item.imageTimestamp)
       let image = await this.getPhoto(email, password, item.id)
+
       RNFS.mkdir(`${dirPictures}/${item.id}`)
         .then(() => {
-          RNFS.writeFile(`${dirPictures}/${item.id}/${item.imageTimestamp}.jpg`, image.data, 'base64')
+          RNFS.writeFile(`${this.imgURI(item.id)}/${item.imageTimestamp}.jpg`, image.data, 'base64')
         })
     })
   }
@@ -145,19 +149,12 @@ export class ImageSync {
       'https://demo-api.hikmahealth.org/api/photos/get_photo',
       {
         "Content-Type": "application/json",
-        Accept: "multipart/form-data"
-      }, [
+      }, JSON.stringify(
         {
-          name: 'email', data: email
-        },
-        {
-          name: 'password', data: password,
-        },
-        {
-          name: 'patient_id', data: patientId
-        }
-      ]
-
+          'email': email,
+          'password': password,
+          'patient_id': patientId
+        })
     ).then(fetchBlobResponse => {
       console.log("Get Photo response: ", fetchBlobResponse);
       if (

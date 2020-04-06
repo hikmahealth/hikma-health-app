@@ -24,11 +24,7 @@ const PatientList = (props) => {
   const search = useRef(null);
 
   useEffect(() => {
-    database.getPatients().then(patients => {
-      setList(patients);
-      setFilteredList(patients);
-      setQuery('');
-    })
+    reloadPatients()
   }, [props.navigation.state.params.reloadPatientsToggle, language])
 
   useEffect(() => {
@@ -54,6 +50,14 @@ const PatientList = (props) => {
   }, [props])
 
   const keyExtractor = (item, index) => index.toString()
+
+  const reloadPatients = () => {
+    database.getPatients().then(patients => {
+      setList(patients);
+      setFilteredList(patients);
+      setQuery('');
+    })
+  }
 
   const LanguageToggle = () => {
     return (
@@ -141,8 +145,9 @@ const PatientList = (props) => {
         <View style={[styles.searchBar, { marginTop: 0 }]}>
           {LanguageToggle()}
           <TouchableOpacity onPress={async () => {
-            await imageSync.syncPhotos(email, password)
             await databaseSync.performSync(email, password)
+            await imageSync.syncPhotos(email, password)
+            reloadPatients()
             }}>
             <Image source={require('../images/sync.png')} style={{ width: 30, height: 30 }} />
           </TouchableOpacity>

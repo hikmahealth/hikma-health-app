@@ -23,6 +23,7 @@ export interface Database {
   applyScript(script: SyncResponse): Promise<void>;
   addPatient(patient: NewPatient): Promise<void>;
   editPatient(patient: NewPatient): Promise<Patient>;
+  updatePatientImageTimestamp(patientId: string, newTimestamp: string): Promise<void>;
   getLatestPatientEventByType(patient_id: string, event_type: string): Promise<string>;
   addEvent(event: Event): Promise<void>;
   addVisit(visit: Visit): Promise<void>;
@@ -143,6 +144,16 @@ class DatabaseImpl implements Database {
         return this.getPatient(patient.id)
 
       });
+  }
+
+  public updatePatientImageTimestamp(patientId: string, newTimestamp: string): Promise<void> {
+    const date = new Date().toISOString();
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql(`UPDATE patients SET image_timestamp = ?, edited_at = ? WHERE id = ?`, [ newTimestamp, date, patientId])
+      ).then(() => {
+        return
+      })
   }
 
   public addEvent(event: Event): Promise<void> {
