@@ -8,16 +8,14 @@ import { SyncResponse } from "../types/syncResponse";
 
 export class DatabaseSync {
 
-  private url = 'https://demo-api.hikmahealth.org/api/sync';
-
-  public async performSync(email: string, password: string): Promise<any> {
+  public async performSync(instanceUrl: string, email: string, password: string): Promise<any> {
     // const target = this.getCompressionTargetPath()
     const target = Platform.OS === 'ios' ? this.getLocalDBFilePathIOS() : this.getLocalDBFilePathAndroid()
 
     // this.compressDB(this.getCompressionSourcePath(), target)
 
     try {
-      const response = await this.syncDB(email, password, target)
+      const response = await this.syncDB(instanceUrl, email, password, target)
       const responseData = JSON.parse(response.data);
       responseData.to_execute.forEach(async (element: SyncResponse) => {
         await database.applyScript(element)
@@ -43,6 +41,7 @@ export class DatabaseSync {
   }
 
   private async syncDB(
+    instanceUrl: string,
     email: string,
     password: string,
     localFilePath: string,
@@ -53,7 +52,7 @@ export class DatabaseSync {
     );
     return RNFetchBlob.fetch(
       "POST",
-      this.url,
+      `${instanceUrl}/api/sync`,
       {
         "Content-Type": "multipart/form-data",
       }, [

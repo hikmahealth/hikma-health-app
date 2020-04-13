@@ -53,9 +53,7 @@ export class ImageSync {
     });
   };
 
-  public syncPhotos = async (email: string, password: string): Promise<any> => {
-
-
+  public syncPhotos = async (instanceUrl: string, email: string, password: string): Promise<any> => {
     let photosToSet = []
     let photosToGet = []
 
@@ -63,9 +61,8 @@ export class ImageSync {
     let devicePhotoIds = []
     let devicePatientIds = []
 
-    let metadata = await this.getPhotoMetadata(email, password)
+    let metadata = await this.getPhotoMetadata(instanceUrl, email, password)
     let serverPhotoIds = Object.keys(metadata)
-
 
     let patients = await database.getPatients();
     patients.forEach(patient => {
@@ -103,16 +100,16 @@ export class ImageSync {
     })
 
     //set photos
-    photosToSet.forEach(async item => {
+    await this.asyncForEach(photosToSet, async item => {
       let filename = `${item.imageTimestamp}.jpg`;
       let photoUri = `${dirPictures}/${item.id}/${filename}`
-      await this.setPhoto(email, password, item.id, filename, photoUri)
+      await this.setPhoto(instanceUrl, email, password, item.id, filename, photoUri)
     })
 
     //get photos
-    photosToGet.forEach(async item => {
+    await this.asyncForEach(photosToGet, async item => {
       await database.updatePatientImageTimestamp(item.id, item.imageTimestamp)
-      let image = await this.getPhoto(email, password, item.id)
+      let image = await this.getPhoto(instanceUrl, email, password, item.id)
 
       RNFS.mkdir(`${dirPictures}/${item.id}`)
         .then(() => {
@@ -121,8 +118,8 @@ export class ImageSync {
     })
   }
 
-  private getPhotoMetadata = async (email: string, password: string): Promise<any> => {
-    const response = await fetch('https://demo-api.hikmahealth.org/api/photos/metadata', {
+  private getPhotoMetadata = async (instanceUrl: string, email: string, password: string): Promise<any> => {
+    const response = await fetch(`${instanceUrl}/api/photos/metadata`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -137,6 +134,7 @@ export class ImageSync {
   }
 
   private async getPhoto(
+    instanceUrl: string,
     email: string,
     password: string,
     patientId: string,
@@ -146,7 +144,7 @@ export class ImageSync {
     );
     return RNFetchBlob.fetch(
       "POST",
-      'https://demo-api.hikmahealth.org/api/photos/get_photo',
+      `${instanceUrl}/api/photos/get_photo`,
       {
         "Content-Type": "application/json",
       }, JSON.stringify(
@@ -174,6 +172,7 @@ export class ImageSync {
   }
 
   private async setPhoto(
+    instanceUrl: string,
     email: string,
     password: string,
     patientId: string,
@@ -185,7 +184,7 @@ export class ImageSync {
     );
     return RNFetchBlob.fetch(
       "POST",
-      'https://demo-api.hikmahealth.org/api/photos/set_photo',
+      `${instanceUrl}/api/photos/set_photo`,
       {
         "Content-Type": "multipart/form-data",
       }, [
