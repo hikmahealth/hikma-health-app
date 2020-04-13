@@ -33,6 +33,15 @@ export default StyleSheet.create({
     borderColor: '#FF0000',
     borderWidth: 1,
   },
+  instanceList: {
+    padding: 10,
+    width: '90%',
+    borderRadius: 12,
+    backgroundColor: '#FFFFFF',
+    height: 40,
+    justifyContent: 'center',
+    marginBottom: 30,
+  },
   logo: {
     width: 110,
     height: 140,

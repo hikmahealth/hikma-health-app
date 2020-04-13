@@ -16,6 +16,7 @@ const PatientList = (props) => {
   const email = props.navigation.state.params.email;
   const password = props.navigation.state.params.password;
   const clinicId = props.navigation.state.params.clinicId;
+  const instanceUrl = props.navigation.state.params.instanceUrl;
   const [userId, setUserId] = useState(props.navigation.state.params.userId);
   const [query, setQuery] = useState('');
   const [list, setList] = useState([]);
@@ -145,8 +146,8 @@ const PatientList = (props) => {
         <View style={[styles.searchBar, { marginTop: 0 }]}>
           {LanguageToggle()}
           <TouchableOpacity onPress={async () => {
-            await databaseSync.performSync(email, password)
-            await imageSync.syncPhotos(email, password)
+            await databaseSync.performSync(instanceUrl, email, password)
+            await imageSync.syncPhotos(instanceUrl, email, password)
             reloadPatients()
             }}>
             <Image source={require('../images/sync.png')} style={{ width: 30, height: 30 }} />

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  View, Text, Image, TextInput, TouchableOpacity
+  View, Text, Image, TextInput, TouchableOpacity, Picker
 } from 'react-native';
 
 import { database } from "../storage/Database";
 import { StringContent } from '../types/StringContent';
-import { NewUser} from '../types/User';
+import { NewUser } from '../types/User';
 import LinearGradient from 'react-native-linear-gradient';
 import { DatabaseSync } from '../storage/Sync'
 import { ImageSync } from '../storage/ImageSync'
@@ -17,13 +17,29 @@ const Login = (props) => {
   const imageSync = new ImageSync();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [instanceList, setInstanceList] = useState([]);
+  const [selectedInstance, setSelectedInstance] = useState();
   const [loginFailed, setLoginFailed] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   let userId = '';
   let clinicId = '';
 
+  useEffect(() => {
+    getInstances().then(response => {
+      setInstanceList(response)
+    })
+  }, [])
+
+  const getInstances = async (): Promise<any> => {
+    return fetch('https://demo-api.hikmahealth.org/api/instances', {
+      method: 'GET',
+    }).then(response => {
+      return response.json()
+    })
+  }
+
   const remoteLogin = async (): Promise<any> => {
-    const response = await fetch('https://demo-api.hikmahealth.org/api/login', {
+    const response = await fetch(`${selectedInstance.url}/api/login`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -81,14 +97,21 @@ const Login = (props) => {
 
     const clinics: Clinic[] = await database.getClinics();
     if (clinics.length == 0) {
-      await databaseSync.performSync(email, password)
-      await imageSync.syncPhotos(email, password)
+      await databaseSync.performSync(selectedInstance.url, email, password)
+      await imageSync.syncPhotos(selectedInstance.url, email, password)
       const clinicsResponse: Clinic[] = await database.getClinics()
       clinicId = clinicsResponse[0].id
     } else {
       clinicId = clinics[0].id
     }
-    props.navigation.navigate('PatientList', { email: email, password: password, reloadPatientsToggle: false, clinicId: clinicId, userId: userId })
+    props.navigation.navigate('PatientList', {
+      email: email,
+      password: password,
+      reloadPatientsToggle: false,
+      clinicId: clinicId,
+      userId: userId,
+      instanceUrl: selectedInstance.url
+    })
 
   };
 
@@ -118,6 +141,15 @@ const Login = (props) => {
           secureTextEntry={true}
         />
         {loginFailed ? <Text style={{ color: '#FF0000', fontSize: 10, paddingLeft: 10 }}>Login Error: {errorMsg}</Text> : null}
+      </View>
+
+      <View style={styles.instanceList}>
+        <Picker
+          selectedValue={selectedInstance}
+          onValueChange={value => setSelectedInstance(value)}
+        >
+          {instanceList.map((instance, index) => { return <Picker.Item key={index} value={instance} label={instance.name} /> })}
+        </Picker>
       </View>
 
       <View >

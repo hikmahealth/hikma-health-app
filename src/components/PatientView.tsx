@@ -1,5 +1,5 @@
-import React, { Component, useState, useEffect } from "react";
-import { View, Text, Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase, Button, Alert, Platform } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, TextInput,  TouchableOpacity, ImageBackground, Alert } from "react-native";
 import { ImageSync } from '../storage/ImageSync';
 import { database } from '../storage/Database';
 import styles from './Style';
