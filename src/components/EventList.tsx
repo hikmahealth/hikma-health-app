@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Picker } from "react-native";
 import { database } from "../storage/Database";
 import styles from './Style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -60,15 +60,15 @@ const EventList = (props) => {
 
   const LanguageToggle = () => {
     return (
-      <TouchableOpacity onPress={() => {
-        if (language === 'en') {
-          setLanguage('ar')
-        } else {
-          setLanguage('en')
-        }
-      }}>
-        <Text style={styles.text}>{language}</Text>
-      </TouchableOpacity>
+      <Picker
+        selectedValue={language}
+        onValueChange={value => setLanguage(value)}
+        style={styles.picker}
+      >
+        <Picker.Item value='en' label='en' />
+        <Picker.Item value='ar' label='ar' />
+        <Picker.Item value='sp' label='sp' />
+      </Picker>
     )
   }
 
@@ -80,7 +80,7 @@ const EventList = (props) => {
         </TouchableOpacity>
         {LanguageToggle()}
       </View>
-      <View style={styles.buttonBar}>
+      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
         <Text style={styles.text}>{LocalizedStrings[language].visitEvents}</Text>
       </View>
       <View style={styles.listContainer}>
