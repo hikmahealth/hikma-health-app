@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect, useRef } from "react";
-import { View, Text, Image as Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase, ImageSourcePropType, Platform } from "react-native";
+import { View, Text, Image as Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase, ImageSourcePropType, Platform, Picker } from "react-native";
 import RNFS from 'react-native-fs';
 import LinearGradient from 'react-native-linear-gradient';
 import { database } from "../storage/Database";
@@ -62,15 +62,15 @@ const PatientList = (props) => {
 
   const LanguageToggle = () => {
     return (
-      <TouchableOpacity onPress={() => {
-        if (language === 'en') {
-          setLanguage('ar')
-        } else {
-          setLanguage('en')
-        }
-      }}>
-        <Text style={styles.text}>{language}</Text>
-      </TouchableOpacity>
+      <Picker
+        selectedValue={language}
+        onValueChange={value => setLanguage(value)}
+        style={styles.picker}
+      >
+        <Picker.Item value='en' label='en' />
+        <Picker.Item value='ar' label='ar' />
+        <Picker.Item value='sp' label='sp' />
+      </Picker>
     )
   }
 
@@ -143,13 +143,14 @@ const PatientList = (props) => {
         <View style={styles.searchBar}>
           <Text style={styles.text}>{`${LocalizedStrings[language].welcome}, ${email}`}</Text>
         </View>
-        <View style={[styles.searchBar, { marginTop: 0 }]}>
+        <View style={[styles.searchBar, { marginTop: 0, justifyContent: 'center' }]}>
           {LanguageToggle()}
           <TouchableOpacity onPress={async () => {
             await databaseSync.performSync(instanceUrl, email, password)
             await imageSync.syncPhotos(instanceUrl, email, password)
             reloadPatients()
-            }}>
+          }}
+            style={{ marginLeft: 50, marginRight: 100 }}>
             <Image source={require('../images/sync.png')} style={{ width: 30, height: 30 }} />
           </TouchableOpacity>
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  View, Text, Image, TextInput, TouchableOpacity, ScrollView
+  View, Text, Image, TextInput, TouchableOpacity, ScrollView, Picker
 } from 'react-native';
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
@@ -77,15 +77,15 @@ const Covid19Form = (props) => {
 
   const LanguageToggle = () => {
     return (
-      <TouchableOpacity onPress={() => {
-        if (language === 'en') {
-          setLanguage('ar')
-        } else {
-          setLanguage('en')
-        }
-      }}>
-        <Text style={styles.text}>{language}</Text>
-      </TouchableOpacity>
+      <Picker
+        selectedValue={language}
+        onValueChange={value => setLanguage(value)}
+        style={styles.picker}
+      >
+        <Picker.Item value='en' label='en' />
+        <Picker.Item value='ar' label='ar' />
+        <Picker.Item value='sp' label='sp' />
+      </Picker>
     )
   }
 

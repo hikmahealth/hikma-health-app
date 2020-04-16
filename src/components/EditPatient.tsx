@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, Image, TextInput, TouchableOpacity, Platform
+  View, Text, Image, TextInput, TouchableOpacity, Platform, Picker, TouchableWithoutFeedback
 } from 'react-native';
 import { ImageSync } from '../storage/ImageSync'
 import { database } from "../storage/Database";
@@ -82,15 +82,15 @@ const EditPatient = (props) => {
 
   const LanguageToggle = () => {
     return (
-      <TouchableOpacity onPress={() => {
-        if (language === 'en') {
-          setLanguage('ar')
-        } else {
-          setLanguage('en')
-        }
-      }}>
-        <Text style={styles.text}>{language}</Text>
-      </TouchableOpacity>
+      <Picker
+      selectedValue={language}
+      onValueChange={value => setLanguage(value)}
+      style={[styles.picker, { marginLeft: 10}]}
+    >
+      <Picker.Item value='en' label='en' />
+      <Picker.Item value='ar' label='ar' />
+      <Picker.Item value='sp' label='sp' />
+    </Picker>
     )
   }
 
@@ -133,12 +133,12 @@ const EditPatient = (props) => {
         onFacesDetected={facesDetected}
       >
 
-        {/* <TouchableWithoutFeedback
+        <TouchableWithoutFeedback
           style={{
             flex: 1,
           }}
           onPress={touchToFocus}
-        /> */}
+        />
 
         {/* <TouchableOpacity
           testID="button"

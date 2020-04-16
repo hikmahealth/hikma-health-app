@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, TextInput,  TouchableOpacity, ImageBackground, Alert } from "react-native";
+import { View, Text, Image, TextInput,  TouchableOpacity, ImageBackground, Alert, Picker } from "react-native";
 import { ImageSync } from '../storage/ImageSync';
 import { database } from '../storage/Database';
 import styles from './Style';
@@ -51,15 +51,15 @@ const PatientView = (props) => {
 
   const LanguageToggle = () => {
     return (
-      <TouchableOpacity onPress={() => {
-        if (language === 'en') {
-          setLanguage('ar')
-        } else {
-          setLanguage('en')
-        }
-      }}>
-        <Text style={{ padding: 20 }} >{language}</Text>
-      </TouchableOpacity>
+      <Picker
+        selectedValue={language}
+        onValueChange={value => setLanguage(value)}
+        style={{ height: 50, width: 90 }}
+      >
+        <Picker.Item value='en' label='en' />
+        <Picker.Item value='ar' label='ar' />
+        <Picker.Item value='sp' label='sp' />
+      </Picker>
     )
   }
 

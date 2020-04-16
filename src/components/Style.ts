@@ -192,6 +192,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     textAlign: 'center',
+    alignItems: 'center',
     height: 50,
   },
   buttonBar: {
@@ -220,7 +221,6 @@ export default StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold'
   },
-
   cardContent: {
     marginTop: 10,
     marginHorizontal: 10,
@@ -272,43 +272,15 @@ export default StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
+  picker: {
+    color: '#FFFFFF',
+    height: 50,
+    width: 90
+  },
   hexagon: {
     width: 100,
     height: 55
   },
-  hexagonInner: {
-    width: 100,
-    height: 55,
-    backgroundColor: 'transparent'
-  },
-  // hexagonAfter: {
-  //   position: 'absolute',
-  //   bottom: -25.5,
-  //   left: 0,
-  //   width: 0,
-  //   height: 0,
-  //   borderStyle: 'solid',
-  //   borderLeftWidth: 51,
-  //   borderLeftColor: '#FFFFFF',
-  //   borderRightWidth: 51,
-  //   borderRightColor: '#FFFFFF',
-  //   borderTopWidth: 25.5,
-  //   borderTopColor: 'transparent',
-  // },
-  // hexagonBefore: {
-  //   position: 'absolute',
-  //   top: -25.5,
-  //   left: 0,
-  //   width: 0,
-  //   height: 0,
-  //   borderStyle: 'solid',
-  //   borderLeftWidth: 51,
-  //   borderLeftColor: '#FFFFFF',
-  //   borderRightWidth: 51,
-  //   borderRightColor: '#FFFFFF',
-  //   borderBottomWidth: 25.5,
-  //   borderBottomColor: 'transparent'
-  // },
   hexagonAfter: {
     position: 'absolute',
     top: -25,
