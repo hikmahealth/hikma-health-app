@@ -102,33 +102,24 @@ const NewPatient = (props) => {
         ratio={ratio}
         style={{ flex: 1 }}
         onFacesDetected={facesDetected}
-      >
-        <TouchableWithoutFeedback
-          style={{
-            flex: 1,
-          }}
-          onPress={touchToFocus}
-        />
+        captureAudio={false}
+      />
+      <TouchableWithoutFeedback
+        style={{
+          flex: 1,
+        }}
+        onPress={touchToFocus}
+      ><View /></TouchableWithoutFeedback>
 
-        {/* <TouchableOpacity
-          testID="button"
-          onPress={toggleFacing}
-          style={{ width: '100%', height: 45 }}>
-          <Text>{type}</Text>
-        </TouchableOpacity> */}
-
-        <TouchableOpacity
-          style={{ position: 'absolute', bottom: 20, right: '50%', transform: [{ translateX: 20 }] }}
-          onPress={capture}
-        ><Image source={require('../images/shutter.png')} style={{ width: 40, height: 40 }} />
-        </TouchableOpacity>
-      </RNCamera>
+      <TouchableOpacity
+        style={{ position: 'absolute', bottom: 20, right: '50%', transform: [{ translateX: 20 }] }}
+        onPress={capture}
+      ><Image source={require('../images/shutter.png')} style={{ width: 40, height: 40 }} />
+      </TouchableOpacity>
     </View>
   ) : (
       <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
-        {/* <View style={{color:'black'}}> */}
         {LanguageToggle()}
-        {/* </View> */}
         <View style={styles.inputRow}>
           {!!imageTimestamp ?
             <Image source={{ uri: `${imageSync.imgURI(patientId)}/${imageTimestamp}.jpg` }} style={{ width: 100, height: 100, justifyContent: 'center', marginRight: 10 }}>

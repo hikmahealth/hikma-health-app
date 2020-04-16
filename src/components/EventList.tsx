@@ -80,7 +80,7 @@ const EventList = (props) => {
         </TouchableOpacity>
         {LanguageToggle()}
       </View>
-      <View style={styles.buttonBar}>
+      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
         <Text style={styles.text}>{LocalizedStrings[language].visitEvents}</Text>
       </View>
       <View style={styles.listContainer}>

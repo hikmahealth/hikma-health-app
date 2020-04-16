@@ -88,7 +88,7 @@ const VisitList = (props) => {
         </TouchableOpacity>
         {LanguageToggle()}
       </View>
-      <View style={styles.buttonBar}>
+      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
         <Text style={styles.text}>{LocalizedStrings[language].visitHistory}</Text>
       </View>
       <View style={styles.listContainer}>

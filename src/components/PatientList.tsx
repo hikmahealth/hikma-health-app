@@ -107,7 +107,7 @@ const PatientList = (props) => {
             </View>
           </ImageBackground> :
           <Image source={icons[iconHash(item.id)]} style={{ width: 100, height: 100, justifyContent: 'center' }} />}
-        <View style={{ marginLeft: 20 }}>
+        <View style={{ flexShrink: 1, marginLeft: 20 }}>
           {displayName(item)}
           <View
             style={{
@@ -116,7 +116,7 @@ const PatientList = (props) => {
               borderBottomWidth: 1,
             }}
           />
-          <Text>{`${LocalizedStrings[language].dob}:  ${item.date_of_birth}`}</Text>
+          <Text style={{flexWrap: 'wrap'}}>{`${LocalizedStrings[language].dob}:  ${item.date_of_birth}`}</Text>
           <Text>{`${LocalizedStrings[language].sex}:  ${item.sex}`}</Text>
         </View>
       </View>

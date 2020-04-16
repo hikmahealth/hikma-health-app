@@ -83,14 +83,14 @@ const EditPatient = (props) => {
   const LanguageToggle = () => {
     return (
       <Picker
-      selectedValue={language}
-      onValueChange={value => setLanguage(value)}
-      style={[styles.picker, { marginLeft: 10}]}
-    >
-      <Picker.Item value='en' label='en' />
-      <Picker.Item value='ar' label='ar' />
-      <Picker.Item value='sp' label='sp' />
-    </Picker>
+        selectedValue={language}
+        onValueChange={value => setLanguage(value)}
+        style={[styles.picker, { marginLeft: 10 }]}
+      >
+        <Picker.Item value='en' label='en' />
+        <Picker.Item value='ar' label='ar' />
+        <Picker.Item value='sp' label='sp' />
+      </Picker>
     )
   }
 
@@ -131,28 +131,19 @@ const EditPatient = (props) => {
         ratio={ratio}
         style={{ flex: 1 }}
         onFacesDetected={facesDetected}
-      >
-
-        <TouchableWithoutFeedback
-          style={{
-            flex: 1,
-          }}
-          onPress={touchToFocus}
-        />
-
-        {/* <TouchableOpacity
-          testID="button"
-          onPress={toggleFacing}
-          style={{ width: '100%', height: 45 }}>
-          <Text>{type}</Text>
-        </TouchableOpacity> */}
-
-        <TouchableOpacity
-          style={{ position: 'absolute', bottom: 20, right: '50%', transform: [{ translateX: 20 }] }}
-          onPress={capture}
-        ><Image source={require('../images/shutter.png')} style={{ width: 40, height: 40 }} />
-        </TouchableOpacity>
-      </RNCamera>
+        captureAudio={false}
+      />
+      <TouchableWithoutFeedback
+        style={{
+          flex: 1,
+        }}
+        onPress={touchToFocus}
+      ><View /></TouchableWithoutFeedback>
+      <TouchableOpacity
+        style={{ position: 'absolute', bottom: 20, right: '50%', transform: [{ translateX: 20 }] }}
+        onPress={capture}
+      ><Image source={require('../images/shutter.png')} style={{ width: 40, height: 40 }} />
+      </TouchableOpacity>
     </View>
   ) : (
       <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
@@ -238,8 +229,6 @@ const EditPatient = (props) => {
           </TouchableOpacity>
         </View>
       </LinearGradient>
-
-
     );
 };
 

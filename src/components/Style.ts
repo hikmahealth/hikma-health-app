@@ -196,6 +196,7 @@ export default StyleSheet.create({
     height: 50,
   },
   buttonBar: {
+    flex: 1,
     marginTop: 10,
     marginHorizontal: 10,
     justifyContent: 'space-evenly',
@@ -204,6 +205,7 @@ export default StyleSheet.create({
     height: 50,
   },
   gridContainer: {
+    flex: 1,
     flexDirection: 'row',
   },
   gridItem: {
@@ -222,7 +224,8 @@ export default StyleSheet.create({
     fontWeight: 'bold'
   },
   cardContent: {
-    marginTop: 10,
+    flex: 1,
+    // marginTop: 10,
     marginHorizontal: 10,
     flexDirection: 'row',
     textAlign: 'center',
