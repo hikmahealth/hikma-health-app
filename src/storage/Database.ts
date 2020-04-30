@@ -74,13 +74,21 @@ class DatabaseImpl implements Database {
   public async saveStringContent(stringContent: StringContent[], id?: string, addLanguage?: boolean): Promise<string> {
     const contentId = id || uuid();
     var stringId = contentId.replace(/-/g, "");
+    const idExists = await this.getIdExists(stringId)
     const db = await this.getDatabase();
-    if (!addLanguage) {
+    if (!addLanguage && !idExists) {
       await db.executeSql(`INSERT INTO string_ids (id) VALUES (?);`, [stringId]);
     }
-    stringContent.forEach(async element => {
-      await this.saveStringWithId(element, stringId);
-    })
+    if (idExists) {
+      stringContent.forEach(async element => {
+        await this.updateStringWithId(element, stringId);
+      })
+    } else {
+      stringContent.forEach(async element => {
+        await this.saveStringWithId(element, stringId);
+      })
+    }
+
     return stringId;
   }
 
@@ -99,10 +107,27 @@ class DatabaseImpl implements Database {
     return id;
   }
 
+  private async getIdExists(id: string): Promise<boolean> {
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql("SELECT * FROM string_ids WHERE ID = ?", [id])
+      )
+      .then(async ([results]) => {
+        return !(results === undefined || results.rows.length < 1)
+      });
+  }
+
   private async saveStringWithId(stringContent: StringContent, id: string): Promise<string> {
     const date = new Date().toISOString();
     const db = await this.getDatabase();
     await db.executeSql(`INSERT INTO string_content (id, language, content, edited_at) VALUES (?, ?, ?, ?);`, [id, stringContent.language, stringContent.content, date]);
+    return id;
+  }
+
+  private async updateStringWithId(stringContent: StringContent, id: string): Promise<string> {
+    const date = new Date().toISOString();
+    const db = await this.getDatabase();
+    await db.executeSql(`UPDATE string_content SET language = ?, content = ?, edited_at = ? WHERE ID = ?;`, [stringContent.language, stringContent.content, date, id]);
     return id;
   }
 
@@ -150,7 +175,7 @@ class DatabaseImpl implements Database {
     const date = new Date().toISOString();
     return this.getDatabase()
       .then(db =>
-        db.executeSql(`UPDATE patients SET image_timestamp = ?, edited_at = ? WHERE id = ?`, [ newTimestamp, date, patientId])
+        db.executeSql(`UPDATE patients SET image_timestamp = ?, edited_at = ? WHERE id = ?`, [newTimestamp, date, patientId])
       ).then(() => {
         return
       })
@@ -359,7 +384,7 @@ class DatabaseImpl implements Database {
       .then(db =>
         db.executeSql("SELECT v.id, v.patient_id, v.clinic_id, v.provider_id, v.check_in_timestamp, u.name FROM visits as v INNER JOIN users as u ON v.provider_id=u.id WHERE patient_id = ? ORDER BY check_in_timestamp DESC;", [patient_id])
       )
-      .then( async ([results]) => {
+      .then(async ([results]) => {
         if (results === undefined) {
           return [];
         }
