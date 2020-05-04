@@ -28,7 +28,7 @@ const EditPatient = (props) => {
   const [countryText, setCountryText] = useState(props.navigation.state.params.patient.country.content[language] || '');
   const [hometownText, setHometownText] = useState(props.navigation.state.params.patient.hometown.content[language] || '');
   const [phone, setPhone] = useState(props.navigation.state.params.patient.phone || '');
-  const [imageTimestamp, setImageTimestamp] = useState('');
+  const [imageTimestamp, setImageTimestamp] = useState(props.navigation.state.params.patient.image_timestamp || '');
   const [cameraOpen, setCameraOpen] = useState(false);
   const today = new Date();
 
