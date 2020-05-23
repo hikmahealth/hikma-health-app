@@ -213,7 +213,6 @@ const Covid19Form = (props) => {
     }).then(() => {
       console.log('Screening event saved')
       setSubmitted(true)
-      // props.navigation.navigate('NewVisit', { language: language })
     })
   }
 

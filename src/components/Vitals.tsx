@@ -22,57 +22,37 @@ const Vitals = (props) => {
   const visitId = props.navigation.getParam('visitId');
 
   useEffect(() => {
-    database.getLatestPatientEventByType(patientId, EventTypes.HR).then((response: string) => {
+    database.getLatestPatientEventByType(patientId, EventTypes.Vitals).then((response: any) => {
       if (!!response) {
-        setHeartRate(response)
-      }
-    })
-    database.getLatestPatientEventByType(patientId, EventTypes.BP).then((response: string) => {
-      if (!!response) {
-        const bp = response.split("/");
-        setSystolic(bp[0])
-        setDiastolic(bp[1])
-      }
-    })
-    database.getLatestPatientEventByType(patientId, EventTypes.Sats).then((response: string) => {
-      if (!!response) {
-        setSats(response)
-      }
-    })
-    database.getLatestPatientEventByType(patientId, EventTypes.Temp).then((response: string) => {
-      if (!!response) {
-        setTemp(response)
-      }
-    })
-    database.getLatestPatientEventByType(patientId, EventTypes.RR).then((response: string) => {
-      if (!!response) {
-        setRespiratoryRate(response)
-      }
-    })
-    database.getLatestPatientEventByType(patientId, EventTypes.BG).then((response: string) => {
-      if (!!response) {
-        setBloodGlucose(response)
+        const metadataObj = JSON.parse(response)
+        setHeartRate(metadataObj.heartRate)
+        setSystolic(metadataObj.systolic)
+        setDiastolic(metadataObj.diastolic)
+        setSats(metadataObj.sats)
+        setTemp(metadataObj.temp)
+        setRespiratoryRate(metadataObj.respiratoryRate)
+        setBloodGlucose(metadataObj.bloodGlucose)
       }
     })
   }, [props])
 
   const setVitals = async () => {
-    await addEvent(heartRate, EventTypes.HR);
-    await addEvent(!!systolic && !!diastolic ? `${systolic}/${diastolic}` : null, EventTypes.BP);
-    await addEvent(sats, EventTypes.Sats);
-    await addEvent(temp, EventTypes.Temp);
-    await addEvent(respiratoryRate, EventTypes.RR);
-    await addEvent(bloodGlucose, EventTypes.BG);
-    props.navigation.navigate('NewVisit')
-  }
-
-  const addEvent = async (entry: any, eventType: EventTypes) => {
     database.addEvent({
       id: uuid(),
       patient_id: patientId,
       visit_id: visitId,
-      event_type: eventType,
-      event_metadata: entry
+      event_type: EventTypes.Vitals,
+      event_metadata: JSON.stringify({ 
+        heartRate,
+        systolic,
+        diastolic,
+        sats,
+        temp,
+        respiratoryRate,
+        bloodGlucose
+      })
+    }).then(() =>{
+      props.navigation.navigate('NewVisit')
     })
   };
 

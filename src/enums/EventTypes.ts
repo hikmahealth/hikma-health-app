@@ -1,11 +1,6 @@
 export enum EventTypes {
   PatientSummary = 'Patient Summary',
-  HR = 'HR',
-  BP = 'BP',
-  Sats = 'Sats',
-  Temp = 'Temp',
-  RR = 'RR',
-  BG = 'BG',
+  Vitals = 'Vitals',
   Examination = 'Examination',
   Complaint = 'Complaint',
   Treatment = 'Treatment',
