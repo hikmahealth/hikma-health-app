@@ -11,7 +11,7 @@ const EventList = (props) => {
   const visit = props.navigation.getParam('visit');
   const patient = props.navigation.getParam('patient');
 
-  const [list, setList] = useState([]);
+  const [list, setList] = useState(props.navigation.getParam('events', []));
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
 
   useEffect(() => {
@@ -32,13 +32,16 @@ const EventList = (props) => {
   const keyExtractor = (item, index) => index.toString()
 
   const editEvent = (event: Event) => {
+    switch (event.event_type) {
+      case EventTypes.Covid19Screening:
+        break
+      case EventTypes.Vitals:
+        props.navigation.navigate('EditVitals', { event, language })
+        break
+      default:
+        props.navigation.navigate('EditOpenTextEvent', { event, language })
 
-    let component = 'OpenTextEvent'
-    if (event.event_type === 'Vitals') {
-      component = 'Vitals'
     }
-    props.navigation.navigate('OpenTextEvent', { patientId: event.patient_id, visitId: event.visit_id, eventType: event.event_type, language: language })
-
   }
 
   const renderItem = ({ item }) => (

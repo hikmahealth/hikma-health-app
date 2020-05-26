@@ -30,7 +30,7 @@ export interface Database {
   getVisits(patient_id: string): Promise<Visit[]>;
   getEvents(visit_id: string): Promise<Event[]>;
   editPatient(patient: NewPatient): Promise<Patient>;
-  editEvent(event: Event): Promise<Event[]>;
+  editEvent(id: string, event_metadata: string): Promise<Event[]>;
 }
 
 class DatabaseImpl implements Database {
@@ -166,20 +166,18 @@ class DatabaseImpl implements Database {
         db.executeSql(`UPDATE patients SET given_name = ?, surname = ?, date_of_birth = ?, country = ?, hometown = ?, phone = ?, sex = ?, image_timestamp = ?, edited_at = ? WHERE id = ?`, [patient.given_name, patient.surname, patient.date_of_birth, patient.country, patient.hometown, patient.phone, patient.sex, patient.image_timestamp, date, patient.id])
       )
       .then(async ([results]) => {
-
         return this.getPatient(patient.id)
-
       });
   }
 
-  public editEvent(event: Event): Promise<Event[]> {
+  public editEvent(id: string, event_metadata: string): Promise<Event[]> {
     const date = new Date().toISOString();
     return this.getDatabase()
       .then(db =>
-        db.executeSql(`UPDATE events SET event_metadata = ?, edited_at = ? WHERE id = ?`, [event.event_metadata, date, event.id])
+        db.executeSql(`UPDATE events SET event_metadata = ?, edited_at = ? WHERE id = ?`, [event_metadata, date, id])
       )
       .then(async ([results]) => {
-        return this.getEvents(event.id)
+        return this.getEvents(id)
       });
   }
 
