@@ -10,9 +10,11 @@ import NewVisit from '../components/NewVisit';
 import Covid19Form from '../components/Covid19Form';
 import EditPatient from '../components/EditPatient';
 import OpenTextEvent from '../components/OpenTextEvent';
+import EditOpenTextEvent from '../components/EditOpenTextEvent';
 import Vitals from '../components/Vitals';
 import VisitList from '../components/VisitList';
 import EventList from '../components/EventList';
+import EditVitals from '../components/EditVitals';
 
 const rootNavigator = createStackNavigator(
   {
@@ -72,10 +74,24 @@ const rootNavigator = createStackNavigator(
         header: null
       })
     },
+    EditOpenTextEvent: {
+      screen: EditOpenTextEvent,
+      navigationOptions: () => ({
+        title: `EditOpenTextEvent`,
+        header: null
+      })
+    },
     Vitals: {
       screen: Vitals,
       navigationOptions: () => ({
         title: `Vitals`,
+        header: null
+      })
+    },
+    EditVitals: {
+      screen: EditVitals,
+      navigationOptions: () => ({
+        title: `EditVitals`,
         header: null
       })
     },

@@ -5,12 +5,13 @@ import styles from './Style';
 import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings'
 import { EventTypes } from "../enums/EventTypes";
+import { Event } from "../types/Event";
 
 const EventList = (props) => {
   const visit = props.navigation.getParam('visit');
   const patient = props.navigation.getParam('patient');
 
-  const [list, setList] = useState([]);
+  const [list, setList] = useState(props.navigation.getParam('events', []));
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
 
   useEffect(() => {
@@ -30,9 +31,21 @@ const EventList = (props) => {
 
   const keyExtractor = (item, index) => index.toString()
 
+  const editEvent = (event: Event) => {
+    switch (event.event_type) {
+      case EventTypes.Covid19Screening:
+        break
+      case EventTypes.Vitals:
+        props.navigation.navigate('EditVitals', { event, language })
+        break
+      default:
+        props.navigation.navigate('EditOpenTextEvent', { event, language })
+
+    }
+  }
 
   const renderItem = ({ item }) => (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card} onLongPress={() => editEvent(item)}>
       <View style={styles.cardContent} >
         <View style={{ margin: 10 }}>
           <Text>{`${LocalizedStrings[language].eventType}: ${item.event_type}`}</Text>
@@ -46,15 +59,39 @@ const EventList = (props) => {
           {renderMetadata(item.event_type, item.event_metadata)}
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 
+  const parseMetadata = (metadata: string) => {
+    try {
+      JSON.parse(metadata);
+    } catch (e) {
+      return metadata;
+    }
+    return JSON.parse(metadata);
+  }
+
   const renderMetadata = (type: EventTypes, metadata: string) => {
-    if (type === EventTypes.Covid19Screening) {
-      const metadataObj = JSON.parse(metadata)
-      return (<Text>Test/Isolate Patient: {metadataObj.testAndIsolate.toString()}</Text>)
-    } else {
-      return(<Text>{metadata}</Text>)
+    const metadataObj = parseMetadata(metadata)
+
+    switch (type) {
+      case EventTypes.Covid19Screening:
+        return (<Text>Test/Isolate Patient: {metadataObj.testAndIsolate.toString()}</Text>)
+      case EventTypes.Vitals:
+        return (
+          <View style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+          }}>
+            <Text style={{ width: '50%' }}>HR: {metadataObj.heartRate} BPM</Text>
+            <Text style={{ width: '50%' }}>BP: {metadataObj.systolic}/{metadataObj.diastolic}</Text>
+            <Text style={{ width: '50%' }}>Sats: {metadataObj.sats}%</Text>
+            <Text style={{ width: '50%' }}>Temp: {metadataObj.temp} °C</Text>
+            <Text style={{ width: '50%' }}>RR: {metadataObj.respiratoryRate}</Text>
+            <Text style={{ width: '50%' }}>BG: {metadataObj.bloodGlucose}</Text>
+          </View>)
+      default:
+        return (<Text>{metadataObj}</Text>)
     }
   }
 
@@ -80,7 +117,7 @@ const EventList = (props) => {
         </TouchableOpacity>
         {LanguageToggle()}
       </View>
-      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+      <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <Text style={styles.text}>{LocalizedStrings[language].visitEvents}</Text>
       </View>
       <View style={styles.listContainer}>

@@ -9,7 +9,7 @@ import { uuid } from 'uuidv4';
 import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 
-const EditPatient = (props) => {
+const OpenTextEvent = (props) => {
 
   const eventType = props.navigation.getParam('eventType');
   const patientId = props.navigation.getParam('patientId');
@@ -59,4 +59,4 @@ const EditPatient = (props) => {
   );
 };
 
-export default EditPatient;
+export default OpenTextEvent;

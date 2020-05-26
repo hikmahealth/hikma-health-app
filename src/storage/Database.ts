@@ -17,19 +17,20 @@ export interface Database {
   getClinics(): Promise<Clinic[]>;
   getPatients(): Promise<Patient[]>;
   getPatient(patient_id: string): Promise<Patient>;
-  addUser(user: NewUser, password: string): Promise<void>;
   editStringContent(stringContent: StringContent[], id: string): Promise<string>;
   saveStringContent(stringContent: StringContent[], id?: string, addLanguage?: boolean): Promise<string>;
   applyScript(script: SyncResponse): Promise<void>;
-  addPatient(patient: NewPatient): Promise<void>;
-  editPatient(patient: NewPatient): Promise<Patient>;
   updatePatientImageTimestamp(patientId: string, newTimestamp: string): Promise<void>;
   getLatestPatientEventByType(patient_id: string, event_type: string): Promise<string>;
+  addUser(user: NewUser, password: string): Promise<void>;
+  addPatient(patient: NewPatient): Promise<void>;
   addEvent(event: Event): Promise<void>;
   addVisit(visit: Visit): Promise<void>;
   getUser(user_id: string): Promise<User>;
   getVisits(patient_id: string): Promise<Visit[]>;
   getEvents(visit_id: string): Promise<Event[]>;
+  editPatient(patient: NewPatient): Promise<Patient>;
+  editEvent(id: string, event_metadata: string): Promise<Event[]>;
 }
 
 class DatabaseImpl implements Database {
@@ -165,9 +166,18 @@ class DatabaseImpl implements Database {
         db.executeSql(`UPDATE patients SET given_name = ?, surname = ?, date_of_birth = ?, country = ?, hometown = ?, phone = ?, sex = ?, image_timestamp = ?, edited_at = ? WHERE id = ?`, [patient.given_name, patient.surname, patient.date_of_birth, patient.country, patient.hometown, patient.phone, patient.sex, patient.image_timestamp, date, patient.id])
       )
       .then(async ([results]) => {
-
         return this.getPatient(patient.id)
+      });
+  }
 
+  public editEvent(id: string, event_metadata: string): Promise<Event[]> {
+    const date = new Date().toISOString();
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql(`UPDATE events SET event_metadata = ?, edited_at = ? WHERE id = ?`, [event_metadata, date, id])
+      )
+      .then(async ([results]) => {
+        return this.getEvents(id)
       });
   }
 

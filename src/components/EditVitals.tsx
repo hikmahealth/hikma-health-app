@@ -4,12 +4,13 @@ import {
 } from 'react-native';
 
 import { database } from "../storage/Database";
-import { uuid } from 'uuidv4';
 import styles from './Style';
-import { EventTypes } from '../enums/EventTypes';
 import LinearGradient from 'react-native-linear-gradient';
 
-const Vitals = (props) => {
+const EditVitals = (props) => {
+  const event = props.navigation.getParam('event');
+  const metadata = props.navigation.getParam('event').event_metadata;
+  const language = props.navigation.getParam('language', 'en')
   const [heartRate, setHeartRate] = useState(null);
   const [systolic, setSystolic] = useState(null);
   const [diastolic, setDiastolic] = useState(null);
@@ -18,13 +19,9 @@ const Vitals = (props) => {
   const [respiratoryRate, setRespiratoryRate] = useState(null);
   const [bloodGlucose, setBloodGlucose] = useState(null);
 
-  const patientId = props.navigation.getParam('patientId');
-  const visitId = props.navigation.getParam('visitId');
-
   useEffect(() => {
-    database.getLatestPatientEventByType(patientId, EventTypes.Vitals).then((response: any) => {
-      if (!!response) {
-        const metadataObj = JSON.parse(response)
+      if (!!metadata) {
+        const metadataObj = JSON.parse(metadata)
         setHeartRate(metadataObj.heartRate)
         setSystolic(metadataObj.systolic)
         setDiastolic(metadataObj.diastolic)
@@ -33,16 +30,12 @@ const Vitals = (props) => {
         setRespiratoryRate(metadataObj.respiratoryRate)
         setBloodGlucose(metadataObj.bloodGlucose)
       }
-    })
   }, [props])
 
   const setVitals = async () => {
-    database.addEvent({
-      id: uuid(),
-      patient_id: patientId,
-      visit_id: visitId,
-      event_type: EventTypes.Vitals,
-      event_metadata: JSON.stringify({ 
+    database.editEvent(
+      event.id,
+      JSON.stringify({ 
         heartRate,
         systolic,
         diastolic,
@@ -51,9 +44,7 @@ const Vitals = (props) => {
         respiratoryRate,
         bloodGlucose
       })
-    }).then(() =>{
-      props.navigation.navigate('NewVisit')
-    })
+    ).then((response) => props.navigation.navigate('EventList', {events: response, language}))
   };
 
   return (
@@ -130,4 +121,4 @@ const Vitals = (props) => {
   );
 };
 
-export default Vitals;
+export default EditVitals;
