@@ -1,5 +1,7 @@
 export enum EventTypes {
   PatientSummary = 'Patient Summary',
+  Camp = 'Camp',
+  VisitType = 'Visit Type',
   Vitals = 'Vitals',
   Examination = 'Examination',
   Complaint = 'Complaint',
@@ -9,7 +11,6 @@ export enum EventTypes {
   Prescriptions = 'Prescriptions',
   Allergies = 'Allergies',
   MedicalHistory = 'Medical History',
-  Camp = 'Camp',
   Notes = 'Notes',
   Covid19Screening = 'COVID-19 Screening'
 }

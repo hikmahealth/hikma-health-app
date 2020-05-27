@@ -13,6 +13,8 @@ const NewVisit = (props) => {
   const [camp, setCamp] = useState('');
   const [visitType, setVisitType] = useState('');
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
+  const [campTextColor, setCampTextColor] = useState('#A9A9A9')
+  const [typeTextColor, setTypeTextColor] = useState('#A9A9A9')
   const patient = props.navigation.getParam('patient');
   const visitId = props.navigation.getParam('visitId');
   const userName = props.navigation.getParam('userName');
@@ -22,6 +24,11 @@ const NewVisit = (props) => {
     database.getLatestPatientEventByType(patientId, EventTypes.Camp).then((response: string) => {
       if (response.length > 0) {
         setCamp(response)
+      }
+    })
+    database.getLatestPatientEventByType(patientId, EventTypes.VisitType).then((response: string) => {
+      if (response.length > 0) {
+        setVisitType(response)
       }
     })
 
@@ -58,6 +65,16 @@ const NewVisit = (props) => {
     }).then(() => console.log('camp saved'))
   }
 
+  const handleSaveVisitType = () => {
+    database.addEvent({
+      id: uuid(),
+      patient_id: patient.id,
+      visit_id: visitId,
+      event_type: EventTypes.VisitType,
+      event_metadata: visitType
+    }).then(() => console.log('visit type saved'))
+  }
+
   return (
     <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
       <View style={styles.searchBar}>
@@ -70,9 +87,11 @@ const NewVisit = (props) => {
       <View style={styles.inputsContainer}>
         <View style={styles.inputRow}>
           <TextInput
-            style={styles.inputs}
+            style={[styles.inputs, {color: campTextColor}]}
             placeholder={LocalizedStrings[language].camp}
-            onChangeText={setCamp}
+            onChangeText={(text) => {
+              setCampTextColor('#000000')
+              setCamp(text)}}
             onEndEditing={handleSaveCamp}
             value={camp}
           />
@@ -90,15 +109,15 @@ const NewVisit = (props) => {
           <Text style={styles.inputs}>
             {new Date().toISOString().split("T")[0]}
           </Text>
-          {/* <TextInput
-            style={styles.inputs}
-            placeholder="Visit Type/EMA#"
-            onChangeText={setVisitType}
+          <TextInput
+            style={[styles.inputs, {color: typeTextColor}]}
+            placeholder={LocalizedStrings[language].visitType}
+            onChangeText={(text) => {
+              setTypeTextColor('#000000')
+              setVisitType(text)}}
+            onEndEditing={handleSaveVisitType}
             value={visitType}
-          /> */}
-          <Text style={styles.inputs}>
-            Visit Type/EMA#
-          </Text>
+          />
         </View>
       </View>
 

@@ -21,21 +21,6 @@ const Vitals = (props) => {
   const patientId = props.navigation.getParam('patientId');
   const visitId = props.navigation.getParam('visitId');
 
-  useEffect(() => {
-    database.getLatestPatientEventByType(patientId, EventTypes.Vitals).then((response: any) => {
-      if (!!response) {
-        const metadataObj = JSON.parse(response)
-        setHeartRate(metadataObj.heartRate)
-        setSystolic(metadataObj.systolic)
-        setDiastolic(metadataObj.diastolic)
-        setSats(metadataObj.sats)
-        setTemp(metadataObj.temp)
-        setRespiratoryRate(metadataObj.respiratoryRate)
-        setBloodGlucose(metadataObj.bloodGlucose)
-      }
-    })
-  }, [props])
-
   const setVitals = async () => {
     database.addEvent({
       id: uuid(),

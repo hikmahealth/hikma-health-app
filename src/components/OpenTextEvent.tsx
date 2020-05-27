@@ -8,6 +8,7 @@ import styles from './Style';
 import { uuid } from 'uuidv4';
 import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
+import { EventTypes } from '../enums/EventTypes';
 
 const OpenTextEvent = (props) => {
 
@@ -15,12 +16,17 @@ const OpenTextEvent = (props) => {
   const patientId = props.navigation.getParam('patientId');
   const visitId = props.navigation.getParam('visitId');
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
-
+  const [textColor, setTextColor] = useState('#A9A9A9')
   const [responseText, setResponseText] = useState('');
 
   useEffect(() => {
     database.getLatestPatientEventByType(patientId, eventType).then((response: string) => {
-      if (response.length > 0) {
+      if (response.length > 0 && (
+        eventType === EventTypes.MedicalHistory ||
+        eventType === EventTypes.Allergies ||
+        eventType === EventTypes.Diagnosis ||
+        eventType === EventTypes.Prescriptions ||
+        eventType === EventTypes.Notes)) {
         setResponseText(response)
       }
     })
@@ -43,9 +49,12 @@ const OpenTextEvent = (props) => {
       </TouchableOpacity>
       <Text>{eventType}</Text>
       <TextInput
-        style={styles.loginInputsContainer}
+        style={[styles.loginInputsContainer, {color: textColor}]}
         placeholder={LocalizedStrings[language].enterTextHere}
-        onChangeText={setResponseText}
+        onChangeText={(text) => {
+          setResponseText(text)
+          setTextColor('#000000')
+        }}
         value={responseText}
         multiline={true}
       />
