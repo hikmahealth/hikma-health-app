@@ -392,7 +392,7 @@ class DatabaseImpl implements Database {
   public getVisits(patient_id: string): Promise<Visit[]> {
     return this.getDatabase()
       .then(db =>
-        db.executeSql("SELECT v.id, v.patient_id, v.clinic_id, v.provider_id, v.check_in_timestamp, u.name FROM visits as v INNER JOIN users as u ON v.provider_id=u.id WHERE patient_id = ? ORDER BY check_in_timestamp DESC;", [patient_id])
+        db.executeSql("SELECT v.id, v.patient_id, v.clinic_id, v.provider_id, v.check_in_timestamp, u.name FROM visits as v LEFT JOIN users as u ON v.provider_id=u.id WHERE patient_id = ? ORDER BY check_in_timestamp DESC;", [patient_id])
       )
       .then(async ([results]) => {
         if (results === undefined) {
@@ -403,7 +403,7 @@ class DatabaseImpl implements Database {
         for (let i = 0; i < count; i++) {
           const row = results.rows.item(i);
           const { id, patient_id, clinic_id, provider_id, check_in_timestamp, name } = row;
-          const nameContent = await this.languageStringDataById(name)
+          const nameContent = (name != null) ? await this.languageStringDataById(name) : {id: null, content: {"en": "Unknown"}};
 
           visits.push({ id, patient_id, clinic_id, provider_id, check_in_timestamp, provider_name: nameContent });
         }
