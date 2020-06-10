@@ -53,7 +53,7 @@ export class ImageSync {
     });
   };
 
-  public syncPhotos = async (instanceUrl: string, email: string, password: string): Promise<any> => {
+  public syncPhotos = async (instanceUrl: string, email: string, password: string): Promise<boolean> => {
     let photosToSet = []
     let photosToGet = []
 
@@ -116,6 +116,7 @@ export class ImageSync {
           RNFS.writeFile(`${this.imgURI(item.id)}/${item.imageTimestamp}.jpg`, image.data, 'base64')
         })
     })
+    return;
   }
 
   private getPhotoMetadata = async (instanceUrl: string, email: string, password: string): Promise<any> => {

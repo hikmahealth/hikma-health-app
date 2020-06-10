@@ -93,7 +93,7 @@ const PatientView = (props) => {
     <View style={styles.main}>
       <View style={styles.viewContainer}>
         <View style={styles.searchBar}>
-          <TouchableOpacity onPress={() => props.navigation.navigate('PatientList', { language: language, reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle })}>
+          <TouchableOpacity onPress={() => props.navigation.navigate('PatientList', { language: language, reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle, imagesSynced: null })}>
             <Text style={{ padding: 20 }}>{LocalizedStrings[language].PATIENTS}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => props.navigation.navigate('EditPatient', { language: language, patient: patient })}>

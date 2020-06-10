@@ -19,16 +19,26 @@ const Login = (props) => {
   const [password, setPassword] = useState('');
   const [instanceList, setInstanceList] = useState([]);
   const [selectedInstance, setSelectedInstance] = useState();
+  const [showInstanceDropdown, setShowInstanceDropdown] = useState(false);
   const [loginFailed, setLoginFailed] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   let userId = '';
   let clinicId = '';
+  let instanceUrl = '';
 
   useEffect(() => {
-    getInstances().then(response => {
-      setInstanceList(response)
+    database.usersExist().then(result => {
+      if (!result) {
+        getInstances().then(response => {
+          setInstanceList(response)
+        })
+        setShowInstanceDropdown(true)
+      } else {
+        setShowInstanceDropdown(false)
+      }
+      database.close()
     })
-  }, [])
+  }, [props])
 
   const getInstances = async (): Promise<any> => {
     return fetch('https://demo-api.hikmahealth.org/api/instances', {
@@ -61,6 +71,12 @@ const Login = (props) => {
       console.log("email: " + email)
       console.log("password: " + password)
 
+      if (selectedInstance === null || selectedInstance === undefined) {
+        setLoginFailed(true);
+        setErrorMsg('Incorrect credentials');
+        return;
+      }
+
       const responseJson = await remoteLogin();
 
       console.log('response' + responseJson)
@@ -87,18 +103,22 @@ const Login = (props) => {
         id: responseJson.id,
         name: nameId,
         role: responseJson.role,
-        email: responseJson.email
+        email: responseJson.email,
+        instance_url: selectedInstance.url
       }
       userId = responseJson.id.replace(/-/g, "");
+      instanceUrl = selectedInstance.url
       await database.addUser(newUser, password)
     } else {
       userId = user.id
+      instanceUrl = user.instance_url
     }
 
+    let imagesSynced;
     const clinics: Clinic[] = await database.getClinics();
     if (clinics.length == 0) {
-      await databaseSync.performSync(selectedInstance.url, email, password)
-      await imageSync.syncPhotos(selectedInstance.url, email, password)
+      await databaseSync.performSync(instanceUrl, email, password)
+      imagesSynced = imageSync.syncPhotos(instanceUrl, email, password)
       const clinicsResponse: Clinic[] = await database.getClinics()
       clinicId = clinicsResponse[0].id
     } else {
@@ -110,7 +130,8 @@ const Login = (props) => {
       reloadPatientsToggle: false,
       clinicId: clinicId,
       userId: userId,
-      instanceUrl: selectedInstance.url
+      instanceUrl,
+      imagesSynced
     })
 
   };
@@ -143,14 +164,14 @@ const Login = (props) => {
         {loginFailed ? <Text style={{ color: '#FF0000', fontSize: 10, paddingLeft: 10 }}>Login Error: {errorMsg}</Text> : null}
       </View>
 
-      <View style={styles.instanceList}>
+      {showInstanceDropdown ? <View style={styles.instanceList}>
         <Picker
           selectedValue={selectedInstance}
           onValueChange={value => setSelectedInstance(value)}
         >
           {instanceList.map((instance, index) => { return <Picker.Item key={index} value={instance} label={instance.name} /> })}
         </Picker>
-      </View>
+      </View> : null }
 
       <View >
         <TouchableOpacity onPress={handleLogin}>

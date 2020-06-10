@@ -5,6 +5,7 @@ export interface User {
   name: LanguageString
   role: string
   email: string
+  instance_url: string
 }
 
 export interface NewUser {
@@ -12,4 +13,5 @@ export interface NewUser {
   name: string
   role: string
   email: string
+  instance_url: string
 }

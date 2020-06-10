@@ -45,6 +45,12 @@ const PatientList = (props) => {
   }, [query]);
 
   useEffect(() => {
+    if (!!props.navigation.getParam('imagesSynced')) {
+      props.navigation.state.params.imagesSynced.then(() => {
+        reloadPatients()
+      })
+    }
+    
     if (!!props.navigation.getParam('language') && language !== props.navigation.getParam('language')) {
       setLanguage(props.navigation.getParam('language'));
     }
@@ -76,7 +82,7 @@ const PatientList = (props) => {
 
   const logout = () => {
     setUserId('')
-    props.navigation.navigate('Home')
+    props.navigation.navigate('Home', {logout: true})
   }
 
   const displayName = (item) => {

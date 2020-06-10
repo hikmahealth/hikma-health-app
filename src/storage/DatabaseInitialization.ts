@@ -83,7 +83,7 @@ export class DatabaseInitialization {
 
     // Version table
     transaction.executeSql(
-      "CREATE TABLE IF NOT EXISTS users (id varchar(32) PRIMARY KEY, name varchar(32) REFERENCES string_ids(id) ON DELETE CASCADE, role text not null, email text not null, hashed_password text not null, edited_at text);"
+      "CREATE TABLE IF NOT EXISTS users (id varchar(32) PRIMARY KEY, name varchar(32) REFERENCES string_ids(id) ON DELETE CASCADE, role text not null, email text not null, hashed_password text not null, instance_url text, edited_at text);"
     );
 
     // Clinics table
@@ -118,7 +118,7 @@ export class DatabaseInitialization {
   // Once the app has shipped, use the following functions as a template for updating the database:
   /*
     // This function should be called when the version of the db is < 1
-    private preVersion1sInserts(transaction: SQLite.Transaction) {
+    private preVersion1Inserts(transaction: SQLite.Transaction) {
         console.log("Running pre-version 1 DB inserts");
         // Make schema changes
         transaction.executeSql("ALTER TABLE ...");

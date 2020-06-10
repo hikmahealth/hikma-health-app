@@ -51,6 +51,7 @@ const NewPatient = (props) => {
       image_timestamp: imageTimestamp
     }).then(() => props.navigation.navigate('PatientList', {
       reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle,
+      imagesSynced: null,
       language: language
     }))
 
