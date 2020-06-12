@@ -11,7 +11,7 @@ const App = () => {
   const [appState, setAppState] = useState(AppState.currentState.toString());
 
   useEffect(() => {
-    appIsNowRunningInForeground().then(() => (database.close()))
+    appIsNowRunningInForeground();
     setAppState('active');
   }, [])
 

@@ -14,6 +14,7 @@ export interface Database {
   open(): Promise<SQLite.SQLiteDatabase>;
   close(): Promise<void>;
   login(email: string, password: string): Promise<any>;
+  usersExist(): Promise<boolean>;
   getClinics(): Promise<Clinic[]>;
   getPatients(): Promise<Patient[]>;
   getPatient(patient_id: string): Promise<Patient>;
@@ -141,7 +142,7 @@ class DatabaseImpl implements Database {
     const hashed_password = password
     const db = await this.getDatabase();
 
-    await db.executeSql(`INSERT INTO users (id, name, role, email, hashed_password, edited_at) VALUES (?, ?, ?, ?, ?, ?);`, [id, user.name, user.role, user.email, hashed_password, date]);
+    await db.executeSql(`INSERT INTO users (id, name, role, email, hashed_password, instance_url, edited_at) VALUES (?, ?, ?, ?, ?, ?, ?);`, [id, user.name, user.role, user.email, hashed_password, user.instance_url, date]);
     return;
   }
 
@@ -234,6 +235,21 @@ class DatabaseImpl implements Database {
           `[db] Retrieved event for patient with id: "${patient_id}"!`
         );
         return event_metadata;
+      });
+  }
+
+  public usersExist(): Promise<boolean> {
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql(
+          `SELECT * FROM users`
+        )
+      )
+      .then(([results]) => {
+        if (results === undefined) {
+          return false;
+        }
+        return results.rows.length > 0;
       });
   }
 
