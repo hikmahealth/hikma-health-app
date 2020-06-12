@@ -11,7 +11,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import { RNCamera } from 'react-native-camera';
 import { useCamera } from 'react-native-camera-hooks';
-import moment from 'moment';
 
 const NewPatient = (props) => {
   const imageSync = new ImageSync();
