@@ -280,7 +280,7 @@ class DatabaseImpl implements Database {
     console.log("[db] Fetching patients from the db...");
     return this.getDatabase()
       .then(db =>
-        db.executeSql("SELECT id, given_name, surname, date_of_birth, country, hometown, sex, phone, image_timestamp FROM patients;")
+        db.executeSql("SELECT id, given_name, surname, date_of_birth, country, hometown, sex, phone, image_timestamp FROM patients ORDER BY edited_at DESC LIMIT 25;")
       )
       .then(async ([results]) => {
         if (results === undefined) {
