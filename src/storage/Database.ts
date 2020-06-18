@@ -17,6 +17,7 @@ export interface Database {
   usersExist(): Promise<boolean>;
   getClinics(): Promise<Clinic[]>;
   getPatients(): Promise<Patient[]>;
+  searchPatients(query: string): Promise<Patient[]>
   getPatient(patient_id: string): Promise<Patient>;
   editStringContent(stringContent: StringContent[], id: string): Promise<string>;
   saveStringContent(stringContent: StringContent[], id?: string, addLanguage?: boolean): Promise<string>;
@@ -303,6 +304,44 @@ class DatabaseImpl implements Database {
       });
   }
 
+  public searchPatients(query: string): Promise<Patient[]> {
+    let searchTerms = query.trim().split(' ')
+    let queryTerms = ` WHERE string_content.content LIKE '%${searchTerms[0]}%'`
+    if (searchTerms.length > 1) {
+      for (let i = 1; i <= searchTerms.length; i++) { 
+        queryTerms += ` OR string_content.content LIKE '%${searchTerms[i]}%'`
+      }
+    }
+    queryTerms += ' ORDER BY patients.edited_at DESC LIMIT 10'
+    
+    const queryBase = "SELECT patients.id, patients.given_name, patients.surname, patients.date_of_birth, patients.country, patients.hometown, patients.sex, patients.phone, patients.image_timestamp FROM patients INNER JOIN string_content ON patients.given_name = string_content.id OR patients.given_name = string_content.id"
+
+    console.log("[db] Fetching patients from the db...");
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql(queryBase + queryTerms)
+      )
+      .then(async ([results]) => {
+        if (results === undefined) {
+          return [];
+        }
+        const count = results.rows.length;
+        const patients: Patient[] = [];
+        for (let i = 0; i < count; i++) {
+
+          const row = results.rows.item(i);
+          const { id, given_name, surname, date_of_birth, country, hometown, sex, phone, image_timestamp } = row;
+          const givenNameContent = await this.languageStringDataById(given_name)
+          const surnameContent = await this.languageStringDataById(surname)
+          const countryContent = await this.languageStringDataById(country)
+          const hometownContent = await this.languageStringDataById(hometown)
+          console.log(`[db] Patient name: ${given_name}, id: ${id}`);
+          patients.push({ id, given_name: givenNameContent, surname: surnameContent, date_of_birth, country: countryContent, hometown: hometownContent, sex, phone, image_timestamp });
+        }
+        return patients;
+      });
+  }
+
   public login(email: string, password: string): Promise<any> {
     return this.getDatabase()
       .then(db =>
@@ -394,10 +433,10 @@ class DatabaseImpl implements Database {
           return;
         }
         const row = results.rows.item(0);
-        const { id, name, role, email } = row;
+        const { id, name, role, email, instance_url } = row;
         const nameContent = await this.languageStringDataById(name)
 
-        const user: User = { id, name: nameContent, role, email };
+        const user: User = { id, name: nameContent, role, email, instance_url };
         console.log(
           `[db] Retrieved user with id: "${id}"!`
         );
@@ -419,7 +458,7 @@ class DatabaseImpl implements Database {
         for (let i = 0; i < count; i++) {
           const row = results.rows.item(i);
           const { id, patient_id, clinic_id, provider_id, check_in_timestamp, name } = row;
-          const nameContent = (name != null) ? await this.languageStringDataById(name) : {id: null, content: {"en": "Unknown"}};
+          const nameContent = (name != null) ? await this.languageStringDataById(name) : { id: null, content: { "en": "Unknown" } };
 
           visits.push({ id, patient_id, clinic_id, provider_id, check_in_timestamp, provider_name: nameContent });
         }

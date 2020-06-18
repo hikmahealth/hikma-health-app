@@ -1,6 +1,5 @@
-import React, { Component, useState, useEffect, useRef } from "react";
-import { View, Text, Image as Image, TextInput, FlatList, StyleSheet, TouchableOpacity, ImageBackground, ImageBackgroundBase, ImageSourcePropType, Platform, Picker } from "react-native";
-import RNFS from 'react-native-fs';
+import React, { useState, useEffect, useRef } from "react";
+import { View, Text, Image as Image, TextInput, FlatList, TouchableOpacity, ImageBackground, Keyboard, Picker } from "react-native";
 import LinearGradient from 'react-native-linear-gradient';
 import { database } from "../storage/Database";
 import { DatabaseSync } from "../storage/Sync";
@@ -20,29 +19,13 @@ const PatientList = (props) => {
   const [userId, setUserId] = useState(props.navigation.state.params.userId);
   const [query, setQuery] = useState('');
   const [list, setList] = useState([]);
-  const [filteredList, setFilteredList] = useState([]);
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
+  const [searchIconFunction, setSearchIconFunction] = useState(false)
   const search = useRef(null);
 
   useEffect(() => {
-    reloadPatients()
+    searchPatients()
   }, [props.navigation.state.params.reloadPatientsToggle, language])
-
-  useEffect(() => {
-    const lowerCaseQuery = query.toLowerCase();
-    const newList = list
-      .filter((patient) =>
-        ((!!patient.given_name.content[language] && patient.given_name.content[language].toLowerCase().includes(lowerCaseQuery))
-          || (!!patient.surname.content[language] && patient.surname.content[language].toLowerCase().includes(lowerCaseQuery))
-          || (!!patient.given_name.content[language]
-            && !!patient.surname.content[language]
-            && `${patient.given_name.content[language].toLowerCase()} ${patient.surname.content[language].toLowerCase()}`.includes(lowerCaseQuery)
-          )
-        )
-      );
-
-    setFilteredList(newList);
-  }, [query]);
 
   useEffect(() => {
     if (!!props.navigation.getParam('imagesSynced')) {
@@ -50,7 +33,7 @@ const PatientList = (props) => {
         reloadPatients()
       })
     }
-    
+
     if (!!props.navigation.getParam('language') && language !== props.navigation.getParam('language')) {
       setLanguage(props.navigation.getParam('language'));
     }
@@ -61,9 +44,20 @@ const PatientList = (props) => {
   const reloadPatients = () => {
     database.getPatients().then(patients => {
       setList(patients);
-      setFilteredList(patients);
       setQuery('');
     })
+  }
+
+  const searchPatients = () => {
+    if (query.length > 0) {
+      const lowerCaseQuery = query.toLowerCase();
+      database.searchPatients(lowerCaseQuery).then(patients => {
+        setList(patients);
+      })
+    } else {
+      reloadPatients()
+    }
+    setSearchIconFunction(false)
   }
 
   const LanguageToggle = () => {
@@ -82,7 +76,7 @@ const PatientList = (props) => {
 
   const logout = () => {
     setUserId('')
-    props.navigation.navigate('Home', {logout: true})
+    props.navigation.navigate('Home', { logout: true })
   }
 
   const displayName = (item) => {
@@ -122,7 +116,7 @@ const PatientList = (props) => {
               borderBottomWidth: 1,
             }}
           />
-          <Text style={{flexWrap: 'wrap'}}>{`${LocalizedStrings[language].dob}:  ${item.date_of_birth}`}</Text>
+          <Text style={{ flexWrap: 'wrap' }}>{`${LocalizedStrings[language].dob}:  ${item.date_of_birth}`}</Text>
           <Text>{`${LocalizedStrings[language].sex}:  ${item.sex}`}</Text>
         </View>
       </View>
@@ -138,10 +132,20 @@ const PatientList = (props) => {
             placeholderTextColor='#FFFFFF'
             placeholder={LocalizedStrings[language].patients}
             onChangeText={(text) => setQuery(text)}
+            onEndEditing={searchPatients}
+            onFocus={() => setSearchIconFunction(true)}
             value={query}
             ref={search}
           />
-          <TouchableOpacity onPress={() => search.current.focus()}>
+          <TouchableOpacity onPress={() => {
+            if (searchIconFunction) {
+              searchPatients()
+              Keyboard.dismiss()
+            } else {
+              search.current.focus()
+              setSearchIconFunction(true)
+            }
+          }}>
             <Image source={require('../images/search.jpg')} style={{ width: 30, height: 30 }} />
           </TouchableOpacity>
         </View>
@@ -167,7 +171,7 @@ const PatientList = (props) => {
         <View style={styles.scroll}>
           <FlatList
             keyExtractor={keyExtractor}
-            data={filteredList}
+            data={list}
             renderItem={(item) => renderItem(item)}
           />
         </View>
