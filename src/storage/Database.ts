@@ -314,7 +314,7 @@ class DatabaseImpl implements Database {
     }
     queryTerms += ' ORDER BY patients.edited_at DESC LIMIT 10'
     
-    const queryBase = "SELECT patients.id, patients.given_name, patients.surname, patients.date_of_birth, patients.country, patients.hometown, patients.sex, patients.phone, patients.image_timestamp FROM patients INNER JOIN string_content ON patients.given_name = string_content.id OR patients.given_name = string_content.id"
+    const queryBase = "SELECT DISTINCT patients.id, patients.given_name, patients.surname, patients.date_of_birth, patients.country, patients.hometown, patients.sex, patients.phone, patients.image_timestamp FROM patients INNER JOIN string_content ON patients.given_name = string_content.id OR patients.surname = string_content.id"
 
     console.log("[db] Fetching patients from the db...");
     return this.getDatabase()
