@@ -20,7 +20,7 @@ export interface Database {
   searchPatients(query: string): Promise<Patient[]>
   getPatient(patient_id: string): Promise<Patient>;
   editStringContent(stringContent: StringContent[], id: string): Promise<string>;
-  saveStringContent(stringContent: StringContent[], id?: string, addLanguage?: boolean): Promise<string>;
+  saveStringContent(stringContent: StringContent[], id?: string): Promise<string>;
   applyScript(script: SyncResponse): Promise<void>;
   updatePatientImageTimestamp(patientId: string, newTimestamp: string): Promise<void>;
   getLatestPatientEventByType(patient_id: string, event_type: string): Promise<string>;
@@ -74,29 +74,21 @@ class DatabaseImpl implements Database {
     });
   }
 
-  public async saveStringContent(stringContent: StringContent[], id?: string, addLanguage?: boolean): Promise<string> {
+  public async saveStringContent(stringContent: StringContent[], id?: string): Promise<string> {
     const contentId = id || uuid();
     var stringId = contentId.replace(/-/g, "");
     const idExists = await this.getIdExists(stringId)
     const db = await this.getDatabase();
-    if (!addLanguage && !idExists) {
+    if (!idExists) {
       await db.executeSql(`INSERT INTO string_ids (id) VALUES (?);`, [stringId]);
     }
-    if (idExists) {
-      stringContent.forEach(async element => {
-        await this.updateStringWithId(element, stringId);
-      })
-    } else {
-      stringContent.forEach(async element => {
-        await this.saveStringWithId(element, stringId);
-      })
-    }
-
+    stringContent.forEach(async element => {
+      await this.saveStringWithId(element, stringId);
+    })
     return stringId;
   }
 
   public async editStringContent(stringContent: StringContent[], id: string): Promise<string> {
-    const db = await this.getDatabase();
     stringContent.forEach(async element => {
       await this.editStringWithId(element, id);
     })
@@ -124,13 +116,6 @@ class DatabaseImpl implements Database {
     const date = new Date().toISOString();
     const db = await this.getDatabase();
     await db.executeSql(`INSERT INTO string_content (id, language, content, edited_at) VALUES (?, ?, ?, ?);`, [id, stringContent.language, stringContent.content, date]);
-    return id;
-  }
-
-  private async updateStringWithId(stringContent: StringContent, id: string): Promise<string> {
-    const date = new Date().toISOString();
-    const db = await this.getDatabase();
-    await db.executeSql(`UPDATE string_content SET language = ?, content = ?, edited_at = ? WHERE ID = ?;`, [stringContent.language, stringContent.content, date, id]);
     return id;
   }
 
@@ -308,12 +293,12 @@ class DatabaseImpl implements Database {
     let searchTerms = query.trim().split(' ')
     let queryTerms = ` WHERE string_content.content LIKE '%${searchTerms[0]}%'`
     if (searchTerms.length > 1) {
-      for (let i = 1; i <= searchTerms.length; i++) { 
+      for (let i = 1; i <= searchTerms.length; i++) {
         queryTerms += ` OR string_content.content LIKE '%${searchTerms[i]}%'`
       }
     }
     queryTerms += ' ORDER BY patients.edited_at DESC LIMIT 10'
-    
+
     const queryBase = "SELECT DISTINCT patients.id, patients.given_name, patients.surname, patients.date_of_birth, patients.country, patients.hometown, patients.sex, patients.phone, patients.image_timestamp FROM patients INNER JOIN string_content ON patients.given_name = string_content.id OR patients.surname = string_content.id"
 
     console.log("[db] Fetching patients from the db...");

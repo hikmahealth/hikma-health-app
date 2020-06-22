@@ -21,37 +21,70 @@ const EditPatient = (props) => {
   ] = useCamera()
   const patient = props.navigation.getParam('patient');
 
-  const [givenNameText, setGivenNameText] = useState(props.navigation.state.params.patient.given_name.content[language] || '');
-  const [surnameText, setSurnameText] = useState(props.navigation.state.params.patient.surname.content[language] || '');
+  const [givenNameText, setGivenNameText] = useState(!!props.navigation.state.params.patient.given_name ? props.navigation.state.params.patient.given_name.content[language] : '');
+  const [surnameText, setSurnameText] = useState(!!props.navigation.state.params.patient.surname ? props.navigation.state.params.patient.surname.content[language] : '');
   const [dob, setDob] = useState(props.navigation.state.params.patient.date_of_birth);
   const [male, setMale] = useState(props.navigation.state.params.patient.sex === 'M');
-  const [countryText, setCountryText] = useState(props.navigation.state.params.patient.country.content[language] || '');
-  const [hometownText, setHometownText] = useState(props.navigation.state.params.patient.hometown.content[language] || '');
+  const [countryText, setCountryText] = useState(!!props.navigation.state.params.patient.country ? props.navigation.state.params.patient.country.content[language] : '');
+  const [hometownText, setHometownText] = useState(!!props.navigation.state.params.patient.hometown ? props.navigation.state.params.patient.hometown.content[language] : '');
   const [phone, setPhone] = useState(props.navigation.state.params.patient.phone || '');
   const [imageTimestamp, setImageTimestamp] = useState(props.navigation.state.params.patient.image_timestamp || '');
   const [cameraOpen, setCameraOpen] = useState(false);
   const today = new Date();
 
   const editPatient = async () => {
-    if (!!patient.given_name.content[language]) {
-      await database.editStringContent([{ language: language, content: givenNameText }], patient.given_name.id)
-      await database.editStringContent([{ language: language, content: surnameText }], patient.surname.id)
-      await database.editStringContent([{ language: language, content: countryText }], patient.country.id)
-      await database.editStringContent([{ language: language, content: hometownText }], patient.hometown.id)
+    let givenNameId = !!patient.given_name ? patient.given_name.id : null
+    let surnameId = !!patient.surname ? patient.surname.id : null
+    let countryId = !!patient.country ? patient.country.id : null
+    let hometownId = !!patient.hometown ? patient.hometown.id : null
+
+    if (!!patient.given_name) {
+      if (!!patient.given_name.content[language]) {
+        await database.editStringContent([{ language: language, content: givenNameText }], patient.given_name.id)
+      } else {
+        await database.saveStringContent([{ language: language, content: givenNameText }], patient.given_name.id)
+      }
     } else {
-      await database.saveStringContent([{ language: language, content: givenNameText }], patient.given_name.id, true)
-      await database.saveStringContent([{ language: language, content: surnameText }], patient.surname.id, true)
-      await database.saveStringContent([{ language: language, content: countryText }], patient.country.id, true)
-      await database.saveStringContent([{ language: language, content: hometownText }], patient.hometown.id, true)
+      givenNameId = await database.saveStringContent([{ language: language, content: givenNameText }])
+    }
+
+    if (!!patient.surname) {
+      if (!!patient.surname.content[language]) {
+        await database.editStringContent([{ language: language, content: surnameText }], patient.surname.id)
+      } else {
+        await database.saveStringContent([{ language: language, content: surnameText }], patient.surname.id)
+      }
+    } else {
+      surnameId = await database.saveStringContent([{ language: language, content: surnameText }])
+    }
+
+    if (!!patient.country) {
+      if (!!patient.country.content[language]) {
+        await database.editStringContent([{ language: language, content: countryText }], patient.country.id)
+      } else {
+        await database.saveStringContent([{ language: language, content: countryText }], patient.country.id)
+      }
+    } else {
+      countryId = await database.saveStringContent([{ language: language, content: countryText }])
+    }
+
+    if (!!patient.hometown) {
+      if (!!patient.hometown.content[language]) {
+        await database.editStringContent([{ language: language, content: hometownText }], patient.hometown.id)
+      } else {
+        await database.saveStringContent([{ language: language, content: hometownText }], patient.hometown.id)
+      }
+    } else {
+      hometownId = await database.saveStringContent([{ language: language, content: hometownText }])
     }
 
     database.editPatient({
       id: patient.id,
-      given_name: patient.given_name.id,
-      surname: patient.surname.id,
+      given_name: givenNameId,
+      surname: surnameId,
       date_of_birth: dob,
-      country: patient.country.id,
-      hometown: patient.hometown.id,
+      country: countryId,
+      hometown: hometownId,
       phone: phone,
       sex: male ? 'M' : 'F',
       image_timestamp: imageTimestamp
@@ -62,10 +95,10 @@ const EditPatient = (props) => {
   };
 
   useEffect(() => {
-    setGivenNameText(patient.given_name.content[language] || '');
-    setSurnameText(patient.surname.content[language] || '');
-    setCountryText(patient.country.content[language] || '');
-    setHometownText(patient.hometown.content[language] || '');
+    setGivenNameText(!!patient.given_name ? patient.given_name.content[language] : '');
+    setSurnameText(!!patient.surname ? patient.surname.content[language] : '');
+    setCountryText(!!patient.country ? patient.country.content[language] : '');
+    setHometownText(!!patient.hometown ? patient.hometown.content[language] : '');
   }, [language])
 
   const capture = async () => {
