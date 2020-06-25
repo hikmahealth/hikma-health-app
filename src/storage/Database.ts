@@ -297,7 +297,7 @@ class DatabaseImpl implements Database {
         queryTerms += ` OR string_content.content LIKE '%${searchTerms[i]}%'`
       }
     }
-    queryTerms += ' ORDER BY patients.edited_at DESC LIMIT 10'
+    queryTerms += ' ORDER BY patients.edited_at DESC LIMIT 50'
 
     const queryBase = "SELECT DISTINCT patients.id, patients.given_name, patients.surname, patients.date_of_birth, patients.country, patients.hometown, patients.sex, patients.phone, patients.image_timestamp FROM patients INNER JOIN string_content ON patients.given_name = string_content.id OR patients.surname = string_content.id"
 
