@@ -126,7 +126,7 @@ export default StyleSheet.create({
   searchInput: {
     color: '#FFFFFF',
     padding: 10,
-    fontSize: 30,
+    fontSize: 20,
   },
   card: {
     margin: 10,
@@ -279,6 +279,37 @@ export default StyleSheet.create({
     color: '#FFFFFF',
     height: 50,
     width: 90
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  leftView: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  modalView: {
+    margin: 8,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 45,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    display: 'flex'
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontWeight: 'bold'
   },
   hexagon: {
     width: 100,

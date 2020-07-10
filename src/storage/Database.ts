@@ -17,7 +17,7 @@ export interface Database {
   usersExist(): Promise<boolean>;
   getClinics(): Promise<Clinic[]>;
   getPatients(): Promise<Patient[]>;
-  searchPatients(query: string): Promise<Patient[]>
+  searchPatients(givenName: string, surname: string, country: string, hometown: string, minYear: number, maxYear: number): Promise<Patient[]>
   getPatient(patient_id: string): Promise<Patient>;
   editStringContent(stringContent: StringContent[], id: string): Promise<string>;
   saveStringContent(stringContent: StringContent[], id?: string): Promise<string>;
@@ -289,17 +289,47 @@ class DatabaseImpl implements Database {
       });
   }
 
-  public searchPatients(query: string): Promise<Patient[]> {
-    let searchTerms = query.trim().split(' ')
-    let queryTerms = ` WHERE string_content.content LIKE '%${searchTerms[0]}%'`
-    if (searchTerms.length > 1) {
-      for (let i = 1; i <= searchTerms.length; i++) {
-        queryTerms += ` OR string_content.content LIKE '%${searchTerms[i]}%'`
+  public searchPatients(givenName: string, surname: string, country: string, hometown: string, minYear: number, maxYear: number): Promise<Patient[]> {
+    let queryTerms = '';
+
+    const queryBase = "SELECT patients.id, patients.given_name, patients.surname, patients.date_of_birth, patients.country, patients.hometown, patients.sex, patients.phone, patients.image_timestamp, patients.edited_at FROM patients LEFT JOIN string_content ON patients.given_name = string_content.id OR patients.surname = string_content.id OR patients.country = string_content.id OR patients.hometown = string_content.id"
+
+    if (!!givenName) {
+      queryTerms += ` WHERE string_content.content LIKE '%${givenName.trim()}%'`
+    }
+
+    if (!!surname) {
+      if (!!queryTerms) {
+        queryTerms += ` INTERSECT ${queryBase} WHERE string_content.content LIKE '%${surname.trim()}%'`
+      } else {
+        queryTerms += ` WHERE string_content.content LIKE '%${surname.trim()}%'`
+      }
+    }
+
+    if (!!country) {
+      if (!!queryTerms) {
+        queryTerms += ` INTERSECT ${queryBase} WHERE string_content.content LIKE '%${country.trim()}%'`
+      } else {
+        queryTerms += ` WHERE string_content.content LIKE '%${country.trim()}%'`
+      }
+    }
+
+    if (!!hometown) {
+      if (!!queryTerms) {
+        queryTerms += ` INTERSECT ${queryBase} WHERE string_content.content LIKE '%${hometown.trim()}%'`
+      } else {
+        queryTerms += ` WHERE string_content.content LIKE '%${hometown.trim()}%'`
+      }
+    }
+
+    if(!!minYear && !!maxYear && minYear.toString().length === 4 && maxYear.toString().length === 4) {
+      if (!!queryTerms) {
+        queryTerms += ` AND SUBSTR(patients.date_of_birth, 1, 4) BETWEEN '${minYear}' AND '${maxYear}'`
+      } else {
+        queryTerms += ` WHERE SUBSTR(patients.date_of_birth, 1, 4) BETWEEN '${minYear}' AND '${maxYear}'`
       }
     }
     queryTerms += ' ORDER BY patients.edited_at DESC LIMIT 50'
-
-    const queryBase = "SELECT DISTINCT patients.id, patients.given_name, patients.surname, patients.date_of_birth, patients.country, patients.hometown, patients.sex, patients.phone, patients.image_timestamp FROM patients INNER JOIN string_content ON patients.given_name = string_content.id OR patients.surname = string_content.id"
 
     console.log("[db] Fetching patients from the db...");
     return this.getDatabase()

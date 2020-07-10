@@ -20,9 +20,11 @@ export class DatabaseSync {
       responseData.to_execute.forEach(async (element: SyncResponse) => {
         await database.applyScript(element)
       });
+      return
     }
     catch (error) {
       console.error("Database sync error!", error);
+      return
     };
   }
 

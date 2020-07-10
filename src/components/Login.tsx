@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, Image, TextInput, TouchableOpacity, Picker
+  View, Text, Image, TextInput, TouchableOpacity, Picker, Modal
 } from 'react-native';
 
 import { database } from "../storage/Database";
@@ -22,6 +22,7 @@ const Login = (props) => {
   const [showInstanceDropdown, setShowInstanceDropdown] = useState(false);
   const [loginFailed, setLoginFailed] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
   let userId = '';
   let clinicId = '';
   let instanceUrl = '';
@@ -117,9 +118,11 @@ const Login = (props) => {
     let imagesSynced;
     const clinics: Clinic[] = await database.getClinics();
     if (clinics.length == 0) {
+      setModalVisible(true)
       await databaseSync.performSync(instanceUrl, email, password)
       imagesSynced = imageSync.syncPhotos(instanceUrl, email, password)
       const clinicsResponse: Clinic[] = await database.getClinics()
+      setModalVisible(false)
       clinicId = clinicsResponse[0].id
     } else {
       clinicId = clinics[0].id
@@ -138,6 +141,17 @@ const Login = (props) => {
 
   return (
     <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.loginContainer}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Initial sync in progress - please wait</Text>
+          </View>
+        </View>
+      </Modal>
       <View >
         <Image source={require('../images/logo.png')} style={styles.logo} />
       </View>
@@ -171,7 +185,7 @@ const Login = (props) => {
         >
           {instanceList.map((instance, index) => { return <Picker.Item key={index} value={instance} label={instance.name} /> })}
         </Picker>
-      </View> : null }
+      </View> : null}
 
       <View >
         <TouchableOpacity onPress={handleLogin}>
