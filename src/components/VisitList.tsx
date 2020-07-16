@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, TouchableOpacity, Picker } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Picker, Alert } from "react-native";
 import { database } from "../storage/Database";
 import styles from './Style';
 import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings'
+import { Visit } from "../types/Visit";
 
 const VisitList = (props) => {
   const patient = props.navigation.getParam('patient');
@@ -24,6 +25,12 @@ const VisitList = (props) => {
   }, [props])
 
   const keyExtractor = (item, index) => index.toString()
+
+  const deleteVisit = (visit: Visit) => {
+    database.deleteVisit(visit.id, patient.id).then(visits => {
+      setList(visits)
+    })
+  }
 
   const displayPatientName = (item) => {
     if (!!item.given_name.content[language] && !!item.surname.content[language]) {
@@ -48,7 +55,23 @@ const VisitList = (props) => {
         patient: patient,
         visit: item
       }
-    )}>
+    )}
+      onLongPress={() => Alert.alert(
+        'Delete Visit',
+        'Are you sure you want to delete this visit?',
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          {
+            text: "Confirm", onPress: () => {
+              deleteVisit(item)
+            }
+          }
+        ],
+      )}>
       <View style={styles.cardContent} >
         <View style={{ margin: 10 }}>
           {displayPatientName(patient)}
@@ -88,7 +111,7 @@ const VisitList = (props) => {
         </TouchableOpacity>
         {LanguageToggle()}
       </View>
-      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+      <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <Text style={styles.text}>{LocalizedStrings[language].visitHistory}</Text>
       </View>
       <View style={styles.listContainer}>

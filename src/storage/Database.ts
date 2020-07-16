@@ -33,6 +33,7 @@ export interface Database {
   getEvents(visit_id: string): Promise<Event[]>;
   editPatient(patient: NewPatient): Promise<Patient>;
   editEvent(id: string, event_metadata: string): Promise<Event[]>;
+  deleteVisit(visit_id: string, patient_id: string): Promise<Visit[]>
 }
 
 class DatabaseImpl implements Database {
@@ -462,7 +463,7 @@ class DatabaseImpl implements Database {
   public getVisits(patient_id: string): Promise<Visit[]> {
     return this.getDatabase()
       .then(db =>
-        db.executeSql("SELECT v.id, v.patient_id, v.clinic_id, v.provider_id, v.check_in_timestamp, u.name FROM visits as v LEFT JOIN users as u ON v.provider_id=u.id WHERE patient_id = ? ORDER BY check_in_timestamp DESC;", [patient_id])
+        db.executeSql("SELECT v.id, v.patient_id, v.clinic_id, v.provider_id, v.check_in_timestamp, u.name FROM visits as v LEFT JOIN users as u ON v.provider_id=u.id WHERE patient_id = ? AND v.deleted = ? ORDER BY check_in_timestamp DESC;", [patient_id, 'FALSE'])
       )
       .then(async ([results]) => {
         if (results === undefined) {
@@ -500,6 +501,15 @@ class DatabaseImpl implements Database {
         }
         return events;
       });
+  }
+
+  public deleteVisit(visit_id: string, patient_id: string): Promise<Visit[]> {
+    const date = new Date().toISOString();
+    return this.getDatabase().then(db => {
+      db.executeSql("UPDATE visits SET edited_at = ?, deleted = ? WHERE id = ?", [date, 'TRUE', visit_id])
+    }).then(() => {
+      return this.getVisits(patient_id)
+    })
   }
 
   public async applyScript(syncResponse: SyncResponse): Promise<void> {
