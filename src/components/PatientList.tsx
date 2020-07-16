@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, Image as Image, TextInput, FlatList, TouchableOpacity, ImageBackground, Keyboard, Picker, Modal, TouchableHighlight } from "react-native";
+import { View, Text, Image as Image, TextInput, FlatList, TouchableOpacity, ImageBackground, Keyboard, Picker, Modal, TouchableHighlight, ScrollView } from "react-native";
 import LinearGradient from 'react-native-linear-gradient';
 import { database } from "../storage/Database";
 import { DatabaseSync } from "../storage/Sync";
@@ -223,23 +223,24 @@ const PatientList = (props) => {
       >
         <View style={styles.leftView}>
           <View style={[styles.modalView, { alignItems: 'stretch' }]}>
-
-            <TouchableHighlight
-              onPress={() => {
-                setModalVisible(!modalVisible);
-                setSearchIconFunction(true)
-              }}
-            >
-              <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}>{LocalizedStrings[language].hideFilters}</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor="#DDDDDD"
-              onPress={() => {
-                reloadPatients()
-              }}
-            >
-              <Text style={{ textAlign: 'center', paddingTop: 5 }}>{LocalizedStrings[language].clearFilters}</Text>
-            </TouchableHighlight>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <TouchableHighlight
+                underlayColor="#DDDDDD"
+                onPress={() => {
+                  reloadPatients()
+                }}
+              >
+                <Text style={{ fontWeight: "bold", fontSize: 18, paddingBottom: 5 }}>{LocalizedStrings[language].clearFilters}</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  setSearchIconFunction(true)
+                }}
+              >
+                <Image source={require('../images/close.png')} style={{ width: 20, height: 20 }} />
+              </TouchableHighlight>
+            </View>
             <View>
               <TextInput
                 placeholder={LocalizedStrings[language].firstName}
@@ -299,6 +300,15 @@ const PatientList = (props) => {
               </Picker>
             </View>
 
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+              <TouchableOpacity onPress={() => {
+                Keyboard.dismiss()
+                setModalVisible(!modalVisible);
+                searchPatients()
+              }}>
+                <Image source={require('../images/search_grey.png')} style={{ width: 30, height: 30 }} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>

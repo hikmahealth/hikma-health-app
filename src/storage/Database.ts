@@ -33,6 +33,7 @@ export interface Database {
   getEvents(visit_id: string): Promise<Event[]>;
   editPatient(patient: NewPatient): Promise<Patient>;
   editEvent(id: string, event_metadata: string): Promise<Event[]>;
+  editVisitDate(visit_id: string, date: string): Promise<void>;
 }
 
 class DatabaseImpl implements Database {
@@ -168,6 +169,16 @@ class DatabaseImpl implements Database {
       });
   }
 
+  public editVisitDate(visit_id: string, date: string): Promise<void> {
+    const edited_at = new Date().toISOString();
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql(`UPDATE visits SET check_in_timestamp = ?, edited_at = ? WHERE id = ?`, [date, edited_at, visit_id])
+      ).then(() => {
+        return
+      })
+  }
+
   public updatePatientImageTimestamp(patientId: string, newTimestamp: string): Promise<void> {
     const date = new Date().toISOString();
     return this.getDatabase()
@@ -197,7 +208,7 @@ class DatabaseImpl implements Database {
     const id = visit.id.replace(/-/g, "")
     return this.getDatabase()
       .then(db =>
-        db.executeSql(`INSERT INTO visits (id, patient_id, clinic_id, provider_id, check_in_timestamp, edited_at) VALUES (?, ?, ?, ?, ?, ?);`, [id, visit.patient_id, visit.clinic_id, visit.provider_id, date, date])
+        db.executeSql(`INSERT INTO visits (id, patient_id, clinic_id, provider_id, check_in_timestamp, edited_at) VALUES (?, ?, ?, ?, ?, ?);`, [id, visit.patient_id, visit.clinic_id, visit.provider_id, date.split('T')[0], date])
       )
       .then(([results]) => {
         console.log(
