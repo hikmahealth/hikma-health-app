@@ -8,16 +8,19 @@ import LinearGradient from 'react-native-linear-gradient';
 import { database } from "../storage/Database";
 import { uuid } from "uuidv4";
 import { LocalizedStrings } from '../enums/LocalizedStrings';
+import DatePicker from 'react-native-datepicker';
 
 const NewVisit = (props) => {
   const [camp, setCamp] = useState('');
   const [visitType, setVisitType] = useState('');
+  const [visitDate, setVisitDate] = useState(new Date().toISOString().split('T')[0]);
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
   const [campTextColor, setCampTextColor] = useState('#A9A9A9')
   const [typeTextColor, setTypeTextColor] = useState('#A9A9A9')
   const patient = props.navigation.getParam('patient');
   const visitId = props.navigation.getParam('visitId');
   const userName = props.navigation.getParam('userName');
+  const today = new Date();
 
   useEffect(() => {
     let patientId = props.navigation.state.params.patient.id;
@@ -42,7 +45,7 @@ const NewVisit = (props) => {
       <Picker
         selectedValue={language}
         onValueChange={value => setLanguage(value)}
-        style={[styles.picker, { marginLeft: 10}]}
+        style={[styles.picker, { marginLeft: 10 }]}
       >
         <Picker.Item value='en' label='en' />
         <Picker.Item value='ar' label='ar' />
@@ -87,11 +90,12 @@ const NewVisit = (props) => {
       <View style={styles.inputsContainer}>
         <View style={styles.inputRow}>
           <TextInput
-            style={[styles.inputs, {color: campTextColor}]}
+            style={[styles.inputs, { color: campTextColor }]}
             placeholder={LocalizedStrings[language].camp}
             onChangeText={(text) => {
               setCampTextColor('#000000')
-              setCamp(text)}}
+              setCamp(text)
+            }}
             onEndEditing={handleSaveCamp}
             value={camp}
           />
@@ -106,15 +110,35 @@ const NewVisit = (props) => {
           </Text>
         </View>
         <View style={styles.inputRow}>
-          <Text style={styles.inputs}>
-            {new Date().toISOString().split("T")[0]}
-          </Text>
+          <DatePicker
+            style={styles.datePicker}
+            date={visitDate}
+            mode="date"
+            placeholder={LocalizedStrings[language].selectDob}
+            format="YYYY-MM-DD"
+            minDate="1900-05-01"
+            maxDate={today.toISOString().split('T')[0]}
+            confirmBtnText={LocalizedStrings[language].confirm}
+            cancelBtnText={LocalizedStrings[language].cancel}
+            customStyles={{
+              dateInput: {
+                alignItems: 'flex-start',
+                borderWidth: 0
+              }
+            }}
+            androidMode='spinner'
+            onDateChange={(date) => {
+              setVisitDate(date)
+              database.editVisitDate(visitId, date)
+            }}
+          />
           <TextInput
-            style={[styles.inputs, {color: typeTextColor}]}
+            style={[styles.inputs, { color: typeTextColor }]}
             placeholder={LocalizedStrings[language].visitType}
             onChangeText={(text) => {
               setTypeTextColor('#000000')
-              setVisitType(text)}}
+              setVisitType(text)
+            }}
             onEndEditing={handleSaveVisitType}
             value={visitType}
           />
