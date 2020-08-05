@@ -474,7 +474,7 @@ class DatabaseImpl implements Database {
   public getVisits(patient_id: string): Promise<Visit[]> {
     return this.getDatabase()
       .then(db =>
-        db.executeSql("SELECT v.id, v.patient_id, v.clinic_id, v.provider_id, v.check_in_timestamp, u.name FROM visits as v LEFT JOIN users as u ON v.provider_id=u.id WHERE patient_id = ? AND v.deleted = ? ORDER BY check_in_timestamp DESC;", [patient_id, 'FALSE'])
+        db.executeSql("SELECT v.id, v.patient_id, v.clinic_id, v.provider_id, v.check_in_timestamp, u.name FROM visits as v LEFT JOIN users as u ON v.provider_id=u.id WHERE patient_id = ? AND v.deleted = ? ORDER BY check_in_timestamp DESC;", [patient_id, 0])
       )
       .then(async ([results]) => {
         if (results === undefined) {
@@ -517,7 +517,7 @@ class DatabaseImpl implements Database {
   public deleteVisit(visit_id: string, patient_id: string): Promise<Visit[]> {
     const date = new Date().toISOString();
     return this.getDatabase().then(db => {
-      db.executeSql("UPDATE visits SET edited_at = ?, deleted = ? WHERE id = ?", [date, 'TRUE', visit_id])
+      db.executeSql("UPDATE visits SET edited_at = ?, deleted = ? WHERE id = ?", [date, 1, visit_id])
     }).then(() => {
       return this.getVisits(patient_id)
     })
