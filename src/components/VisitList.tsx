@@ -60,7 +60,7 @@ const VisitList = (props) => {
             }}
           />
           {displayProviderName(item)}
-          <Text>{`${LocalizedStrings[language].visitDate}: ${item.check_in_timestamp}`}</Text>
+          <Text>{`${LocalizedStrings[language].visitDate}: ${item.check_in_timestamp.split('T')[0]}`}</Text>
         </View>
       </View>
     </TouchableOpacity>

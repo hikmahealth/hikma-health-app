@@ -13,6 +13,7 @@
     "@types/react-native-elements": "^0.18.0",
     "@types/react-native-fs": "^2.13.0",
     "elements": "^0.6.0",
+    "moment": "^2.27.0",
     "react": "16.8.6",
     "react-final-form": "^6.3.0",
     "react-native": "^0.60.5",

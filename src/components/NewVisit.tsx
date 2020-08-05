@@ -9,6 +9,7 @@ import { database } from "../storage/Database";
 import { uuid } from "uuidv4";
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import DatePicker from 'react-native-datepicker';
+import moment from 'moment';
 
 const NewVisit = (props) => {
   const [camp, setCamp] = useState('');
@@ -129,7 +130,7 @@ const NewVisit = (props) => {
             androidMode='spinner'
             onDateChange={(date) => {
               setVisitDate(date)
-              database.editVisitDate(visitId, date)
+              database.editVisitDate(visitId, moment(date).toISOString())
             }}
           />
           <TextInput
