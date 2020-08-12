@@ -9,6 +9,7 @@ import { Patient, NewPatient } from "../types/Patient";
 import { LanguageString } from "../types/LanguageString";
 import { Event } from "../types/Event";
 import { Visit } from "../types/Visit";
+import { EventTypes } from "../enums/EventTypes";
 
 export interface Database {
   open(): Promise<SQLite.SQLiteDatabase>;
@@ -17,7 +18,7 @@ export interface Database {
   usersExist(): Promise<boolean>;
   getClinics(): Promise<Clinic[]>;
   getPatients(): Promise<Patient[]>;
-  searchPatients(givenName: string, surname: string, country: string, hometown: string, minYear: number, maxYear: number): Promise<Patient[]>
+  searchPatients(givenName: string, surname: string, country: string, hometown: string, camp: string, minYear: number, maxYear: number): Promise<Patient[]>
   getPatient(patient_id: string): Promise<Patient>;
   editStringContent(stringContent: StringContent[], id: string): Promise<string>;
   saveStringContent(stringContent: StringContent[], id?: string): Promise<string>;
@@ -33,6 +34,7 @@ export interface Database {
   getEvents(visit_id: string): Promise<Event[]>;
   editPatient(patient: NewPatient): Promise<Patient>;
   editEvent(id: string, event_metadata: string): Promise<Event[]>;
+  deleteVisit(visit_id: string, patient_id: string): Promise<Visit[]>
   editVisitDate(visit_id: string, date: string): Promise<void>;
 }
 
@@ -300,10 +302,10 @@ class DatabaseImpl implements Database {
       });
   }
 
-  public searchPatients(givenName: string, surname: string, country: string, hometown: string, minYear: number, maxYear: number): Promise<Patient[]> {
+  public searchPatients(givenName: string, surname: string, country: string, hometown: string, camp: string, minYear: number, maxYear: number): Promise<Patient[]> {
     let queryTerms = '';
 
-    const queryBase = "SELECT patients.id, patients.given_name, patients.surname, patients.date_of_birth, patients.country, patients.hometown, patients.sex, patients.phone, patients.image_timestamp, patients.edited_at FROM patients LEFT JOIN string_content ON patients.given_name = string_content.id OR patients.surname = string_content.id OR patients.country = string_content.id OR patients.hometown = string_content.id"
+    const queryBase = "SELECT DISTINCT patients.id, patients.given_name, patients.surname, patients.date_of_birth, patients.country, patients.hometown, patients.sex, patients.phone, patients.image_timestamp, patients.edited_at FROM patients LEFT JOIN string_content ON patients.given_name = string_content.id OR patients.surname = string_content.id OR patients.country = string_content.id OR patients.hometown = string_content.id LEFT JOIN events ON patients.id = events.patient_id"
 
     if (!!givenName) {
       queryTerms += ` WHERE string_content.content LIKE '%${givenName.trim()}%'`
@@ -330,6 +332,14 @@ class DatabaseImpl implements Database {
         queryTerms += ` INTERSECT ${queryBase} WHERE string_content.content LIKE '%${hometown.trim()}%'`
       } else {
         queryTerms += ` WHERE string_content.content LIKE '%${hometown.trim()}%'`
+      }
+    }
+
+    if (!!camp) {
+      if (!!queryTerms) {
+        queryTerms += ` INTERSECT ${queryBase} WHERE events.event_type = '${EventTypes.Camp}' AND events.event_metadata LIKE '%${camp.trim()}%'`
+      } else {
+        queryTerms += ` WHERE events.event_type = '${EventTypes.Camp}' AND events.event_metadata LIKE '%${camp.trim()}%'`
       }
     }
 
@@ -473,7 +483,7 @@ class DatabaseImpl implements Database {
   public getVisits(patient_id: string): Promise<Visit[]> {
     return this.getDatabase()
       .then(db =>
-        db.executeSql("SELECT v.id, v.patient_id, v.clinic_id, v.provider_id, v.check_in_timestamp, u.name FROM visits as v LEFT JOIN users as u ON v.provider_id=u.id WHERE patient_id = ? ORDER BY check_in_timestamp DESC;", [patient_id])
+        db.executeSql("SELECT v.id, v.patient_id, v.clinic_id, v.provider_id, v.check_in_timestamp, u.name FROM visits as v LEFT JOIN users as u ON v.provider_id=u.id WHERE patient_id = ? AND v.deleted = ? ORDER BY check_in_timestamp DESC;", [patient_id, 0])
       )
       .then(async ([results]) => {
         if (results === undefined) {
@@ -511,6 +521,15 @@ class DatabaseImpl implements Database {
         }
         return events;
       });
+  }
+
+  public deleteVisit(visit_id: string, patient_id: string): Promise<Visit[]> {
+    const date = new Date().toISOString();
+    return this.getDatabase().then(db => {
+      db.executeSql("UPDATE visits SET edited_at = ?, deleted = ? WHERE id = ?", [date, 1, visit_id])
+    }).then(() => {
+      return this.getVisits(patient_id)
+    })
   }
 
   public async applyScript(syncResponse: SyncResponse): Promise<void> {
