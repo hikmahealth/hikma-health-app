@@ -9,6 +9,7 @@ import { Patient, NewPatient } from "../types/Patient";
 import { LanguageString } from "../types/LanguageString";
 import { Event } from "../types/Event";
 import { Visit } from "../types/Visit";
+import { EventTypes } from "../enums/EventTypes";
 
 export interface Database {
   open(): Promise<SQLite.SQLiteDatabase>;
@@ -17,7 +18,7 @@ export interface Database {
   usersExist(): Promise<boolean>;
   getClinics(): Promise<Clinic[]>;
   getPatients(): Promise<Patient[]>;
-  searchPatients(givenName: string, surname: string, country: string, hometown: string, minYear: number, maxYear: number): Promise<Patient[]>
+  searchPatients(givenName: string, surname: string, country: string, hometown: string, camp: string, minYear: number, maxYear: number): Promise<Patient[]>
   getPatient(patient_id: string): Promise<Patient>;
   editStringContent(stringContent: StringContent[], id: string): Promise<string>;
   saveStringContent(stringContent: StringContent[], id?: string): Promise<string>;
@@ -301,10 +302,10 @@ class DatabaseImpl implements Database {
       });
   }
 
-  public searchPatients(givenName: string, surname: string, country: string, hometown: string, minYear: number, maxYear: number): Promise<Patient[]> {
+  public searchPatients(givenName: string, surname: string, country: string, hometown: string, camp: string, minYear: number, maxYear: number): Promise<Patient[]> {
     let queryTerms = '';
 
-    const queryBase = "SELECT patients.id, patients.given_name, patients.surname, patients.date_of_birth, patients.country, patients.hometown, patients.sex, patients.phone, patients.image_timestamp, patients.edited_at FROM patients LEFT JOIN string_content ON patients.given_name = string_content.id OR patients.surname = string_content.id OR patients.country = string_content.id OR patients.hometown = string_content.id"
+    const queryBase = "SELECT DISTINCT patients.id, patients.given_name, patients.surname, patients.date_of_birth, patients.country, patients.hometown, patients.sex, patients.phone, patients.image_timestamp, patients.edited_at FROM patients LEFT JOIN string_content ON patients.given_name = string_content.id OR patients.surname = string_content.id OR patients.country = string_content.id OR patients.hometown = string_content.id LEFT JOIN events ON patients.id = events.patient_id"
 
     if (!!givenName) {
       queryTerms += ` WHERE string_content.content LIKE '%${givenName.trim()}%'`
@@ -331,6 +332,14 @@ class DatabaseImpl implements Database {
         queryTerms += ` INTERSECT ${queryBase} WHERE string_content.content LIKE '%${hometown.trim()}%'`
       } else {
         queryTerms += ` WHERE string_content.content LIKE '%${hometown.trim()}%'`
+      }
+    }
+
+    if (!!camp) {
+      if (!!queryTerms) {
+        queryTerms += ` INTERSECT ${queryBase} WHERE events.event_type = '${EventTypes.Camp}' AND events.event_metadata LIKE '%${camp.trim()}%'`
+      } else {
+        queryTerms += ` WHERE events.event_type = '${EventTypes.Camp}' AND events.event_metadata LIKE '%${camp.trim()}%'`
       }
     }
 

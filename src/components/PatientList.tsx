@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, Image as Image, TextInput, FlatList, TouchableOpacity, ImageBackground, Keyboard, Picker, Modal, TouchableHighlight, ScrollView } from "react-native";
+import { View, Text, Image as Image, TextInput, FlatList, TouchableOpacity, ImageBackground, Keyboard, Picker, Modal, TouchableHighlight, Button } from "react-native";
 import LinearGradient from 'react-native-linear-gradient';
 import { database } from "../storage/Database";
 import { DatabaseSync } from "../storage/Sync";
@@ -22,6 +22,7 @@ const PatientList = (props) => {
   const [surname, setSurname] = useState('');
   const [country, setCountry] = useState('');
   const [hometown, setHometown] = useState('');
+  const [camp, setCamp] = useState('');
   const [minAge, setMinAge] = useState<number>(0);
   const [maxAge, setMaxAge] = useState<number>(0);
 
@@ -55,6 +56,7 @@ const PatientList = (props) => {
       setSurname('');
       setCountry('');
       setHometown('');
+      setCamp('');
       setMinAge(0);
       setMaxAge(0);
     })
@@ -62,15 +64,16 @@ const PatientList = (props) => {
 
   const searchPatients = () => {
     const currentYear = new Date().getFullYear()
-    if (givenName.length > 0 || surname.length > 0 || country.length > 0 || hometown.length > 0 || maxAge > 0) {
+    if (givenName.length > 0 || surname.length > 0 || country.length > 0 || hometown.length > 0 || maxAge > 0 || camp.length > 0) {
       const givenNameLC = givenName.toLowerCase();
       const surnameLC = surname.toLowerCase();
       const countryLC = country.toLowerCase();
       const hometownLC = hometown.toLowerCase();
+      const campLC = camp.toLowerCase();
       const minYear = (maxAge > 0 && maxAge >= minAge) ? currentYear - maxAge : null;
       const maxYear = (maxAge > 0 && maxAge >= minAge) ? currentYear - minAge : null;
 
-      database.searchPatients(givenNameLC, surnameLC, countryLC, hometownLC, minYear, maxYear).then(patients => {
+      database.searchPatients(givenNameLC, surnameLC, countryLC, hometownLC, campLC, minYear, maxYear).then(patients => {
         setList(patients);
       })
     } else {
@@ -178,9 +181,14 @@ const PatientList = (props) => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={[styles.searchBar, { marginTop: 0, justifyContent: 'center' }]} onPress={() => setModalVisible(!modalVisible)}>
-          <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].advancedFilters}</Text>
-        </TouchableOpacity>
+        <View style={[styles.searchBar, {marginTop: 0, justifyContent: 'space-around'}]}>
+          <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+            <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].advancedFilters}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => reloadPatients()}>
+            <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].clearFilters}</Text>
+          </TouchableOpacity>
+        </View>
         <View style={[styles.searchBar, { marginTop: 0, justifyContent: 'center' }]}>
           {LanguageToggle()}
           <TouchableOpacity onPress={async () => {
@@ -216,39 +224,30 @@ const PatientList = (props) => {
         </View>
       </View>
       <Modal
-        animationType="slide"
-        transparent={true}
+        animationType="fade"
+        transparent={false}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.leftView}>
-          <View style={[styles.modalView, { alignItems: 'stretch' }]}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <TouchableHighlight
-                underlayColor="#DDDDDD"
-                onPress={() => {
-                  reloadPatients()
-                }}
-              >
-                <Text style={{ fontWeight: "bold", fontSize: 18, paddingBottom: 5 }}>{LocalizedStrings[language].clearFilters}</Text>
-              </TouchableHighlight>
+          <View style={[styles.modalView, { alignItems: 'stretch', justifyContent: 'space-between', flex: 1 }]}>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+
               <TouchableHighlight
                 onPress={() => {
                   setModalVisible(!modalVisible);
                   setSearchIconFunction(true)
                 }}
               >
-                <Image source={require('../images/close.png')} style={{ width: 20, height: 20 }} />
+                <Image source={require('../images/close.png')} style={{ width: 15, height: 15 }} />
               </TouchableHighlight>
             </View>
-            <View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <TextInput
                 placeholder={LocalizedStrings[language].firstName}
                 onChangeText={(text) => setGivenName(text)}
                 value={givenName}
               />
-            </View>
-            <View>
               <TextInput
                 placeholder={LocalizedStrings[language].surname}
                 onChangeText={(text) => setSurname(text)}
@@ -256,19 +255,24 @@ const PatientList = (props) => {
               />
             </View>
 
-            <View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <TextInput
                 placeholder={LocalizedStrings[language].country}
                 onChangeText={(text) => setCountry(text)}
                 value={country}
               />
-            </View>
-
-            <View>
               <TextInput
                 placeholder={LocalizedStrings[language].hometown}
                 onChangeText={(text) => setHometown(text)}
                 value={hometown}
+              />
+            </View>
+
+            <View>
+              <TextInput
+                placeholder={LocalizedStrings[language].camp}
+                onChangeText={(text) => setCamp(text)}
+                value={camp}
               />
             </View>
 
@@ -284,10 +288,7 @@ const PatientList = (props) => {
               >
                 {agePicker()}
               </Picker>
-            </View>
-
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={{ paddingTop: 15, paddingRight: 5 }}>{LocalizedStrings[language].maxAge}</Text>
+              <Text style={{ paddingTop: 15, paddingRight: 5, paddingLeft: 5 }}>{LocalizedStrings[language].maxAge}</Text>
               <Picker
                 selectedValue={maxAge}
                 onValueChange={value => setMaxAge(value)}
@@ -300,14 +301,24 @@ const PatientList = (props) => {
               </Picker>
             </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-              <TouchableOpacity onPress={() => {
-                Keyboard.dismiss()
-                setModalVisible(!modalVisible);
-                searchPatients()
-              }}>
-                <Image source={require('../images/search_grey.png')} style={{ width: 30, height: 30 }} />
-              </TouchableOpacity>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Button
+                title={LocalizedStrings[language].clearFilters}
+                color={'red'}
+                onPress={() => {
+                  reloadPatients()
+                }}
+              >
+              </Button>
+              <Button
+                title={LocalizedStrings[language].search}
+                onPress={() => {
+                  Keyboard.dismiss()
+                  setModalVisible(!modalVisible);
+                  searchPatients()
+                }}>
+              </Button>
             </View>
           </View>
         </View>
