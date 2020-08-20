@@ -101,7 +101,7 @@ export default StyleSheet.create({
   },
   main: {
     paddingTop: Platform.OS === 'ios' ? getStatusBarHeight() : 0,
-    flex: 1
+    flex: 1,
   },
   listContainer: {
     flexDirection: 'column',
@@ -109,7 +109,7 @@ export default StyleSheet.create({
     alignContent: 'flex-start'
   },
   viewContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#ededed',
     flexDirection: 'column',
     flex: 1,
     justifyContent: 'space-between'
@@ -184,7 +184,18 @@ export default StyleSheet.create({
     borderRadius: 30,
     backgroundColor: '#FFFFFF',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: '70%'
+  },
+  profileButton: {
+    margin: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    elevation: 5,
+    borderColor: '#EAEAEA',
+    borderWidth: .5,
+    borderRadius: 12,
+    backgroundColor: '#FFFFFF'
   },
   searchBar: {
     marginTop: 10,
@@ -218,14 +229,15 @@ export default StyleSheet.create({
   },
   gridItemText: {
     fontSize: 20,
+    textAlign: 'center',
   },
   gridItemLabel: {
     fontSize: 15,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   cardContent: {
     flex: 1,
-    // marginTop: 10,
     marginHorizontal: 10,
     flexDirection: 'row',
     textAlign: 'center',
@@ -342,5 +354,33 @@ export default StyleSheet.create({
     borderLeftColor: 'transparent',
     borderTopWidth: 52,
     borderTopColor: '#FFFFFF',
+  },
+  hexagonAfterPatientView: {
+    position: 'absolute',
+    top: -25,
+    left: 0,
+    width: 0,
+    height: 0,
+    borderStyle: 'solid',
+    borderBottomWidth: 52,
+    borderBottomColor: '#ededed',
+    borderRightWidth: 25,
+    borderRightColor: 'transparent',
+    borderTopWidth: 52,
+    borderTopColor: '#ededed',
+  },
+  hexagonBeforePatientView: {
+    position: 'absolute',
+    top: -25,
+    left: 75,
+    width: 0,
+    height: 0,
+    borderStyle: 'solid',
+    borderBottomWidth: 52,
+    borderBottomColor: '#ededed',
+    borderLeftWidth: 25,
+    borderLeftColor: 'transparent',
+    borderTopWidth: 52,
+    borderTopColor: '#ededed',
   },
 });

@@ -45,7 +45,7 @@ export const LocalizedStrings = {
     covidScreening: "COVID-19 Screening",
     enterTextHere: "Enter text here.",
     visitDate: "Visit Date",
-    visitHistory: "VISIT HISTORY",
+    visitHistory: "Visit History",
     visitEvents: "Visit Events",
     visitType: "Visit Type",
     trends: "TRENDS",

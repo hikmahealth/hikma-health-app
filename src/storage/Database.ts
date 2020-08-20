@@ -25,6 +25,7 @@ export interface Database {
   applyScript(script: SyncResponse): Promise<void>;
   updatePatientImageTimestamp(patientId: string, newTimestamp: string): Promise<void>;
   getLatestPatientEventByType(patient_id: string, event_type: string): Promise<string>;
+  getAllPatientEventsByType(patient_id: string, event_type: string): Promise<Event[]>;
   addUser(user: NewUser, password: string): Promise<void>;
   addPatient(patient: NewPatient): Promise<void>;
   addEvent(event: Event): Promise<void>;
@@ -234,6 +235,27 @@ class DatabaseImpl implements Database {
           `[db] Retrieved event for patient with id: "${patient_id}"!`
         );
         return event_metadata;
+      });
+  }
+
+  public getAllPatientEventsByType(patient_id: string, event_type: string): Promise<Event[]> {
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql("SELECT id, patient_id, event_type, event_metadata FROM events WHERE patient_id = ? AND event_type = ? ORDER BY event_timestamp DESC;", [patient_id, event_type])
+      )
+      .then(async ([results]) => {
+        if (results === undefined) {
+          return [];
+        }
+        const count = results.rows.length;
+        const events: Event[] = [];
+        for (let i = 0; i < count; i++) {
+          const row = results.rows.item(i);
+          const { id, patient_id, event_type, event_metadata } = row;
+
+          events.push({ id, patient_id, event_type, event_metadata });
+        }
+        return events;
       });
   }
 

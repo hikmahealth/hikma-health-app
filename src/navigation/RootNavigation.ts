@@ -15,6 +15,7 @@ import Vitals from '../components/Vitals';
 import VisitList from '../components/VisitList';
 import EventList from '../components/EventList';
 import EditVitals from '../components/EditVitals';
+import PrescriptionList from '../components/PrescriptionList';
 
 const rootNavigator = createStackNavigator(
   {
@@ -106,6 +107,13 @@ const rootNavigator = createStackNavigator(
       screen: EventList,
       navigationOptions: () => ({
         title: `EventList`,
+        header: null
+      })
+    },
+    PrescriptionList: {
+      screen: PrescriptionList,
+      navigationOptions: () => ({
+        title: `PrescriptionList`,
         header: null
       })
     }

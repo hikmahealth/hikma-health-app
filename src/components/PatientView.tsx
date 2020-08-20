@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, TextInput,  TouchableOpacity, ImageBackground, Alert, Picker } from "react-native";
+import { View, Text, Image, TextInput, TouchableOpacity, ImageBackground, Alert, Picker } from "react-native";
 import { ImageSync } from '../storage/ImageSync';
 import { database } from '../storage/Database';
 import styles from './Style';
@@ -103,64 +103,65 @@ const PatientView = (props) => {
         </View>
 
         <View style={styles.cardContent}>
-        {!!patient.image_timestamp ? 
-        <ImageBackground source={{uri: `${imageSync.imgURI(patient.id)}/${patient.image_timestamp}.jpg`}} style={{ width: 100, height: 100, justifyContent: 'center' }}>
-          <View style={styles.hexagon}>
-            <View style={styles.hexagonBefore} />
-            <View style={styles.hexagonAfter} />
-          </View>
-        </ImageBackground> : 
-        <Image source={icons[iconHash(patient.id)]} style={{ width: 100, height: 100, justifyContent: 'center' }}>
-          
-        </Image>}
+          {!!patient.image_timestamp ?
+            <ImageBackground source={{ uri: `${imageSync.imgURI(patient.id)}/${patient.image_timestamp}.jpg` }} style={{ width: 100, height: 100, justifyContent: 'center' }}>
+              <View style={styles.hexagon}>
+                <View style={styles.hexagonBeforePatientView} />
+                <View style={styles.hexagonAfterPatientView} />
+              </View>
+            </ImageBackground> :
+            <Image source={icons[iconHash(patient.id)]} style={{ width: 100, height: 100, justifyContent: 'center' }}>
 
-          <View style={{marginLeft: 20}}>
-            {displayName(patient)}
-            <View
-              style={{
-                marginVertical: 5,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-              }}
-            />
+            </Image>}
+
+          <View style={{ marginLeft: 20 }}>
+            <Text style={styles.gridItemText}>{displayName(patient)}</Text>
           </View>
         </View>
-        <View style={styles.buttonBar}>
+        <View style={[styles.card, { height: 100, justifyContent: 'center', marginTop: 0, elevation: 0 }]}>
+          <View style={{ marginTop: 10, marginHorizontal: 20, display: "flex", flexDirection: "row" }}>
+            <View style={{ flex: 1, display: 'flex', justifyContent: 'center' }}><Text style={[styles.gridItemText, { marginRight: 'auto' }]}>{patient.date_of_birth}</Text></View>
+            <View style={{ flex: 1, display: 'flex', justifyContent: 'center' }}><Text style={styles.gridItemText}>{getPatientAge(patient.date_of_birth)}</Text></View>
+            <View style={{ flex: 1, display: 'flex', justifyContent: 'center' }}><Text style={[styles.gridItemText, { marginLeft: 'auto' }]}>{patient.sex}</Text></View>
+          </View>
+          <View
+            style={{
+              marginVertical: 5,
+              marginHorizontal: 10,
+              borderBottomColor: '#ededed',
+              borderBottomWidth: 1,
+            }}
+          />
+          <View style={{ marginBottom: 10, marginHorizontal: 20, display: "flex", flexDirection: "row" }}>
+            <View style={{ flex: 1, display: 'flex', justifyContent: 'center' }}><Text style={[styles.gridItemLabel, { marginRight: 'auto' }]}>{LocalizedStrings[language].DOB}</Text></View>
+            <View style={{ flex: 1, display: 'flex', justifyContent: 'center' }}><Text style={styles.gridItemLabel}>{LocalizedStrings[language].age}</Text></View>
+            <View style={{ flex: 1, display: 'flex', justifyContent: 'center' }}><Text style={[styles.gridItemLabel, { marginLeft: 'auto' }]}>{LocalizedStrings[language].GENDER}</Text></View>
+          </View>
+
+        </View>
+        {isEditingSummary ? null : <View style={{margin: 15}}></View> }
+        <View style={{ alignItems: 'center' }}>
           <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              Alert.alert(
-                'Under construction',
-                '',
-                [
-                  { text: 'OK' },
-                ],
-              );
-            }}>
-            <Text style={{ color: '#31BBF3' }}>{LocalizedStrings[language].trends}</Text>
+            style={[styles.profileButton, { height: 40 }]}
+            onPress={() => props.navigation.navigate('PrescriptionList', { language: language, patient: patient })}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20 }}>
+              <Text style={{ fontSize: 15 }}>{LocalizedStrings[language].prescriptions}</Text>
+              <Text style={{ fontSize: 15 }}>></Text>
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.button}
+            style={[styles.profileButton, { height: 40 }]}
             onPress={() => props.navigation.navigate('VisitList', { language: language, patient: patient })}>
-            <Text style={{ color: '#31BBF3' }}>{LocalizedStrings[language].visitHistory}</Text>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20 }}>
+              <Text style={{ fontSize: 15 }}>{LocalizedStrings[language].visitHistory}</Text>
+              <Text style={{ fontSize: 15 }}>></Text>
+            </View>
+
           </TouchableOpacity>
         </View>
-        <View style={styles.gridContainer}>
-          <View style={styles.gridItem}>
-            <Text style={styles.gridItemText}>{patient.date_of_birth}</Text>
-            <Text style={styles.gridItemLabel}>{LocalizedStrings[language].DOB}</Text>
-          </View>
-          <View style={styles.gridItem}>
-            <Text style={styles.gridItemText}>{getPatientAge(patient.date_of_birth)}</Text>
-            <Text style={styles.gridItemLabel}>{LocalizedStrings[language].age}</Text>
-          </View>
-          <View style={styles.gridItem}>
-            <Text style={styles.gridItemText}>{patient.sex}</Text>
-            <Text style={styles.gridItemLabel}>{LocalizedStrings[language].GENDER}</Text>
-          </View>
-        </View>
+
         <View>
-          <Text style={[styles.gridItemLabel, styles.title]}>{LocalizedStrings[language].patientSummary}</Text>
+          <Text style={[styles.gridItemLabel, styles.title, { textAlign: 'left', paddingBottom: 5 }]}>{LocalizedStrings[language].patientSummary}</Text>
           <TouchableOpacity onLongPress={() => setIsEditingSummary(true)}>
             {isEditingSummary ?
               <View>
@@ -170,12 +171,14 @@ const PatientView = (props) => {
                   value={summary}
                 />
                 <TouchableOpacity
-                  style={styles.button}
+                  style={[styles.profileButton, { height: 40, marginBottom: 0 }]}
                   onPress={() => {
                     handleSaveSummary();
                     setIsEditingSummary(false);
                   }}>
-                  <Text style={{ color: '#31BBF3' }}>{LocalizedStrings[language].save}</Text>
+                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                    <Text style={{ fontSize: 15 }}>{LocalizedStrings[language].save}</Text>
+                  </View>
                 </TouchableOpacity>
               </View> :
               <Text style={styles.paragraph}>
@@ -207,7 +210,7 @@ const PatientView = (props) => {
         </View>
 
       </View>
-    </View>
+    </View >
   )
 
 }
