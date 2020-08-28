@@ -241,7 +241,7 @@ class DatabaseImpl implements Database {
   public getAllPatientEventsByType(patient_id: string, event_type: string): Promise<Event[]> {
     return this.getDatabase()
       .then(db =>
-        db.executeSql("SELECT id, patient_id, event_type, event_metadata FROM events WHERE patient_id = ? AND event_type = ? ORDER BY event_timestamp DESC;", [patient_id, event_type])
+        db.executeSql("SELECT id, patient_id, event_type, event_metadata, edited_at FROM events WHERE patient_id = ? AND event_type = ? ORDER BY event_timestamp DESC;", [patient_id, event_type])
       )
       .then(async ([results]) => {
         if (results === undefined) {
@@ -251,9 +251,9 @@ class DatabaseImpl implements Database {
         const events: Event[] = [];
         for (let i = 0; i < count; i++) {
           const row = results.rows.item(i);
-          const { id, patient_id, event_type, event_metadata } = row;
+          const { id, patient_id, event_type, event_metadata, edited_at } = row;
 
-          events.push({ id, patient_id, event_type, event_metadata });
+          events.push({ id, patient_id, event_type, event_metadata, edited_at });
         }
         return events;
       });

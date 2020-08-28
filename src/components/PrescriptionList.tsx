@@ -47,6 +47,7 @@ const PrescriptionList = (props) => {
             }}
           />
           {renderMetadata(item.event_metadata)}
+          <Text>{`${LocalizedStrings[language].datePrescribed}: ${item.edited_at.split('T')[0]}`}</Text>
         </View>
       </View>
     </TouchableOpacity>

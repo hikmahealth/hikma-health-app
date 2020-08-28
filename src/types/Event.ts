@@ -4,4 +4,5 @@ export interface Event {
   visit_id?: string
   event_type: string
   event_metadata: string
+  edited_at?: string
 }
