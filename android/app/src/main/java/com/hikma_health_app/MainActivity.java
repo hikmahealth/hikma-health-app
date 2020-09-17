@@ -1,4 +1,4 @@
-package com.hikma_app;
+package com.hikma_health_app;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "hikma_app";
+        return "hikma_health_app";
     }
 }

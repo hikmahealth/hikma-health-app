@@ -1,4 +1,4 @@
-package com.hikma_app;
+package com.hikma_health_app;
 
 import android.app.Application;
 import android.util.Log;

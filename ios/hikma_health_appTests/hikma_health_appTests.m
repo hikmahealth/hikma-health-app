@@ -14,11 +14,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React Native!"
 
-@interface hikma_appTests : XCTestCase
+@interface hikma_health_appTests : XCTestCase
 
 @end
 
-@implementation hikma_appTests
+@implementation hikma_health_appTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {

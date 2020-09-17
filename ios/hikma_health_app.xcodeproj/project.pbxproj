@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* hikma_appTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* hikma_appTests.m */; };
+		00E356F31AD99517003FC87E /* hikma_health_appTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* hikma_health_appTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -15,11 +15,11 @@
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2DCD954D1E0B4F2C00145EB5 /* hikma_appTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* hikma_appTests.m */; };
-		6682056299F1B1C88889C141 /* libPods-hikma_app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 62F458D6ABE738899468A32B /* libPods-hikma_app.a */; };
-		8440CE5664EE33A8CA19B95B /* libPods-hikma_app-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47FF4E4FB7C379710BE7CA9B /* libPods-hikma_app-tvOS.a */; };
-		A9855E9DB9912099FC4E70DE /* libPods-hikma_appTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE03C9AD21563547B229C93 /* libPods-hikma_appTests.a */; };
-		CA3A520AE423D501FE91CE59 /* libPods-hikma_app-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE7F1485A5D22E72FCDF8B7B /* libPods-hikma_app-tvOSTests.a */; };
+		2DCD954D1E0B4F2C00145EB5 /* hikma_health_appTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* hikma_health_appTests.m */; };
+		6682056299F1B1C88889C141 /* libPods-hikma_health_app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 62F458D6ABE738899468A32B /* libPods-hikma_health_app.a */; };
+		8440CE5664EE33A8CA19B95B /* libPods-hikma_health_app-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47FF4E4FB7C379710BE7CA9B /* libPods-hikma_health_app-tvOS.a */; };
+		A9855E9DB9912099FC4E70DE /* libPods-hikma_health_appTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE03C9AD21563547B229C93 /* libPods-hikma_health_appTests.a */; };
+		CA3A520AE423D501FE91CE59 /* libPods-hikma_health_app-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE7F1485A5D22E72FCDF8B7B /* libPods-hikma_health_app-tvOSTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,43 +28,43 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = hikma_app;
+			remoteInfo = hikma_health_app;
 		};
 		2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
-			remoteInfo = "hikma_app-tvOS";
+			remoteInfo = "hikma_health_app-tvOS";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		00E356EE1AD99517003FC87E /* hikma_appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = hikma_appTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* hikma_health_appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = hikma_health_appTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* hikma_appTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = hikma_appTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* hikma_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hikma_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = hikma_app/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = hikma_app/AppDelegate.m; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* hikma_health_appTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = hikma_health_appTests.m; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* hikma_health_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hikma_health_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = hikma_health_app/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = hikma_health_app/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = hikma_app/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = hikma_app/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = hikma_app/main.m; sourceTree = "<group>"; };
-		2D02E47B1E0B4A5D006451C7 /* hikma_app-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "hikma_app-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D02E4901E0B4A5D006451C7 /* hikma_app-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "hikma_app-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3A7A93A2B4E61825142E65FD /* Pods-hikma_app-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_app-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-hikma_app-tvOS/Pods-hikma_app-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		45DDB508273F2231946E0A06 /* Pods-hikma_appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_appTests.release.xcconfig"; path = "Target Support Files/Pods-hikma_appTests/Pods-hikma_appTests.release.xcconfig"; sourceTree = "<group>"; };
-		47FF4E4FB7C379710BE7CA9B /* libPods-hikma_app-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hikma_app-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4CE03C9AD21563547B229C93 /* libPods-hikma_appTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hikma_appTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4D5F3B6774C4DBCC8FE19017 /* Pods-hikma_app-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_app-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-hikma_app-tvOSTests/Pods-hikma_app-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		4F0A8E287E959121B2D75D7D /* Pods-hikma_app-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_app-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-hikma_app-tvOSTests/Pods-hikma_app-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		621A766DDE06CF983864239A /* Pods-hikma_appTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_appTests.debug.xcconfig"; path = "Target Support Files/Pods-hikma_appTests/Pods-hikma_appTests.debug.xcconfig"; sourceTree = "<group>"; };
-		62F458D6ABE738899468A32B /* libPods-hikma_app.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hikma_app.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AB08D136E315F734C2DC447F /* Pods-hikma_app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_app.debug.xcconfig"; path = "Target Support Files/Pods-hikma_app/Pods-hikma_app.debug.xcconfig"; sourceTree = "<group>"; };
-		B3D6E62C35AAAADD1D5F751B /* Pods-hikma_app-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_app-tvOS.release.xcconfig"; path = "Target Support Files/Pods-hikma_app-tvOS/Pods-hikma_app-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		D605E756AE840213B69C8A96 /* Pods-hikma_app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_app.release.xcconfig"; path = "Target Support Files/Pods-hikma_app/Pods-hikma_app.release.xcconfig"; sourceTree = "<group>"; };
-		DE7F1485A5D22E72FCDF8B7B /* libPods-hikma_app-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hikma_app-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = hikma_health_app/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = hikma_health_app/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = hikma_health_app/main.m; sourceTree = "<group>"; };
+		2D02E47B1E0B4A5D006451C7 /* hikma_health_app-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "hikma_health_app-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E4901E0B4A5D006451C7 /* hikma_health_app-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "hikma_health_app-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A7A93A2B4E61825142E65FD /* Pods-hikma_health_app-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_health_app-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-hikma_health_app-tvOS/Pods-hikma_health_app-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		45DDB508273F2231946E0A06 /* Pods-hikma_health_appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_health_appTests.release.xcconfig"; path = "Target Support Files/Pods-hikma_health_appTests/Pods-hikma_health_appTests.release.xcconfig"; sourceTree = "<group>"; };
+		47FF4E4FB7C379710BE7CA9B /* libPods-hikma_health_app-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hikma_health_app-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CE03C9AD21563547B229C93 /* libPods-hikma_health_appTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hikma_health_appTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D5F3B6774C4DBCC8FE19017 /* Pods-hikma_health_app-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_health_app-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-hikma_health_app-tvOSTests/Pods-hikma_health_app-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		4F0A8E287E959121B2D75D7D /* Pods-hikma_health_app-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_health_app-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-hikma_health_app-tvOSTests/Pods-hikma_health_app-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		621A766DDE06CF983864239A /* Pods-hikma_health_appTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_health_appTests.debug.xcconfig"; path = "Target Support Files/Pods-hikma_health_appTests/Pods-hikma_health_appTests.debug.xcconfig"; sourceTree = "<group>"; };
+		62F458D6ABE738899468A32B /* libPods-hikma_health_app.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hikma_health_app.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB08D136E315F734C2DC447F /* Pods-hikma_health_app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_health_app.debug.xcconfig"; path = "Target Support Files/Pods-hikma_health_app/Pods-hikma_health_app.debug.xcconfig"; sourceTree = "<group>"; };
+		B3D6E62C35AAAADD1D5F751B /* Pods-hikma_health_app-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_health_app-tvOS.release.xcconfig"; path = "Target Support Files/Pods-hikma_health_app-tvOS/Pods-hikma_health_app-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		D605E756AE840213B69C8A96 /* Pods-hikma_health_app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hikma_health_app.release.xcconfig"; path = "Target Support Files/Pods-hikma_health_app/Pods-hikma_health_app.release.xcconfig"; sourceTree = "<group>"; };
+		DE7F1485A5D22E72FCDF8B7B /* libPods-hikma_health_app-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hikma_health_app-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -74,7 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9855E9DB9912099FC4E70DE /* libPods-hikma_appTests.a in Frameworks */,
+				A9855E9DB9912099FC4E70DE /* libPods-hikma_health_appTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6682056299F1B1C88889C141 /* libPods-hikma_app.a in Frameworks */,
+				6682056299F1B1C88889C141 /* libPods-hikma_health_app.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,7 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8440CE5664EE33A8CA19B95B /* libPods-hikma_app-tvOS.a in Frameworks */,
+				8440CE5664EE33A8CA19B95B /* libPods-hikma_health_app-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,20 +98,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA3A520AE423D501FE91CE59 /* libPods-hikma_app-tvOSTests.a in Frameworks */,
+				CA3A520AE423D501FE91CE59 /* libPods-hikma_health_app-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* hikma_appTests */ = {
+		00E356EF1AD99517003FC87E /* hikma_health_appTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* hikma_appTests.m */,
+				00E356F21AD99517003FC87E /* hikma_health_appTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = hikma_appTests;
+			path = hikma_health_appTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -125,19 +125,19 @@
 		0C78F42CBDF0BAAB0D552907 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				AB08D136E315F734C2DC447F /* Pods-hikma_app.debug.xcconfig */,
-				D605E756AE840213B69C8A96 /* Pods-hikma_app.release.xcconfig */,
-				3A7A93A2B4E61825142E65FD /* Pods-hikma_app-tvOS.debug.xcconfig */,
-				B3D6E62C35AAAADD1D5F751B /* Pods-hikma_app-tvOS.release.xcconfig */,
-				4F0A8E287E959121B2D75D7D /* Pods-hikma_app-tvOSTests.debug.xcconfig */,
-				4D5F3B6774C4DBCC8FE19017 /* Pods-hikma_app-tvOSTests.release.xcconfig */,
-				621A766DDE06CF983864239A /* Pods-hikma_appTests.debug.xcconfig */,
-				45DDB508273F2231946E0A06 /* Pods-hikma_appTests.release.xcconfig */,
+				AB08D136E315F734C2DC447F /* Pods-hikma_health_app.debug.xcconfig */,
+				D605E756AE840213B69C8A96 /* Pods-hikma_health_app.release.xcconfig */,
+				3A7A93A2B4E61825142E65FD /* Pods-hikma_health_app-tvOS.debug.xcconfig */,
+				B3D6E62C35AAAADD1D5F751B /* Pods-hikma_health_app-tvOS.release.xcconfig */,
+				4F0A8E287E959121B2D75D7D /* Pods-hikma_health_app-tvOSTests.debug.xcconfig */,
+				4D5F3B6774C4DBCC8FE19017 /* Pods-hikma_health_app-tvOSTests.release.xcconfig */,
+				621A766DDE06CF983864239A /* Pods-hikma_health_appTests.debug.xcconfig */,
+				45DDB508273F2231946E0A06 /* Pods-hikma_health_appTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* hikma_app */ = {
+		13B07FAE1A68108700A75B9A /* hikma_health_app */ = {
 			isa = PBXGroup;
 			children = (
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -148,7 +148,7 @@
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = hikma_app;
+			name = hikma_health_app;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -156,10 +156,10 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				62F458D6ABE738899468A32B /* libPods-hikma_app.a */,
-				47FF4E4FB7C379710BE7CA9B /* libPods-hikma_app-tvOS.a */,
-				DE7F1485A5D22E72FCDF8B7B /* libPods-hikma_app-tvOSTests.a */,
-				4CE03C9AD21563547B229C93 /* libPods-hikma_appTests.a */,
+				62F458D6ABE738899468A32B /* libPods-hikma_health_app.a */,
+				47FF4E4FB7C379710BE7CA9B /* libPods-hikma_health_app-tvOS.a */,
+				DE7F1485A5D22E72FCDF8B7B /* libPods-hikma_health_app-tvOSTests.a */,
+				4CE03C9AD21563547B229C93 /* libPods-hikma_health_appTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -174,9 +174,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* hikma_app */,
+				13B07FAE1A68108700A75B9A /* hikma_health_app */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* hikma_appTests */,
+				00E356EF1AD99517003FC87E /* hikma_health_appTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				0C78F42CBDF0BAAB0D552907 /* Pods */,
@@ -189,10 +189,10 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* hikma_app.app */,
-				00E356EE1AD99517003FC87E /* hikma_appTests.xctest */,
-				2D02E47B1E0B4A5D006451C7 /* hikma_app-tvOS.app */,
-				2D02E4901E0B4A5D006451C7 /* hikma_app-tvOSTests.xctest */,
+				13B07F961A680F5B00A75B9A /* hikma_health_app.app */,
+				00E356EE1AD99517003FC87E /* hikma_health_appTests.xctest */,
+				2D02E47B1E0B4A5D006451C7 /* hikma_health_app-tvOS.app */,
+				2D02E4901E0B4A5D006451C7 /* hikma_health_app-tvOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -200,9 +200,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* hikma_appTests */ = {
+		00E356ED1AD99517003FC87E /* hikma_health_appTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "hikma_appTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "hikma_health_appTests" */;
 			buildPhases = (
 				BCC4003C1D2ACBB94DEFFB15 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -214,14 +214,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = hikma_appTests;
-			productName = hikma_appTests;
-			productReference = 00E356EE1AD99517003FC87E /* hikma_appTests.xctest */;
+			name = hikma_health_appTests;
+			productName = hikma_health_appTests;
+			productReference = 00E356EE1AD99517003FC87E /* hikma_health_appTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* hikma_app */ = {
+		13B07F861A680F5B00A75B9A /* hikma_health_app */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "hikma_app" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "hikma_health_app" */;
 			buildPhases = (
 				93879FC90730FF5AB7268E80 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -235,14 +235,14 @@
 			);
 			dependencies = (
 			);
-			name = hikma_app;
-			productName = hikma_app;
-			productReference = 13B07F961A680F5B00A75B9A /* hikma_app.app */;
+			name = hikma_health_app;
+			productName = hikma_health_app;
+			productReference = 13B07F961A680F5B00A75B9A /* hikma_health_app.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E47A1E0B4A5D006451C7 /* hikma_app-tvOS */ = {
+		2D02E47A1E0B4A5D006451C7 /* hikma_health_app-tvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "hikma_app-tvOS" */;
+			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "hikma_health_app-tvOS" */;
 			buildPhases = (
 				FBC7B8F164BB7022EE8488C1 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
@@ -255,14 +255,14 @@
 			);
 			dependencies = (
 			);
-			name = "hikma_app-tvOS";
-			productName = "hikma_app-tvOS";
-			productReference = 2D02E47B1E0B4A5D006451C7 /* hikma_app-tvOS.app */;
+			name = "hikma_health_app-tvOS";
+			productName = "hikma_health_app-tvOS";
+			productReference = 2D02E47B1E0B4A5D006451C7 /* hikma_health_app-tvOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E48F1E0B4A5D006451C7 /* hikma_app-tvOSTests */ = {
+		2D02E48F1E0B4A5D006451C7 /* hikma_health_app-tvOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "hikma_app-tvOSTests" */;
+			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "hikma_health_app-tvOSTests" */;
 			buildPhases = (
 				3471B1492CBF072BBF667A62 /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
@@ -274,9 +274,9 @@
 			dependencies = (
 				2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */,
 			);
-			name = "hikma_app-tvOSTests";
-			productName = "hikma_app-tvOSTests";
-			productReference = 2D02E4901E0B4A5D006451C7 /* hikma_app-tvOSTests.xctest */;
+			name = "hikma_health_app-tvOSTests";
+			productName = "hikma_health_app-tvOSTests";
+			productReference = 2D02E4901E0B4A5D006451C7 /* hikma_health_app-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -303,7 +303,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "hikma_app" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "hikma_health_app" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -316,10 +316,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* hikma_app */,
-				00E356ED1AD99517003FC87E /* hikma_appTests */,
-				2D02E47A1E0B4A5D006451C7 /* hikma_app-tvOS */,
-				2D02E48F1E0B4A5D006451C7 /* hikma_app-tvOSTests */,
+				13B07F861A680F5B00A75B9A /* hikma_health_app */,
+				00E356ED1AD99517003FC87E /* hikma_health_appTests */,
+				2D02E47A1E0B4A5D006451C7 /* hikma_health_app-tvOS */,
+				2D02E48F1E0B4A5D006451C7 /* hikma_health_app-tvOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -402,7 +402,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-hikma_app-tvOSTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-hikma_health_app-tvOSTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -415,7 +415,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-hikma_app/Pods-hikma_app-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-hikma_health_app/Pods-hikma_health_app-resources.sh",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -454,7 +454,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-hikma_app/Pods-hikma_app-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-hikma_health_app/Pods-hikma_health_app-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		93879FC90730FF5AB7268E80 /* [CP] Check Pods Manifest.lock */ = {
@@ -472,7 +472,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-hikma_app-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-hikma_health_app-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -494,7 +494,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-hikma_appTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-hikma_health_appTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -516,7 +516,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-hikma_app-tvOS-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-hikma_health_app-tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -568,7 +568,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* hikma_appTests.m in Sources */,
+				00E356F31AD99517003FC87E /* hikma_health_appTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,7 +594,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DCD954D1E0B4F2C00145EB5 /* hikma_appTests.m in Sources */,
+				2DCD954D1E0B4F2C00145EB5 /* hikma_health_appTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,12 +603,12 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* hikma_app */;
+			target = 13B07F861A680F5B00A75B9A /* hikma_health_app */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 		2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2D02E47A1E0B4A5D006451C7 /* hikma_app-tvOS */;
+			target = 2D02E47A1E0B4A5D006451C7 /* hikma_health_app-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -620,7 +620,7 @@
 				13B07FB21A68108700A75B9A /* Base */,
 			);
 			name = LaunchScreen.xib;
-			path = hikma_app;
+			path = hikma_health_app;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -628,14 +628,14 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 621A766DDE06CF983864239A /* Pods-hikma_appTests.debug.xcconfig */;
+			baseConfigurationReference = 621A766DDE06CF983864239A /* Pods-hikma_health_appTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = hikma_appTests/Info.plist;
+				INFOPLIST_FILE = hikma_health_appTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -645,17 +645,17 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/hikma_app.app/hikma_app";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/hikma_health_app.app/hikma_health_app";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 45DDB508273F2231946E0A06 /* Pods-hikma_appTests.release.xcconfig */;
+			baseConfigurationReference = 45DDB508273F2231946E0A06 /* Pods-hikma_health_appTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = hikma_appTests/Info.plist;
+				INFOPLIST_FILE = hikma_health_appTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -665,18 +665,18 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/hikma_app.app/hikma_app";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/hikma_health_app.app/hikma_health_app";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AB08D136E315F734C2DC447F /* Pods-hikma_app.debug.xcconfig */;
+			baseConfigurationReference = AB08D136E315F734C2DC447F /* Pods-hikma_health_app.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				INFOPLIST_FILE = hikma_app/Info.plist;
+				INFOPLIST_FILE = hikma_health_app/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -684,18 +684,18 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = hikma_app;
+				PRODUCT_NAME = hikma_health_app;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D605E756AE840213B69C8A96 /* Pods-hikma_app.release.xcconfig */;
+			baseConfigurationReference = D605E756AE840213B69C8A96 /* Pods-hikma_health_app.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = hikma_app/Info.plist;
+				INFOPLIST_FILE = hikma_health_app/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -703,14 +703,14 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = hikma_app;
+				PRODUCT_NAME = hikma_health_app;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3A7A93A2B4E61825142E65FD /* Pods-hikma_app-tvOS.debug.xcconfig */;
+			baseConfigurationReference = 3A7A93A2B4E61825142E65FD /* Pods-hikma_health_app-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -721,14 +721,14 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "hikma_app-tvOS/Info.plist";
+				INFOPLIST_FILE = "hikma_health_app-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.hikma_app-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.hikma_health_app-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -738,7 +738,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B3D6E62C35AAAADD1D5F751B /* Pods-hikma_app-tvOS.release.xcconfig */;
+			baseConfigurationReference = B3D6E62C35AAAADD1D5F751B /* Pods-hikma_health_app-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -749,14 +749,14 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "hikma_app-tvOS/Info.plist";
+				INFOPLIST_FILE = "hikma_health_app-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.hikma_app-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.hikma_health_app-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -766,7 +766,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4F0A8E287E959121B2D75D7D /* Pods-hikma_app-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = 4F0A8E287E959121B2D75D7D /* Pods-hikma_health_app-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -776,24 +776,24 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "hikma_app-tvOSTests/Info.plist";
+				INFOPLIST_FILE = "hikma_health_app-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.hikma_app-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.hikma_health_app-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/hikma_app-tvOS.app/hikma_app-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/hikma_health_app-tvOS.app/hikma_health_app-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Debug;
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4D5F3B6774C4DBCC8FE19017 /* Pods-hikma_app-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = 4D5F3B6774C4DBCC8FE19017 /* Pods-hikma_health_app-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -803,17 +803,17 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "hikma_app-tvOSTests/Info.plist";
+				INFOPLIST_FILE = "hikma_health_app-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.hikma_app-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.hikma_health_app-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/hikma_app-tvOS.app/hikma_app-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/hikma_health_app-tvOS.app/hikma_health_app-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Release;
@@ -922,7 +922,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "hikma_appTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "hikma_health_appTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -931,7 +931,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "hikma_app" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "hikma_health_app" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -940,7 +940,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "hikma_app-tvOS" */ = {
+		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "hikma_health_app-tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4971E0B4A5E006451C7 /* Debug */,
@@ -949,7 +949,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "hikma_app-tvOSTests" */ = {
+		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "hikma_health_app-tvOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4991E0B4A5E006451C7 /* Debug */,
@@ -958,7 +958,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "hikma_app" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "hikma_health_app" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
