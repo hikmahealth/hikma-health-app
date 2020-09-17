@@ -192,6 +192,9 @@ const Login = (props) => {
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>
       </View>
+      <Text  style={{paddingTop: 20, paddingHorizontal: 30, color: '#ffffff', textAlign: 'center'}}>
+        Hikma Health is an independent 501(c)(3) nonprofit and is not affiliated with Hikma Pharmaceuticals PLC or any of its affiliates.
+      </Text>
     </LinearGradient>
   );
 };

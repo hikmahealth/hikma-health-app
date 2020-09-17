@@ -39,7 +39,7 @@ const EditPatient = (props) => {
     let hometownId = !!patient.hometown ? patient.hometown.id : null
 
     if (!!patient.given_name) {
-      if (!!patient.given_name.content[language]) {
+      if (patient.given_name.content[language] !== undefined) {
         await database.editStringContent([{ language: language, content: givenNameText }], patient.given_name.id)
       } else {
         await database.saveStringContent([{ language: language, content: givenNameText }], patient.given_name.id)
@@ -49,7 +49,7 @@ const EditPatient = (props) => {
     }
 
     if (!!patient.surname) {
-      if (!!patient.surname.content[language]) {
+      if (patient.surname.content[language] !== undefined) {
         await database.editStringContent([{ language: language, content: surnameText }], patient.surname.id)
       } else {
         await database.saveStringContent([{ language: language, content: surnameText }], patient.surname.id)
@@ -59,7 +59,7 @@ const EditPatient = (props) => {
     }
 
     if (!!patient.country) {
-      if (!!patient.country.content[language]) {
+      if (patient.country.content[language] !== undefined) {
         await database.editStringContent([{ language: language, content: countryText }], patient.country.id)
       } else {
         await database.saveStringContent([{ language: language, content: countryText }], patient.country.id)
@@ -69,7 +69,7 @@ const EditPatient = (props) => {
     }
 
     if (!!patient.hometown) {
-      if (!!patient.hometown.content[language]) {
+      if (patient.hometown.content[language] !== undefined) {
         await database.editStringContent([{ language: language, content: hometownText }], patient.hometown.id)
       } else {
         await database.saveStringContent([{ language: language, content: hometownText }], patient.hometown.id)
