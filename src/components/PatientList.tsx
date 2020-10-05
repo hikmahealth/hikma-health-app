@@ -23,6 +23,7 @@ const PatientList = (props) => {
   const [country, setCountry] = useState('');
   const [hometown, setHometown] = useState('');
   const [camp, setCamp] = useState('');
+  const [phone, setPhone] = useState('');
   const [minAge, setMinAge] = useState<number>(0);
   const [maxAge, setMaxAge] = useState<number>(0);
 
@@ -57,6 +58,7 @@ const PatientList = (props) => {
       setCountry('');
       setHometown('');
       setCamp('');
+      setPhone('');
       setMinAge(0);
       setMaxAge(0);
     })
@@ -64,16 +66,17 @@ const PatientList = (props) => {
 
   const searchPatients = () => {
     const currentYear = new Date().getFullYear()
-    if (givenName.length > 0 || surname.length > 0 || country.length > 0 || hometown.length > 0 || maxAge > 0 || camp.length > 0) {
+    if (givenName.length > 0 || surname.length > 0 || country.length > 0 || hometown.length > 0 || maxAge > 0 || camp.length > 0 || phone.length > 0) {
       const givenNameLC = givenName.toLowerCase();
       const surnameLC = surname.toLowerCase();
       const countryLC = country.toLowerCase();
       const hometownLC = hometown.toLowerCase();
       const campLC = camp.toLowerCase();
+      const phoneLC = phone.toLowerCase();
       const minYear = (maxAge > 0 && maxAge >= minAge) ? currentYear - maxAge : null;
       const maxYear = (maxAge > 0 && maxAge >= minAge) ? currentYear - minAge : null;
 
-      database.searchPatients(givenNameLC, surnameLC, countryLC, hometownLC, campLC, minYear, maxYear).then(patients => {
+      database.searchPatients(givenNameLC, surnameLC, countryLC, hometownLC, campLC, phoneLC, minYear, maxYear).then(patients => {
         setList(patients);
       })
     } else {
@@ -181,7 +184,7 @@ const PatientList = (props) => {
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.searchBar, {marginTop: 0, justifyContent: 'space-around'}]}>
+        <View style={[styles.searchBar, { marginTop: 0, justifyContent: 'space-around' }]}>
           <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
             <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].advancedFilters}</Text>
           </TouchableOpacity>
@@ -268,11 +271,16 @@ const PatientList = (props) => {
               />
             </View>
 
-            <View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <TextInput
                 placeholder={LocalizedStrings[language].camp}
                 onChangeText={(text) => setCamp(text)}
                 value={camp}
+              />
+              <TextInput
+                placeholder={LocalizedStrings[language].phone}
+                onChangeText={(text) => setPhone(text)}
+                value={phone}
               />
             </View>
 
@@ -300,7 +308,6 @@ const PatientList = (props) => {
                 {agePicker()}
               </Picker>
             </View>
-
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <Button
