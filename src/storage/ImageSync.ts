@@ -157,7 +157,6 @@ export class ImageSync {
     ).then(fetchBlobResponse => {
       console.log("Get Photo response: ", fetchBlobResponse);
       if (
-        fetchBlobResponse.data &&
         fetchBlobResponse.respInfo &&
         fetchBlobResponse.respInfo.status === 200
       ) {
@@ -210,9 +209,7 @@ export class ImageSync {
         fetchBlobResponse.respInfo.status === 200
       ) {
         console.log("Set Photo SUCCESS!");
-        // const responseData = JSON.parse(fetchBlobResponse.data);
         return fetchBlobResponse;
-        // return responseData;
       } else {
         throw new Error(
           "Set Photo failure! HTTP status: " +
