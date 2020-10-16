@@ -10,6 +10,7 @@ import { LanguageString } from "../types/LanguageString";
 import { Event } from "../types/Event";
 import { Visit } from "../types/Visit";
 import { EventTypes } from "../enums/EventTypes";
+import { NameVariants } from "../enums/NameVariants";
 
 export interface Database {
   open(): Promise<SQLite.SQLiteDatabase>;
@@ -18,7 +19,7 @@ export interface Database {
   usersExist(): Promise<boolean>;
   getClinics(): Promise<Clinic[]>;
   getPatients(): Promise<Patient[]>;
-  searchPatients(givenName: string, surname: string, country: string, hometown: string, camp: string, minYear: number, maxYear: number): Promise<Patient[]>
+  searchPatients(givenName: string, surname: string, country: string, hometown: string, camp: string, phone: string, minYear: number, maxYear: number): Promise<Patient[]>
   getPatient(patient_id: string): Promise<Patient>;
   editStringContent(stringContent: StringContent[], id: string): Promise<string>;
   saveStringContent(stringContent: StringContent[], id?: string): Promise<string>;
@@ -324,13 +325,31 @@ class DatabaseImpl implements Database {
       });
   }
 
-  public searchPatients(givenName: string, surname: string, country: string, hometown: string, camp: string, minYear: number, maxYear: number): Promise<Patient[]> {
+  public fuzzySearch(givenName: string): string {
+    let queryTerms = ` WHERE (string_content.content LIKE '%${givenName.trim()}%'`
+    NameVariants.forEach(name => {
+
+      let match = name.findIndex(variant => {
+        return variant.includes(givenName)
+      })
+
+      if (match > -1) {
+        name.forEach(variant => {
+          queryTerms += ` OR string_content.content LIKE '%${variant}%'`
+        })
+      }
+    })
+    queryTerms += ')'
+    return queryTerms
+  }
+
+  public searchPatients(givenName: string, surname: string, country: string, hometown: string, camp: string, phone: string, minYear: number, maxYear: number): Promise<Patient[]> {
     let queryTerms = '';
 
     const queryBase = "SELECT DISTINCT patients.id, patients.given_name, patients.surname, patients.date_of_birth, patients.country, patients.hometown, patients.sex, patients.phone, patients.image_timestamp, patients.edited_at FROM patients LEFT JOIN string_content ON patients.given_name = string_content.id OR patients.surname = string_content.id OR patients.country = string_content.id OR patients.hometown = string_content.id LEFT JOIN events ON patients.id = events.patient_id"
 
     if (!!givenName) {
-      queryTerms += ` WHERE string_content.content LIKE '%${givenName.trim()}%'`
+      queryTerms += this.fuzzySearch(givenName.trim().toLowerCase())
     }
 
     if (!!surname) {
@@ -365,7 +384,15 @@ class DatabaseImpl implements Database {
       }
     }
 
-    if(!!minYear && !!maxYear && minYear.toString().length === 4 && maxYear.toString().length === 4) {
+    if (!!phone) {
+      if (!!queryTerms) {
+        queryTerms += ` INTERSECT ${queryBase} WHERE patients.phone LIKE '%${phone.trim()}%'`
+      } else {
+        queryTerms += ` WHERE patients.phone LIKE '%${phone.trim()}%'`
+      }
+    }
+
+    if (!!minYear && !!maxYear && minYear.toString().length === 4 && maxYear.toString().length === 4) {
       if (!!queryTerms) {
         queryTerms += ` AND SUBSTR(patients.date_of_birth, 1, 4) BETWEEN '${minYear}' AND '${maxYear}'`
       } else {

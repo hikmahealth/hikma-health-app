@@ -26,7 +26,7 @@ const EditOpenTextEvent = (props) => {
 
   return (
     <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
-      <TouchableOpacity onPress={() => props.navigation.navigate('EventList', { language })}>
+      <TouchableOpacity onPress={() => editPrescription ? props.navigation.navigate('PrescriptionList', { language }) : props.navigation.navigate('EventList', { language })}>
         <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
       </TouchableOpacity>
       <Text>{event.event_type}</Text>
