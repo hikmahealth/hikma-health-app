@@ -130,7 +130,8 @@ export default StyleSheet.create({
   },
   card: {
     margin: 10,
-    height: 130,
+    padding: 10,
+    height: 'auto',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

@@ -11,6 +11,75 @@ import { LocalizedStrings } from '../enums/LocalizedStrings';
 import DatePicker from 'react-native-datepicker';
 import Slider from '@react-native-community/slider';
 
+export const datePicker = (props) => {
+  let today = new Date();
+
+  if (!!props.future) {
+    let year = today.getFullYear();
+    let month = today.getMonth();
+    let day = today.getDate();
+    let future = new Date(year + 1, month, day);
+    today = future
+  }
+  return (
+    <DatePicker
+      style={{ width: 120 }}
+      date={props.date}
+      mode="date"
+      placeholder={props.placeholder}
+      format="YYYY-MM-DD"
+      minDate="1900-05-01"
+      maxDate={today.toISOString().split('T')[0]}
+      confirmBtnText={LocalizedStrings[props.language].confirm}
+      cancelBtnText={LocalizedStrings[props.language].cancel}
+      customStyles={{
+        dateInput: {
+          alignItems: 'flex-start',
+          borderWidth: 0
+        },
+        placeholderText: {
+          color: '#FFFFFF'
+        },
+        dateText: {
+          color: '#FFFFFF'
+        },
+        btnTextConfirm: {
+          height: 20
+        },
+        btnTextCancel: {
+          height: 20
+        }
+      }}
+      androidMode='spinner'
+      onDateChange={(date) => props.action(date)}
+    />
+  )
+}
+
+export const radioButtons = (props) => {
+  return (
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+      <Text style={{ color: '#FFFFFF' }}>{props.prompt}</Text>
+      <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity onPress={() => props.action(!props.field)}>
+          <View style={styles.outerRadioButton}>
+            {props.field ? <View style={styles.selectedRadioButton} /> : null}
+          </View>
+        </TouchableOpacity>
+        <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[props.language].yes}</Text>
+      </View>
+      <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity onPress={() => props.action(!props.field)}>
+          <View style={styles.outerRadioButton}>
+            {!props.field ? <View style={styles.selectedRadioButton} /> : null}
+          </View>
+        </TouchableOpacity>
+        <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[props.language].no}</Text>
+      </View>
+    </View>
+  )
+}
+
 const Covid19Form = (props) => {
   const [fever, setFever] = useState(false);
   const [feverDate, setFeverDate] = useState('');
@@ -89,42 +158,7 @@ const Covid19Form = (props) => {
     )
   }
 
-  const datePicker = (props) => {
-    const today = new Date();
-    return (
-      <DatePicker
-        style={{ width: 120 }}
-        date={props.date}
-        mode="date"
-        placeholder={props.placeholder}
-        format="YYYY-MM-DD"
-        minDate="1900-05-01"
-        maxDate={today.toISOString().split('T')[0]}
-        confirmBtnText={LocalizedStrings[language].confirm}
-        cancelBtnText={LocalizedStrings[language].cancel}
-        customStyles={{
-          dateInput: {
-            alignItems: 'flex-start',
-            borderWidth: 0
-          },
-          placeholderText: {
-            color: '#FFFFFF'
-          },
-          dateText: {
-            color: '#FFFFFF'
-          },
-          btnTextConfirm: {
-            height: 20
-          },
-          btnTextCancel: {
-            height: 20
-          }
-        }}
-        androidMode='spinner'
-        onDateChange={(date) => props.action(date)}
-      />
-    )
-  }
+
 
   const slider = (props) => {
     return (
@@ -138,30 +172,6 @@ const Covid19Form = (props) => {
           maximumValue={3}
           onValueChange={(value) => props.action(value)}
         />
-      </View>
-    )
-  }
-
-  const radioButtons = (props) => {
-    return (
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-        <Text style={{ color: '#FFFFFF' }}>{props.prompt}</Text>
-        <View style={{ flexDirection: 'row' }}>
-          <TouchableOpacity onPress={() => props.action(!props.field)}>
-            <View style={styles.outerRadioButton}>
-              {props.field ? <View style={styles.selectedRadioButton} /> : null}
-            </View>
-          </TouchableOpacity>
-          <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].yes}</Text>
-        </View>
-        <View style={{ flexDirection: 'row' }}>
-          <TouchableOpacity onPress={() => props.action(!props.field)}>
-            <View style={styles.outerRadioButton}>
-              {!props.field ? <View style={styles.selectedRadioButton} /> : null}
-            </View>
-          </TouchableOpacity>
-          <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].no}</Text>
-        </View>
       </View>
     )
   }

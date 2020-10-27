@@ -3,7 +3,7 @@ export enum EventTypes {
   Camp = 'Camp',
   VisitType = 'Visit Type',
   Vitals = 'Vitals',
-  Examination = 'Examination',
+  Evaluation = 'Evaluation',
   Complaint = 'Complaint',
   Treatment = 'Treatment',
   Diagnosis = 'Diagnosis',

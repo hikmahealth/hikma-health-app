@@ -6,6 +6,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings'
 import { EventTypes } from "../enums/EventTypes";
 import { Event } from "../types/Event";
+import { MedicalHistoryDisplay } from "./nv_events/MedicalHistory";
+import { VitalSignsDisplay } from "./nv_events/VitalSigns";
+import { ClinicalEvaluationDisplay } from "./nv_events/ClinicalEvaluation";
 
 const EventList = (props) => {
   const visit = props.navigation.getParam('visit');
@@ -78,18 +81,11 @@ const EventList = (props) => {
       case EventTypes.Covid19Screening:
         return (<Text>Test/Isolate Patient: {metadataObj.testAndIsolate.toString()}</Text>)
       case EventTypes.Vitals:
-        return (
-          <View style={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-          }}>
-            <Text style={{ width: '50%' }}>HR: {metadataObj.heartRate} BPM</Text>
-            <Text style={{ width: '50%' }}>BP: {metadataObj.systolic}/{metadataObj.diastolic}</Text>
-            <Text style={{ width: '50%' }}>Sats: {metadataObj.sats}%</Text>
-            <Text style={{ width: '50%' }}>Temp: {metadataObj.temp} °C</Text>
-            <Text style={{ width: '50%' }}>RR: {metadataObj.respiratoryRate}</Text>
-            <Text style={{ width: '50%' }}>BG: {metadataObj.bloodGlucose}</Text>
-          </View>)
+        return VitalSignsDisplay(metadataObj, language)
+      case EventTypes.MedicalHistory:
+        return MedicalHistoryDisplay(metadataObj, language)
+      case EventTypes.Evaluation:
+        return ClinicalEvaluationDisplay(metadataObj, language)  
       default:
         return (<Text>{metadataObj}</Text>)
     }
