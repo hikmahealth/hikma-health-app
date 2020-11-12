@@ -61,7 +61,6 @@ const ClinicalEvaluation = (props) => {
       visit_id: visitId,
       event_type: EventTypes.Evaluation,
       event_metadata: JSON.stringify({
-        visitDate,
         doctor: userName,
         reason,
         observations,

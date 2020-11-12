@@ -32,6 +32,7 @@ const EditVitals = (props) => {
       }
   }, [props])
 
+  //TODO remove this file since it has changed for NV
   const setVitals = async () => {
     database.editEvent(
       event.id,
