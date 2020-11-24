@@ -146,7 +146,7 @@ export const LocalizedStrings = {
     copd: "COPD",
     gastritis: "GERD/Gastritis/H. Pylori",
     scabies: "Scabies",
-    lastPAP: "last PAP",
+    lastPAP: "Last PAP",
     vaginalFluid: "Vaginal fluid",
     hypertension: "Hypertension or Cardiac condition",
     hypothyroidism: "Hypothyroidism",
@@ -184,6 +184,7 @@ export const LocalizedStrings = {
     hiv: "HIV",
     vomiting: "Vomiting",
     other: "Other",
+    details: "Details",
 
     anxiety: "Anxiety",
     nuclearFamily: "Attention to the Nuclear Family",
@@ -721,6 +722,7 @@ export const LocalizedStrings = {
     hiv: "VIH",
     vomiting: "Vómito",
     other: "Otra",
+    details: "Detalles",
 
     //8
     anxiety: "Ansiedad",
