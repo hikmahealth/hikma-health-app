@@ -101,6 +101,7 @@ export const LocalizedStrings = {
     temp: "Temp",
     bloodType: "Blood Type",
 
+    clinicalEvaluation: "Clinical Evaluation",
     doctor: "Doctor",
     reason: "Reason for Medical Exam",
     observations: "General Observations",
@@ -112,6 +113,8 @@ export const LocalizedStrings = {
     nextVisitDate: "Date of Next Visit",
     nextVisitReason: "Reason for Next Visit",
 
+    //7
+    medicalPathologies: "Medical Pathologies",
     miscarriages: "Number of Miscarriages", 
     foodAllergies: "Allergies to Food",
     animalAllergies: "Allergies to Animals",
@@ -638,7 +641,8 @@ export const LocalizedStrings = {
     temp: "Temp",
     bloodType: "Tipo de Sangre",
 
-    doctor: "Médica",
+    clinicalEvaluation: "Evaluación Clinica",
+    doctor: "Médic@",
     reason: "Razón del Examen Médico",
     observations: "Observaciones Generales",
     medications: "Medicamentos Actuales",
@@ -650,6 +654,7 @@ export const LocalizedStrings = {
     nextVisitReason: "Motiva de la Cita de Seguimiento",
 
     //7
+    medicalPathologies: "Patologias Medicas",
     miscarriages: "Abortos", 
     foodAllergies: "Alérgias a Alimentos",
     animalAllergies: "Alérgias a Animales",

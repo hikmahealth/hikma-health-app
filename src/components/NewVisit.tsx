@@ -93,27 +93,7 @@ const NewVisit = (props) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-          <View style={styles.inputRow}>
-            <TextInput
-              style={[styles.inputs, { color: campTextColor }]}
-              placeholder={LocalizedStrings[language].camp}
-              onChangeText={(text) => {
-                setCampTextColor('#000000')
-                setCamp(text)
-              }}
-              onEndEditing={handleSaveCamp}
-              value={camp}
-            />
-            {/* <TextInput
-            style={styles.inputs}
-            placeholder="Seen By"
-            onChangeText={setSeenBy}
-            value={seenBy}
-          /> */}
-            <Text style={styles.inputs}>
-              {userName}
-            </Text>
-          </View>
+
           <View style={styles.inputRow}>
             <DatePicker
               style={styles.datePicker}
@@ -137,16 +117,9 @@ const NewVisit = (props) => {
                 database.editVisitDate(visitId, moment(date).toISOString())
               }}
             />
-            <TextInput
-              style={[styles.inputs, { color: typeTextColor }]}
-              placeholder={LocalizedStrings[language].visitType}
-              onChangeText={(text) => {
-                setTypeTextColor('#000000')
-                setVisitType(text)
-              }}
-              onEndEditing={handleSaveVisitType}
-              value={visitType}
-            />
+            <Text style={styles.inputs}>
+              {userName}
+            </Text>
           </View>
         </View>
 
@@ -171,7 +144,7 @@ const NewVisit = (props) => {
               <View style={styles.actionIcon}>
                 <Image source={require('../images/stethoscope.png')} style={{ width: 43, height: 47 }} />
               </View>
-              <Text style={styles.actionText}>{LocalizedStrings[language].examination}</Text>
+              <Text style={styles.actionText}>{LocalizedStrings[language].clinicalEvaluation}</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.gridContainer}>
@@ -197,13 +170,13 @@ const NewVisit = (props) => {
           </View>
           <View style={styles.gridContainer}>
 
-            <TouchableOpacity style={styles.actionButton} 
+            <TouchableOpacity style={styles.actionButton}
             // onPress={() => props.navigation.navigate('MedicalPathologies', { patientId: patient.id, visitId: visitId, language: language })}
             >
               <View style={styles.actionIcon}>
                 <Image source={require('../images/doctor.png')} style={{ width: 40, height: 48 }} />
               </View>
-              <Text style={styles.actionText}>Medical Pathologies</Text>
+              <Text style={styles.actionText}>{LocalizedStrings[language].medicalPathologies}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.MedicineDispensed)}>
               <View style={styles.actionIcon}>

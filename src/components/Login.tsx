@@ -15,8 +15,8 @@ import styles from './Style';
 const Login = (props) => {
   const databaseSync = new DatabaseSync();
   const imageSync = new ImageSync();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('demo-nv@hikmahealth.org');
+  const [password, setPassword] = useState('HikmaHealth');
   const [instanceList, setInstanceList] = useState([]);
   const [selectedInstance, setSelectedInstance] = useState({name: 'NV', url: 'https://nv-api.hikmahealth.org'});
   const [showInstanceDropdown, setShowInstanceDropdown] = useState(false);
