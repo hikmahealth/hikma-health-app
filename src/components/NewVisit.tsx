@@ -28,6 +28,7 @@ const NewVisit = (props) => {
     database.getLatestPatientEventByType(patientId, EventTypes.Camp).then((response: string) => {
       if (response.length > 0) {
         setCamp(response)
+        handleSaveCamp(response)
       }
     })
     database.getLatestPatientEventByType(patientId, EventTypes.VisitType).then((response: string) => {
@@ -59,13 +60,13 @@ const NewVisit = (props) => {
     props.navigation.navigate('OpenTextEvent', { patientId: patient.id, visitId: visitId, eventType: eventType, language: language })
   }
 
-  const handleSaveCamp = () => {
+  const handleSaveCamp = (campName: string) => {
     database.addEvent({
       id: uuid(),
       patient_id: patient.id,
       visit_id: visitId,
       event_type: EventTypes.Camp,
-      event_metadata: camp
+      event_metadata: campName
     }).then(() => console.log('camp saved'))
   }
 
@@ -97,7 +98,7 @@ const NewVisit = (props) => {
               setCampTextColor('#000000')
               setCamp(text)
             }}
-            onEndEditing={handleSaveCamp}
+            onEndEditing={() => handleSaveCamp(camp)}
             value={camp}
           />
           {/* <TextInput
