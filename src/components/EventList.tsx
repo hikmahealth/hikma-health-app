@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, TouchableOpacity, Picker } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Picker, Image } from "react-native";
 import { database } from "../storage/Database";
 import styles from './Style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -118,7 +118,7 @@ const EventList = (props) => {
         {LanguageToggle()}
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-        <Text style={styles.text}>{LocalizedStrings[language].visitEvents}</Text>
+        <Text style={styles.text}>{visit.check_in_timestamp.split('T')[0]}</Text>
       </View>
       <View style={styles.listContainer}>
 
@@ -130,6 +130,21 @@ const EventList = (props) => {
           />
         </View>
 
+      </View>
+      <View style={{ position: 'absolute', bottom: 20, right: 20 }}>
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.navigate('NewVisit',
+              {
+                language: language,
+                patient: patient,
+                visitId: visit.id,
+                existingVisit: true
+              }
+            )
+          }}>
+          <Image source={require('../images/newVisit.png')} style={{ width: 75, height: 75 }} />
+        </TouchableOpacity>
       </View>
     </LinearGradient>
   )

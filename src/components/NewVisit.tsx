@@ -21,6 +21,8 @@ const NewVisit = (props) => {
   const patient = props.navigation.getParam('patient');
   const visitId = props.navigation.getParam('visitId');
   const userName = props.navigation.getParam('userName');
+  const existingVisit = props.navigation.getParam('existingVisit');
+
   const today = new Date();
 
   useEffect(() => {
@@ -83,7 +85,10 @@ const NewVisit = (props) => {
   return (
     <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
       <View style={styles.searchBar}>
-        <TouchableOpacity onPress={() => props.navigation.navigate('PatientView', { language: language, patient: patient })}>
+        <TouchableOpacity onPress={() => existingVisit ?
+          props.navigation.navigate('EventList', { language, patient }) :
+          props.navigation.navigate('PatientView', { language, patient })
+        }>
           <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
         </TouchableOpacity>
         {LanguageToggle()}
@@ -107,44 +112,48 @@ const NewVisit = (props) => {
             onChangeText={setSeenBy}
             value={seenBy}
           /> */}
-          <Text style={styles.inputs}>
-            {userName}
-          </Text>
+          {!!userName ?
+            <Text style={styles.inputs}>
+              {userName}
+            </Text> : null}
         </View>
-        <View style={styles.inputRow}>
-          <DatePicker
-            style={styles.datePicker}
-            date={visitDate}
-            mode="date"
-            placeholder={LocalizedStrings[language].selectDob}
-            format="YYYY-MM-DD"
-            minDate="1900-05-01"
-            maxDate={today.toISOString().split('T')[0]}
-            confirmBtnText={LocalizedStrings[language].confirm}
-            cancelBtnText={LocalizedStrings[language].cancel}
-            customStyles={{
-              dateInput: {
-                alignItems: 'flex-start',
-                borderWidth: 0
-              }
-            }}
-            androidMode='spinner'
-            onDateChange={(date) => {
-              setVisitDate(date)
-              database.editVisitDate(visitId, moment(date).toISOString())
-            }}
-          />
-          <TextInput
-            style={[styles.inputs, { color: typeTextColor }]}
-            placeholder={LocalizedStrings[language].visitType}
-            onChangeText={(text) => {
-              setTypeTextColor('#000000')
-              setVisitType(text)
-            }}
-            onEndEditing={handleSaveVisitType}
-            value={visitType}
-          />
-        </View>
+        {existingVisit ?
+          null :
+          <View style={styles.inputRow}>
+            <DatePicker
+              style={styles.datePicker}
+              date={visitDate}
+              mode="date"
+              placeholder={LocalizedStrings[language].selectDob}
+              format="YYYY-MM-DD"
+              minDate="1900-05-01"
+              maxDate={today.toISOString().split('T')[0]}
+              confirmBtnText={LocalizedStrings[language].confirm}
+              cancelBtnText={LocalizedStrings[language].cancel}
+              customStyles={{
+                dateInput: {
+                  alignItems: 'flex-start',
+                  borderWidth: 0
+                }
+              }}
+              androidMode='spinner'
+              onDateChange={(date) => {
+                setVisitDate(date)
+                database.editVisitDate(visitId, moment(date).toISOString())
+              }}
+            />
+            <TextInput
+              style={[styles.inputs, { color: typeTextColor }]}
+              placeholder={LocalizedStrings[language].visitType}
+              onChangeText={(text) => {
+                setTypeTextColor('#000000')
+                setVisitType(text)
+              }}
+              onEndEditing={handleSaveVisitType}
+              value={visitType}
+            />
+          </View>
+        }
       </View>
 
       <View style={styles.gridContainer}>
