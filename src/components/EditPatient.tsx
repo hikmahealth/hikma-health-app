@@ -3,6 +3,7 @@ import {
   View, Text, Image, TextInput, TouchableOpacity, Platform, Picker, TouchableWithoutFeedback
 } from 'react-native';
 import { ImageSync } from '../storage/ImageSync'
+import { uuid } from 'uuidv4';
 import { database } from "../storage/Database";
 import styles from './Style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -10,6 +11,7 @@ import DatePicker from 'react-native-datepicker'
 import { RNCamera } from 'react-native-camera';
 import { useCamera } from 'react-native-camera-hooks';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
+import { EventTypes } from '../enums/EventTypes';
 
 const EditPatient = (props) => {
   const imageSync = new ImageSync();
@@ -29,8 +31,19 @@ const EditPatient = (props) => {
   const [hometownText, setHometownText] = useState(!!props.navigation.state.params.patient.hometown ? props.navigation.state.params.patient.hometown.content[language] : '');
   const [phone, setPhone] = useState(props.navigation.state.params.patient.phone || '');
   const [imageTimestamp, setImageTimestamp] = useState(props.navigation.state.params.patient.image_timestamp || '');
+  const [camp, setCamp] = useState('');  
   const [cameraOpen, setCameraOpen] = useState(false);
   const today = new Date();
+
+  const handleSaveCamp = (campName: string) => {
+    database.addEvent({
+      id: uuid(),
+      patient_id: patient.id,
+      visit_id: null,
+      event_type: EventTypes.Camp,
+      event_metadata: campName
+    }).then(() => console.log('camp saved'))
+  }
 
   const editPatient = async () => {
     let givenNameId = !!patient.given_name ? patient.given_name.id : null
@@ -100,6 +113,14 @@ const EditPatient = (props) => {
     setCountryText(!!patient.country ? patient.country.content[language] : '');
     setHometownText(!!patient.hometown ? patient.hometown.content[language] : '');
   }, [language])
+
+  useEffect(() => {
+    database.getLatestPatientEventByType(patient.id, EventTypes.Camp).then((response: string) => {
+      if (response.length > 0) {
+        setCamp(response)
+      }
+    })
+  }, [])
 
   const capture = async () => {
     try {
@@ -248,7 +269,15 @@ const EditPatient = (props) => {
           />
         </View>
         <View style={styles.inputRow}>
-
+        <TextInput
+            style={[styles.inputs]}
+            placeholder={LocalizedStrings[language].camp}
+            onChangeText={(text) => {
+              setCamp(text)
+            }}
+            onEndEditing={() => handleSaveCamp(camp)}
+            value={camp}
+          />
           <TextInput
             style={styles.inputs}
             placeholder={LocalizedStrings[language].phone}

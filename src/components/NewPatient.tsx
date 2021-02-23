@@ -11,6 +11,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import { RNCamera } from 'react-native-camera';
 import { useCamera } from 'react-native-camera-hooks';
+import { EventTypes } from '../enums/EventTypes';
 
 const NewPatient = (props) => {
   const imageSync = new ImageSync();
@@ -23,6 +24,8 @@ const NewPatient = (props) => {
   const [phone, setPhone] = useState('');
   const [imageTimestamp, setImageTimestamp] = useState('');
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
+  const [camp, setCamp] = useState('');
+
   const [
     { cameraRef, type, ratio, autoFocusPoint },
     { takePicture, toggleFacing, touchToFocus, facesDetected, }
@@ -31,6 +34,16 @@ const NewPatient = (props) => {
   const [cameraOpen, setCameraOpen] = useState(false);
   const today = new Date();
   const [patientId] = useState(uuid().replace(/-/g, ''));
+
+  const handleSaveCamp = (campName: string) => {
+    database.addEvent({
+      id: uuid(),
+      patient_id: patientId,
+      visit_id: null,
+      event_type: EventTypes.Camp,
+      event_metadata: campName
+    }).then(() => console.log('camp saved'))
+  }
 
   const addPatient = async () => {
     const givenNameId = await database.saveStringContent([{ language: language, content: givenName }])
@@ -187,6 +200,15 @@ const NewPatient = (props) => {
           />
         </View>
         <View style={styles.inputRow}>
+          <TextInput
+            style={[styles.inputs]}
+            placeholder={LocalizedStrings[language].camp}
+            onChangeText={(text) => {
+              setCamp(text)
+            }}
+            onEndEditing={() => handleSaveCamp(camp)}
+            value={camp}
+          />
           <TextInput
             style={styles.inputs}
             placeholder={LocalizedStrings[language].phone}

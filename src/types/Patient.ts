@@ -10,6 +10,7 @@ export interface Patient {
   sex: string
   phone: string
   image_timestamp: string
+  camp: string
 }
 
 export interface NewPatient {

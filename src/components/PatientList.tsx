@@ -152,6 +152,7 @@ const PatientList = (props) => {
           />
           <Text style={{ flexWrap: 'wrap' }}>{`${LocalizedStrings[language].dob}:  ${item.date_of_birth}`}</Text>
           <Text>{`${LocalizedStrings[language].sex}:  ${item.sex}`}</Text>
+          <Text>{`${LocalizedStrings[language].camp}:  ${item.camp}`}</Text>
         </View>
       </View>
     </TouchableOpacity>

@@ -314,12 +314,14 @@ class DatabaseImpl implements Database {
 
           const row = results.rows.item(i);
           const { id, given_name, surname, date_of_birth, country, hometown, sex, phone, image_timestamp } = row;
+
+          const camp = await this.getLatestPatientEventByType(id, EventTypes.Camp)
           const givenNameContent = await this.languageStringDataById(given_name)
           const surnameContent = await this.languageStringDataById(surname)
           const countryContent = await this.languageStringDataById(country)
           const hometownContent = await this.languageStringDataById(hometown)
           console.log(`[db] Patient name: ${given_name}, id: ${id}`);
-          patients.push({ id, given_name: givenNameContent, surname: surnameContent, date_of_birth, country: countryContent, hometown: hometownContent, sex, phone, image_timestamp });
+          patients.push({ id, given_name: givenNameContent, surname: surnameContent, date_of_birth, country: countryContent, hometown: hometownContent, sex, phone, image_timestamp, camp });
         }
         return patients;
       });
@@ -416,12 +418,14 @@ class DatabaseImpl implements Database {
 
           const row = results.rows.item(i);
           const { id, given_name, surname, date_of_birth, country, hometown, sex, phone, image_timestamp } = row;
+          const camp = await this.getLatestPatientEventByType(id, EventTypes.Camp)
+
           const givenNameContent = await this.languageStringDataById(given_name)
           const surnameContent = await this.languageStringDataById(surname)
           const countryContent = await this.languageStringDataById(country)
           const hometownContent = await this.languageStringDataById(hometown)
           console.log(`[db] Patient name: ${given_name}, id: ${id}`);
-          patients.push({ id, given_name: givenNameContent, surname: surnameContent, date_of_birth, country: countryContent, hometown: hometownContent, sex, phone, image_timestamp });
+          patients.push({ id, given_name: givenNameContent, surname: surnameContent, date_of_birth, country: countryContent, hometown: hometownContent, sex, phone, image_timestamp, camp });
         }
         return patients;
       });
@@ -494,12 +498,14 @@ class DatabaseImpl implements Database {
         }
         const row = results.rows.item(0);
         const { id, given_name, surname, date_of_birth, country, hometown, sex, image_timestamp, phone } = row;
+        const camp = await this.getLatestPatientEventByType(id, EventTypes.Camp)
+
         const givenNameContent = await this.languageStringDataById(given_name)
         const surnameContent = await this.languageStringDataById(surname)
         const countryContent = await this.languageStringDataById(country)
         const hometownContent = await this.languageStringDataById(hometown)
 
-        const editedPatient: Patient = { id, given_name: givenNameContent, surname: surnameContent, date_of_birth, country: countryContent, hometown: hometownContent, sex, phone, image_timestamp };
+        const editedPatient: Patient = { id, given_name: givenNameContent, surname: surnameContent, date_of_birth, country: countryContent, hometown: hometownContent, sex, phone, image_timestamp, camp };
         console.log(
           `[db] Edited patient with id: "${id}"!`
         );
@@ -554,7 +560,7 @@ class DatabaseImpl implements Database {
   public getEvents(visit_id: string): Promise<Event[]> {
     return this.getDatabase()
       .then(db =>
-        db.executeSql("SELECT id, patient_id, event_type, event_metadata FROM events WHERE visit_id = ? GROUP BY event_type ORDER BY event_timestamp DESC;", [visit_id])
+        db.executeSql("SELECT id, patient_id, event_type, event_metadata FROM events WHERE visit_id = ? ORDER BY event_timestamp DESC;", [visit_id])
       )
       .then(([results]) => {
         if (results === undefined) {

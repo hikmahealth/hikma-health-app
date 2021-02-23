@@ -116,9 +116,10 @@ const PatientView = (props) => {
 
           <View style={{ marginLeft: 20 }}>
             <Text style={styles.gridItemText}>{displayName(patient)}</Text>
+          <Text>{`${LocalizedStrings[language].camp}:  ${patient.camp}`}</Text>
           </View>
         </View>
-        <View style={[styles.card, { height: 100, justifyContent: 'center', marginTop: 0, elevation: 0 }]}>
+        <View style={[styles.card, { flex: 1, justifyContent: 'center', marginTop: 0, elevation: 0 }]}>
           <View style={{ marginTop: 10, marginHorizontal: 20, display: "flex", flexDirection: "row" }}>
             <View style={{ flex: 1, display: 'flex', justifyContent: 'center' }}><Text style={[styles.gridItemText, { marginRight: 'auto' }]}>{patient.date_of_birth}</Text></View>
             <View style={{ flex: 1, display: 'flex', justifyContent: 'center' }}><Text style={styles.gridItemText}>{getPatientAge(patient.date_of_birth)}</Text></View>
@@ -139,10 +140,9 @@ const PatientView = (props) => {
           </View>
 
         </View>
-        {isEditingSummary ? null : <View style={{margin: 15}}></View> }
-        <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: 'center', flex: 1 }}>
           <TouchableOpacity
-            style={[styles.profileButton, { height: 40 }]}
+            style={[styles.profileButton, {flex: 1}]}
             onPress={() => props.navigation.navigate('PrescriptionList', { language: language, patient: patient })}>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20 }}>
               <Text style={{ fontSize: 15 }}>{LocalizedStrings[language].prescriptions}</Text>
@@ -150,7 +150,7 @@ const PatientView = (props) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.profileButton, { height: 40 }]}
+            style={[styles.profileButton, {flex: 1}]}
             onPress={() => props.navigation.navigate('VisitList', { language: language, patient: patient })}>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20 }}>
               <Text style={{ fontSize: 15 }}>{LocalizedStrings[language].visitHistory}</Text>
