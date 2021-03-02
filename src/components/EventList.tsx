@@ -6,6 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings'
 import { EventTypes } from "../enums/EventTypes";
 import { Event } from "../types/Event";
+import { Covid19Display } from "./Covid19Form";
 
 const EventList = (props) => {
   const visit = props.navigation.getParam('visit');
@@ -76,7 +77,7 @@ const EventList = (props) => {
 
     switch (type) {
       case EventTypes.Covid19Screening:
-        return (<Text>Test/Isolate Patient: {metadataObj.testAndIsolate.toString()}</Text>)
+        return Covid19Display(metadataObj, language)
       case EventTypes.Vitals:
         return (
           <View style={{

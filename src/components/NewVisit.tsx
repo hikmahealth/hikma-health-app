@@ -18,7 +18,6 @@ const NewVisit = (props) => {
   const [typeTextColor, setTypeTextColor] = useState('#A9A9A9')
   const patient = props.navigation.getParam('patient');
   const visitId = props.navigation.getParam('visitId');
-  const userName = props.navigation.getParam('userName');
   const existingVisit = props.navigation.getParam('existingVisit');
 
   const today = new Date();
@@ -76,16 +75,9 @@ const NewVisit = (props) => {
         {LanguageToggle()}
       </View>
 
-      <View style={styles.inputsContainer}>
-        <View style={styles.inputRow}>
-          {!!userName ?
-            <Text style={styles.inputs}>
-              {userName}
-            </Text> : null}
-            <View style={{width: '50%'}}></View>
-        </View>
-        {existingVisit ?
-          null :
+      {existingVisit ?
+        null :
+        <View style={styles.inputsContainer}>
           <View style={styles.inputRow}>
             <DatePicker
               style={styles.datePicker}
@@ -120,8 +112,8 @@ const NewVisit = (props) => {
               value={visitType}
             />
           </View>
-        }
-      </View>
+        </View>
+      }
 
       <View style={styles.gridContainer}>
         <TouchableOpacity style={styles.actionButton} onPress={() => openTextEvent(EventTypes.MedicalHistory)}>

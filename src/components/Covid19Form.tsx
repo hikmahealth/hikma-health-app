@@ -9,63 +9,112 @@ import { database } from "../storage/Database";
 import { uuid } from "uuidv4";
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import DatePicker from 'react-native-datepicker';
-import Slider from '@react-native-community/slider';
+
+const formatResult = (metadataObj, language) => {
+  if (metadataObj.seekCare) {
+    return LocalizedStrings[language].seekCare
+  }
+  if (metadataObj.testAndIsolate) {
+    return LocalizedStrings[language].testIsolate
+  }
+  return LocalizedStrings[language].noAction
+
+}
+
+const formatTravel = (metadataObj, language) => {
+  if (!!metadataObj.travelDeparture && !!metadataObj.travelReturn) {
+    return (metadataObj.travelDeparture + ' ' + LocalizedStrings[language].to + ' ' + metadataObj.travelReturn)
+  }
+  return LocalizedStrings[language].yes
+}
+
+export const Covid19Display = (metadataObj, language) => {
+  return (
+    <View>
+      <Text style={{fontWeight: 'bold'}}>{formatResult(metadataObj, language)}</Text>
+      {!!metadataObj.fever ? <Text>{LocalizedStrings[language].fever}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.dryCough ? <Text>{LocalizedStrings[language].dryCough}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.diffBreathing ? <Text>{LocalizedStrings[language].diffBreathing}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.soreThroat ? <Text>{LocalizedStrings[language].soreThroat}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.nausea ? <Text>{LocalizedStrings[language].nausea}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.symptomsDate ? <Text>{LocalizedStrings[language].symptomsDate}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.chestPain ? <Text>{LocalizedStrings[language].chestPain}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.confusion ? <Text>{LocalizedStrings[language].confusion}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.bluish ? <Text>{LocalizedStrings[language].bluish}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.fatigue ? <Text>{LocalizedStrings[language].fatigue}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.aches ? <Text>{LocalizedStrings[language].aches}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.headache ? <Text>{LocalizedStrings[language].headache}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.changeTasteSmell ? <Text>{LocalizedStrings[language].changeTasteSmell}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.diabetes ? <Text>{LocalizedStrings[language].diabetes}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.cardioDisease ? <Text>{LocalizedStrings[language].cardioDisease}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.pulmonaryDisease ? <Text>{LocalizedStrings[language].pulmonaryDisease}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.renalDisease ? <Text>{LocalizedStrings[language].renalDisease}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.malignancy ? <Text>{LocalizedStrings[language].malignancy}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.pregnant ? <Text>{LocalizedStrings[language].pregnant}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.immunocompromised ? <Text>{LocalizedStrings[language].immunocompromised}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.exposureKnown ? <Text>{LocalizedStrings[language].exposureKnown}: {LocalizedStrings[language].yes}</Text> : null}
+      {!!metadataObj.travel ? <Text>{LocalizedStrings[language].travel}: {formatTravel(metadataObj, language)}</Text> : null}
+    </View>
+  )
+}
 
 const Covid19Form = (props) => {
-  const [fever, setFever] = useState(false);
-  const [feverDate, setFeverDate] = useState('');
+  const [fever, setFever] = useState(null);
   //lower resp
-  const [dryCough, setDryCough] = useState(false);
-  const [coughDate, setCoughDate] = useState('');
-  const [coughSeverity, setCoughSeverity] = useState(1);
-  const [diffBreathing, setDiffBreathing] = useState(false);
-  const [diffBreathingDate, setDiffBreathingDate] = useState('');
-  const [diffBreathingSeverity, setDiffBreathingSeverity] = useState(1);
-  const [soreThroat, setSoreThroat] = useState(false);
-  const [soreThroatDate, setSoreThroatDate] = useState('');
-  const [soreThroatSeverity, setSoreThroatSeverity] = useState(1);
+  const [dryCough, setDryCough] = useState(null);
+  const [diffBreathing, setDiffBreathing] = useState(null);
+  const [soreThroat, setSoreThroat] = useState(null);
+  const [nausea, setNausea] = useState(null);
+  const [symptomsDate, setSymptomsDate] = useState('');
   //sudden warning
-  const [chestPain, setChestPain] = useState(false);
-  const [confusion, setConfusion] = useState(false);
-  const [bluish, setBluish] = useState(false);
+  const [chestPain, setChestPain] = useState(null);
+  const [confusion, setConfusion] = useState(null);
+  const [bluish, setBluish] = useState(null);
   //other symptoms
-  const [fatigue, setFatigue] = useState(false);
-  const [fatigueDate, setFatigueDate] = useState('');
-  const [aches, setAches] = useState(false);
-  const [achesDate, setAchesDate] = useState('');
-  const [headache, setHeadache] = useState(false);
-  const [headacheDate, setHeadacheDate] = useState('');
+  const [fatigue, setFatigue] = useState(null);
+  const [aches, setAches] = useState(null);
+  const [headache, setHeadache] = useState(null);
+  const [changeTasteSmell, setChangeTasteSmell] = useState(null);
   //underlying
-  const [diabetes, setDiabetes] = useState(false);
-  const [cardioDisease, setCardioDisease] = useState(false);
-  const [pulmonaryDisease, setPulmonaryDisease] = useState(false);
-  const [renalDisease, setRenalDisease] = useState(false);
-  const [malignancy, setMalignancy] = useState(false);
-  const [pregnant, setPregnant] = useState(false);
-  const [immunocompromised, setImmunocompromised] = useState(false);
+  const [diabetes, setDiabetes] = useState(null);
+  const [cardioDisease, setCardioDisease] = useState(null);
+  const [pulmonaryDisease, setPulmonaryDisease] = useState(null);
+  const [renalDisease, setRenalDisease] = useState(null);
+  const [malignancy, setMalignancy] = useState(null);
+  const [pregnant, setPregnant] = useState(null);
+  const [immunocompromised, setImmunocompromised] = useState(null);
   //exposure
-  const [exposureKnown, setExposureKnown] = useState(false);
-  const [exposureSuspected, setExposureSuspected] = useState(false);
-  const [travelIran, setTravelIran] = useState(false);
-  const [travelIranDeparture, setTravelIranDeparture] = useState('');
-  const [travelIranReturn, setTravelIranReturn] = useState('');
-  const [travel, setTravel] = useState(false);
+  const [exposureKnown, setExposureKnown] = useState(null);
+  const [travel, setTravel] = useState(null);
   const [travelDeparture, setTravelDeparture] = useState('');
   const [travelReturn, setTravelReturn] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState(null);
+
+  const [isCollapsed, setIsCollapsed] = useState(true)
 
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
   const patient = props.navigation.getParam('patient');
   const visitId = props.navigation.getParam('visitId');
 
   const result = () => {
-    let testIsolate = false;
-    if ((getPatientAge(patient.date_of_birth) > 18 && (chestPain || confusion || bluish))
-      || ((dryCough || diffBreathing || soreThroat) && fever)
-      || exposureKnown || exposureSuspected || travel || travelIran || getPatientAge(patient.date_of_birth) > 55 || diabetes || cardioDisease || pulmonaryDisease || renalDisease || malignancy || pregnant || immunocompromised) {
-      testIsolate = true
+    if (emergencyResult()) {
+      return LocalizedStrings[language].seekCare
     }
-    return testIsolate;
+
+    if (testAndIsolate()) {
+      return LocalizedStrings[language].testIsolate
+    }
+    return LocalizedStrings[language].noAction;
+  }
+
+  const emergencyResult = () => {
+    return chestPain || confusion || bluish
+  }
+
+  const testAndIsolate = () => {
+    return (fever || dryCough || diffBreathing || soreThroat || exposureKnown || travel
+      || diabetes || cardioDisease || pulmonaryDisease || renalDisease || malignancy || pregnant || immunocompromised)
+
   }
 
   const getPatientAge = (dob: string) => {
@@ -126,26 +175,10 @@ const Covid19Form = (props) => {
     )
   }
 
-  const slider = (props) => {
-    return (
-      <View style={{ flexDirection: 'row' }}>
-        <Text style={styles.text}>{LocalizedStrings[language].severity} : {props.severity}</Text>
-        <Slider
-          style={{ width: 200, height: 40 }}
-          step={1}
-          value={props.severity}
-          minimumValue={1}
-          maximumValue={3}
-          onValueChange={(value) => props.action(value)}
-        />
-      </View>
-    )
-  }
-
   const radioButtons = (props) => {
     return (
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-        <Text style={{ color: '#FFFFFF' }}>{props.prompt}</Text>
+      <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+        <Text style={{ color: '#FFFFFF', flex: 1, flexDirection: 'column', flexWrap: 'wrap' }}>{props.prompt}</Text>
         <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity onPress={() => props.action(!props.field)}>
             <View style={styles.outerRadioButton}>
@@ -153,11 +186,12 @@ const Covid19Form = (props) => {
             </View>
           </TouchableOpacity>
           <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].yes}</Text>
-        </View>
-        <View style={{ flexDirection: 'row' }}>
-          <TouchableOpacity onPress={() => props.action(!props.field)}>
+
+          <TouchableOpacity onPress={() => {
+            props.field === null ? props.action(false) : props.action(!props.field)
+          }}>
             <View style={styles.outerRadioButton}>
-              {!props.field ? <View style={styles.selectedRadioButton} /> : null}
+              {(!props.field && props.field !== null) ? <View style={styles.selectedRadioButton} /> : null}
             </View>
           </TouchableOpacity>
           <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].no}</Text>
@@ -175,23 +209,16 @@ const Covid19Form = (props) => {
       event_metadata: JSON.stringify({
         fever,
         dryCough,
-        coughDate,
-        coughSeverity,
         diffBreathing,
-        diffBreathingDate,
-        diffBreathingSeverity,
         soreThroat,
-        soreThroatDate,
-        soreThroatSeverity,
+        nausea,
+        symptomsDate,
         chestPain,
         confusion,
         bluish,
         fatigue,
-        fatigueDate,
         aches,
-        achesDate,
         headache,
-        headacheDate,
         age: getPatientAge(patient.date_of_birth),
         diabetes,
         cardioDisease,
@@ -201,14 +228,11 @@ const Covid19Form = (props) => {
         pregnant,
         immunocompromised,
         exposureKnown,
-        exposureSuspected,
-        travelIran,
-        travelIranDeparture,
-        travelIranReturn,
         travel,
         travelDeparture,
         travelReturn,
-        testAndIsolate: result()
+        seekCare: emergencyResult(),
+        testAndIsolate: testAndIsolate()
       })
     }).then(() => {
       console.log('Screening event saved')
@@ -228,25 +252,6 @@ const Covid19Form = (props) => {
 
         <View style={[styles.inputsContainer, { alignItems: 'flex-start' }]}>
           <View style={styles.responseRow}>
-            {radioButtons({ field: fever, action: setFever, prompt: LocalizedStrings[language].fever })}
-            <View style={{ paddingLeft: 20 }}>{fever ? datePicker({ placeholder: LocalizedStrings[language].onsetDate, date: feverDate, action: setFeverDate }) : null}</View>
-          </View>
-          <View style={styles.responseRow}>
-            {radioButtons({ field: dryCough, action: setDryCough, prompt: LocalizedStrings[language].dryCough })}
-            <View style={{ paddingLeft: 10 }}>{dryCough ? datePicker({ placeholder: LocalizedStrings[language].onsetDate, date: coughDate, action: setCoughDate }) : null}</View>
-            <View style={{ paddingLeft: 20 }}>{dryCough ? slider({ severity: coughSeverity, action: setCoughSeverity }) : null}</View>
-          </View>
-          <View style={styles.responseRow}>
-            {radioButtons({ field: diffBreathing, action: setDiffBreathing, prompt: LocalizedStrings[language].diffBreathing })}
-            <View style={{ paddingLeft: 20 }}>{diffBreathing ? datePicker({ placeholder: LocalizedStrings[language].onsetDate, date: diffBreathingDate, action: setDiffBreathingDate }) : null}</View>
-            <View style={{ paddingLeft: 20 }}>{diffBreathing ? slider({ severity: diffBreathingSeverity, action: setDiffBreathingSeverity }) : null}</View>
-          </View>
-          <View style={styles.responseRow}>
-            {radioButtons({ field: soreThroat, action: setSoreThroat, prompt: LocalizedStrings[language].soreThroat })}
-            <View style={{ paddingLeft: 20 }}>{soreThroat ? datePicker({ placeholder: LocalizedStrings[language].onsetDate, date: soreThroatDate, action: setSoreThroatDate }) : null}</View>
-            <View style={{ paddingLeft: 20 }}>{soreThroat ? slider({ severity: soreThroatSeverity, action: setSoreThroatSeverity }) : null}</View>
-          </View>
-          <View style={styles.responseRow}>
             {radioButtons({ field: chestPain, action: setChestPain, prompt: LocalizedStrings[language].chestPain })}
           </View>
           <View style={styles.responseRow}>
@@ -256,56 +261,78 @@ const Covid19Form = (props) => {
             {radioButtons({ field: bluish, action: setBluish, prompt: LocalizedStrings[language].bluish })}
           </View>
           <View style={styles.responseRow}>
+            {radioButtons({ field: fever, action: setFever, prompt: LocalizedStrings[language].fever })}
+          </View>
+          <View style={styles.responseRow}>
+            {radioButtons({ field: dryCough, action: setDryCough, prompt: LocalizedStrings[language].dryCough })}
+          </View>
+          <View style={styles.responseRow}>
+            {radioButtons({ field: diffBreathing, action: setDiffBreathing, prompt: LocalizedStrings[language].diffBreathing })}
+          </View>
+          <View style={styles.responseRow}>
+            {radioButtons({ field: soreThroat, action: setSoreThroat, prompt: LocalizedStrings[language].soreThroat })}
+          </View>
+          <View style={styles.responseRow}>
+            {radioButtons({ field: nausea, action: setNausea, prompt: LocalizedStrings[language].nausea })}
+          </View>
+          <View style={styles.responseRow}>
             {radioButtons({ field: fatigue, action: setFatigue, prompt: LocalizedStrings[language].fatigue })}
-            <View style={{ paddingLeft: 10 }}>{fatigue ? datePicker({ placeholder: LocalizedStrings[language].onsetDate, date: fatigueDate, action: setFatigueDate }) : null}</View>
           </View>
           <View style={styles.responseRow}>
             {radioButtons({ field: aches, action: setAches, prompt: LocalizedStrings[language].aches })}
-            <View style={{ paddingLeft: 10 }}>{aches ? datePicker({ placeholder: LocalizedStrings[language].onsetDate, date: achesDate, action: setAchesDate }) : null}</View>
           </View>
           <View style={styles.responseRow}>
             {radioButtons({ field: headache, action: setHeadache, prompt: LocalizedStrings[language].headache })}
-            <View style={{ paddingLeft: 10 }}>{headache ? datePicker({ placeholder: LocalizedStrings[language].onsetDate, date: headacheDate, action: setHeadacheDate }) : null}</View>
           </View>
           <View style={styles.responseRow}>
-            {radioButtons({ field: diabetes, action: setDiabetes, prompt: LocalizedStrings[language].diabetes })}
+            {radioButtons({ field: changeTasteSmell, action: setChangeTasteSmell, prompt: LocalizedStrings[language].changeTasteSmell })}
           </View>
-          <View style={styles.responseRow}>
-            {radioButtons({ field: cardioDisease, action: setCardioDisease, prompt: LocalizedStrings[language].cardioDisease })}
-          </View>
-          <View style={styles.responseRow}>
-            {radioButtons({ field: pulmonaryDisease, action: setPulmonaryDisease, prompt: LocalizedStrings[language].pulmonaryDisease })}
-          </View>
-          <View style={styles.responseRow}>
-            {radioButtons({ field: renalDisease, action: setRenalDisease, prompt: LocalizedStrings[language].renalDisease })}
-          </View>
-          <View style={styles.responseRow}>
-            {radioButtons({ field: malignancy, action: setMalignancy, prompt: LocalizedStrings[language].malignancy })}
-          </View>
-          <View style={styles.responseRow}>
-            {radioButtons({ field: pregnant, action: setPregnant, prompt: LocalizedStrings[language].pregnant })}
-          </View>
-          <View style={styles.responseRow}>
-            {radioButtons({ field: immunocompromised, action: setImmunocompromised, prompt: LocalizedStrings[language].immunocompromised })}
-          </View>
-          <View style={[styles.responseRow, { maxWidth: '90%' }]}>
-            {radioButtons({ field: exposureKnown, action: setExposureKnown, prompt: LocalizedStrings[language].exposureKnown })}
-          </View>
-          <View style={styles.responseRow}>
-            {radioButtons({ field: exposureSuspected, action: setExposureSuspected, prompt: LocalizedStrings[language].exposureSuspected })}
-          </View>
-          <View style={styles.responseRow}>
-            {radioButtons({ field: travelIran, action: setTravelIran, prompt: LocalizedStrings[language].travelIran })}
-            <View style={{ paddingLeft: 20 }}>{travelIran ? datePicker({ placeholder: LocalizedStrings[language].departure, date: travelIranDeparture, action: setTravelIranDeparture }) : null}</View>
-            {travelIran ? <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].to}</Text> : null}
-            <View style={{ paddingLeft: 20 }}>{travelIran ? datePicker({ placeholder: LocalizedStrings[language].return, date: travelIranReturn, action: setTravelIranReturn }) : null}</View>
-          </View>
-          <View style={styles.responseRow}>
-            {radioButtons({ field: travel, action: setTravel, prompt: LocalizedStrings[language].travel })}
-            <View style={{ paddingLeft: 20 }}>{travel ? datePicker({ placeholder: LocalizedStrings[language].departure, date: travelDeparture, action: setTravelDeparture }) : null}</View>
-            {travel ? <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].to}</Text> : null}
-            <View style={{ paddingLeft: 20 }}>{travel ? datePicker({ placeholder: LocalizedStrings[language].return, date: travelReturn, action: setTravelReturn }) : null}</View>
-          </View>
+          <View style={styles.responseRow}>{datePicker({ placeholder: LocalizedStrings[language].symptomsDate, date: symptomsDate, action: setSymptomsDate })}</View>
+
+          <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)}
+            style={styles.responseRow}
+          // style={{ flexDirection: 'row', justifyContent: "flex-end", alignItems: 'center', }}
+          >
+            <Text>{isCollapsed ? LocalizedStrings[language].riskFactors : LocalizedStrings[language].hideRiskFactors}</Text>
+            <Image source={require('../images/menu.png')} style={{ width: 50, height: 50 }} />
+          </TouchableOpacity>
+
+          {isCollapsed ? null :
+            <View style={{ width: '100%' }}>
+              <View style={styles.responseRow}>
+                {radioButtons({ field: diabetes, action: setDiabetes, prompt: LocalizedStrings[language].diabetes })}
+              </View>
+              <View style={styles.responseRow}>
+                {radioButtons({ field: cardioDisease, action: setCardioDisease, prompt: LocalizedStrings[language].cardioDisease })}
+              </View>
+              <View style={styles.responseRow}>
+                {radioButtons({ field: pulmonaryDisease, action: setPulmonaryDisease, prompt: LocalizedStrings[language].pulmonaryDisease })}
+              </View>
+              <View style={styles.responseRow}>
+                {radioButtons({ field: renalDisease, action: setRenalDisease, prompt: LocalizedStrings[language].renalDisease })}
+              </View>
+              <View style={styles.responseRow}>
+                {radioButtons({ field: malignancy, action: setMalignancy, prompt: LocalizedStrings[language].malignancy })}
+              </View>
+              <View style={styles.responseRow}>
+                {radioButtons({ field: pregnant, action: setPregnant, prompt: LocalizedStrings[language].pregnant })}
+              </View>
+              <View style={styles.responseRow}>
+                {radioButtons({ field: immunocompromised, action: setImmunocompromised, prompt: LocalizedStrings[language].immunocompromised })}
+              </View>
+              <View style={[styles.responseRow]}>
+                {radioButtons({ field: exposureKnown, action: setExposureKnown, prompt: LocalizedStrings[language].exposureKnown })}
+              </View>
+              <View style={styles.responseRow}>
+                {radioButtons({ field: travel, action: setTravel, prompt: LocalizedStrings[language].travel })}
+              </View>
+              <View style={styles.responseRow}>
+                <View style={{ paddingLeft: 20 }}>{travel ? datePicker({ placeholder: LocalizedStrings[language].departure, date: travelDeparture, action: setTravelDeparture }) : null}</View>
+                {travel ? <Text style={{ color: '#FFFFFF', paddingLeft: 10 }}>{LocalizedStrings[language].to}</Text> : null}
+                <View style={{ paddingLeft: 20 }}>{travel ? datePicker({ placeholder: LocalizedStrings[language].return, date: travelReturn, action: setTravelReturn }) : null}</View>
+              </View>
+            </View>
+          }
         </View>
         <View style={{ alignItems: 'center' }}>
           <TouchableOpacity onPress={() => handleSaveScreeningEvent()}>
@@ -324,7 +351,7 @@ const Covid19Form = (props) => {
         </View>
 
         <View style={{ alignItems: 'center' }}>
-          {result() ? <Text style={{ color: '#FFFFFF', fontSize: 20 }}>{LocalizedStrings[language].testIsolate}</Text> : <Text style={{ color: '#FFFFFF', fontSize: 20 }}>{LocalizedStrings[language].noAction}</Text>}
+          <Text style={{ color: '#FFFFFF', fontSize: 20 }}>{result()}</Text>
         </View>
       </LinearGradient>
     );
