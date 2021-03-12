@@ -61,11 +61,16 @@ const NewPatient = (props) => {
       phone: phone,
       sex: male ? 'M' : 'F',
       image_timestamp: imageTimestamp
-    }).then(() => props.navigation.navigate('PatientList', {
-      reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle,
-      imagesSynced: null,
-      language: language
-    }))
+    }).then(() => {
+      if (!!camp) {
+        handleSaveCamp(camp)
+      }
+      props.navigation.navigate('PatientList', {
+        reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle,
+        imagesSynced: null,
+        language: language
+      })
+    })
 
   };
 
@@ -206,7 +211,6 @@ const NewPatient = (props) => {
             onChangeText={(text) => {
               setCamp(text)
             }}
-            onEndEditing={() => handleSaveCamp(camp)}
             value={camp}
           />
           <TextInput
