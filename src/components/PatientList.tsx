@@ -18,6 +18,7 @@ const PatientList = (props) => {
   const instanceUrl = props.navigation.state.params.instanceUrl;
   const [userId, setUserId] = useState(props.navigation.state.params.userId);
   const [list, setList] = useState([]);
+  const [patientCount, setPatientCount] = useState(0);
   const [givenName, setGivenName] = useState('');
   const [surname, setSurname] = useState('');
   const [country, setCountry] = useState('');
@@ -62,6 +63,7 @@ const PatientList = (props) => {
       setMinAge(0);
       setMaxAge(0);
     })
+    database.getPatientCount().then(number => setPatientCount(number))
   }
 
   const searchPatients = () => {
@@ -186,6 +188,7 @@ const PatientList = (props) => {
         </View>
 
         <View style={[styles.searchBar, { marginTop: 0, justifyContent: 'space-around' }]}>
+          <Text style={styles.text}>{patientCount} {LocalizedStrings[language].patients}</Text>
           <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
             <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].advancedFilters}</Text>
           </TouchableOpacity>
@@ -196,7 +199,7 @@ const PatientList = (props) => {
         <View style={[styles.searchBar, { marginTop: 0, justifyContent: 'center' }]}>
           {LanguageToggle()}
           <TouchableOpacity onPress={async () => {
-            await databaseSync.performSync(instanceUrl, email, password)
+            await databaseSync.performSync(instanceUrl, email, password, language)
             await imageSync.syncPhotos(instanceUrl, email, password)
             reloadPatients()
           }}

@@ -112,7 +112,7 @@ const VisitList = (props) => {
         {LanguageToggle()}
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-        <Text style={styles.text}>{LocalizedStrings[language].visitHistory}</Text>
+        <Text style={styles.text}>{LocalizedStrings[language].visitHistory}   ({list.length})</Text>
       </View>
       <View style={styles.listContainer}>
         <View style={styles.scroll}>

@@ -18,6 +18,7 @@ export interface Database {
   login(email: string, password: string): Promise<any>;
   usersExist(): Promise<boolean>;
   getClinics(): Promise<Clinic[]>;
+  getPatientCount(): Promise<number>
   getPatients(): Promise<Patient[]>;
   searchPatients(givenName: string, surname: string, country: string, hometown: string, camp: string, phone: string, minYear: number, maxYear: number): Promise<Patient[]>
   getPatient(patient_id: string): Promise<Patient>;
@@ -296,6 +297,20 @@ class DatabaseImpl implements Database {
         }
         return clinics;
       });
+  }
+
+  public getPatientCount(): Promise<number> {
+    return this.getDatabase()
+      .then(db =>
+        db.executeSql("SELECT COUNT(*) as patient_count FROM patients;")
+      )
+      .then(async ([results]) => {
+        if (results === undefined) {
+          return 0;
+        }
+        const row = results.rows.item(0);
+        return row.patient_count
+      })
   }
 
   public getPatients(): Promise<Patient[]> {

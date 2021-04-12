@@ -119,7 +119,7 @@ const EventList = (props) => {
         {LanguageToggle()}
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-        <Text style={styles.text}>{visit.check_in_timestamp.split('T')[0]}</Text>
+        <Text style={styles.text}>{visit.check_in_timestamp.split('T')[0]}   ({list.length})</Text>
       </View>
       <View style={styles.listContainer}>
 

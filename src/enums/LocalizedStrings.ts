@@ -83,7 +83,11 @@ export const LocalizedStrings = {
     hideRiskFactors: "Hide Risk Factors",
     testIsolate: "Test/Isolate Patient",
     seekCare: "Seek Emergency Care and Isolate",
-    noAction: "No Action Necessary"
+    noAction: "No Action Necessary",
+    syncFailure: "Database Sync Failure!",
+    syncFailureConnection: "Check internet connection",
+    syncFailureSystem: "Contact system administrator",
+    syncSuccess: "Database Sync Success",
   },
   "ar": {
     patients: "المرضى",
@@ -169,7 +173,11 @@ export const LocalizedStrings = {
     hideRiskFactors: "إخفاء عوامل الخطر",
     testIsolate: "اختبار وعزل المريض",
     seekCare: "احصل على رعاية الطوارئ واعزل نفسك",
-    noAction: "لا رد فعل"
+    noAction: "لا رد فعل",
+    syncFailure: "فشل مزامنة قاعدة البيانات",
+    syncFailureConnection: "تحقق من اتصال الإنترنت",
+    syncFailureSystem: "اتصل بمسؤول النظام",
+    syncSuccess: "نجاح مزامنة قاعدة البيانات",
   },
   "sp": {
     patients: "Pacientes",
@@ -256,5 +264,9 @@ export const LocalizedStrings = {
     testIsolate: "Hacerle la prueba/Aislar al paciente",
     seekCare: "Busque atención de emergencia y aísle",
     noAction: "No es necesario tomar ninguna acción",
+    syncFailure: "¡Fallo de sincronización!",
+    syncFailureConnection: "Verifica la conexión a internet",
+    syncFailureSystem: "Comuníquese con el administrador del sistema",
+    syncSuccess: "Éxito en la sincronización",
   }
 };

@@ -1,31 +1,41 @@
-import { Platform } from "react-native";
+import { Platform, Alert } from "react-native";
 import RNFS from "react-native-fs";
 import RNFetchBlob, { FetchBlobResponse } from "rn-fetch-blob";
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
 import { DATABASE } from "./Constants";
 import { database } from "./Database";
 import { SyncResponse } from "../types/syncResponse";
+import { LocalizedStrings } from "../enums/LocalizedStrings";
+import NetInfo from "@react-native-community/netinfo"
 
 export class DatabaseSync {
 
-  public async performSync(instanceUrl: string, email: string, password: string): Promise<any> {
+  public async performSync(instanceUrl: string, email: string, password: string, language: string): Promise<any> {
     // const target = this.getCompressionTargetPath()
     const target = Platform.OS === 'ios' ? this.getLocalDBFilePathIOS() : this.getLocalDBFilePathAndroid()
 
     // this.compressDB(this.getCompressionSourcePath(), target)
 
-    try {
-      const response = await this.syncDB(instanceUrl, email, password, target)
+    let state = await NetInfo.fetch()
+    if (state.isConnected) {
+      const response = await this.syncDB(instanceUrl, email, password, target, language)
       const responseData = JSON.parse(response.data);
       responseData.to_execute.forEach(async (element: SyncResponse) => {
         await database.applyScript(element)
       });
       return
+    } else {
+      Alert.alert(
+        LocalizedStrings[language].syncFailure,
+        LocalizedStrings[language].syncFailureConnection,
+        [
+          {
+            text: 'OK',
+          }
+        ]
+      )
     }
-    catch (error) {
-      console.error("Database sync error!", error);
-      return
-    };
+    return
   }
 
   private compressDB(
@@ -47,6 +57,7 @@ export class DatabaseSync {
     email: string,
     password: string,
     localFilePath: string,
+    language: string
   ): Promise<FetchBlobResponse> {
     database.close();
     console.log(
@@ -78,14 +89,27 @@ export class DatabaseSync {
         fetchBlobResponse.respInfo.status === 200
       ) {
         console.log("Sync SUCCESS!");
-        // const responseData = JSON.parse(fetchBlobResponse.data);
+        Alert.alert(
+          LocalizedStrings[language].syncSuccess,
+          null,
+          [
+            {
+              text: 'OK',
+            }
+          ],
+        )
         return fetchBlobResponse;
         // return responseData;
       } else {
-        throw new Error(
-          "Sync failure! HTTP status: " +
-          fetchBlobResponse.respInfo.status
-        );
+        Alert.alert(
+          LocalizedStrings[language].syncFailure,
+          LocalizedStrings[language].syncFailureSystem,
+          [
+            {
+              text: 'OK',
+            }
+          ],
+        )
       }
     });
   }
