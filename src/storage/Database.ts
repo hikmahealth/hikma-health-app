@@ -575,7 +575,7 @@ class DatabaseImpl implements Database {
   public getEvents(visit_id: string): Promise<Event[]> {
     return this.getDatabase()
       .then(db =>
-        db.executeSql("SELECT id, patient_id, event_type, event_metadata FROM events WHERE visit_id = ? ORDER BY event_timestamp DESC;", [visit_id])
+        db.executeSql("SELECT id, patient_id, event_type, event_timestamp, event_metadata FROM events WHERE visit_id = ? ORDER BY event_timestamp DESC;", [visit_id])
       )
       .then(([results]) => {
         if (results === undefined) {
@@ -585,9 +585,8 @@ class DatabaseImpl implements Database {
         const events: Event[] = [];
         for (let i = 0; i < count; i++) {
           const row = results.rows.item(i);
-          const { id, patient_id, event_type, event_metadata } = row;
-
-          events.push({ id, patient_id, event_type, event_metadata });
+          const { id, patient_id, event_type, event_timestamp, event_metadata } = row;
+          events.push({ id, patient_id, event_type, event_timestamp, event_metadata });
         }
         return events;
       });

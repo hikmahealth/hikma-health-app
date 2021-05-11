@@ -9,6 +9,22 @@ import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
 import LinearGradient from 'react-native-linear-gradient';
 
+export const VitalsDisplay = (metadataObj) => {
+  return (
+    <View style={{
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    }}>
+      <Text style={{ width: '50%' }}>HR: {metadataObj.heartRate} BPM</Text>
+      <Text style={{ width: '50%' }}>BP: {metadataObj.systolic}/{metadataObj.diastolic}</Text>
+      <Text style={{ width: '50%' }}>Sats: {metadataObj.sats}%</Text>
+      <Text style={{ width: '50%' }}>Temp: {metadataObj.temp} °C</Text>
+      <Text style={{ width: '50%' }}>RR: {metadataObj.respiratoryRate}</Text>
+      <Text style={{ width: '50%' }}>Weight: {metadataObj.weight} kg</Text>
+      <Text style={{ width: '50%' }}>BG: {metadataObj.bloodGlucose}</Text>
+    </View>)
+}
+
 const Vitals = (props) => {
   const [heartRate, setHeartRate] = useState(null);
   const [systolic, setSystolic] = useState(null);
@@ -16,6 +32,7 @@ const Vitals = (props) => {
   const [sats, setSats] = useState(null);
   const [temp, setTemp] = useState(null);
   const [respiratoryRate, setRespiratoryRate] = useState(null);
+  const [weight, setWeight] = useState(null);
   const [bloodGlucose, setBloodGlucose] = useState(null);
 
   const patientId = props.navigation.getParam('patientId');
@@ -27,23 +44,24 @@ const Vitals = (props) => {
       patient_id: patientId,
       visit_id: visitId,
       event_type: EventTypes.Vitals,
-      event_metadata: JSON.stringify({ 
+      event_metadata: JSON.stringify({
         heartRate,
         systolic,
         diastolic,
         sats,
         temp,
         respiratoryRate,
+        weight,
         bloodGlucose
       })
-    }).then(() =>{
+    }).then(() => {
       props.navigation.navigate('NewVisit')
     })
   };
 
   return (
     <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
-      <View style={[styles.inputRow, {marginTop: 30}]}>
+      <View style={[styles.inputRow, { marginTop: 30 }]}>
         <TextInput
           style={styles.inputs}
           placeholder="HR"
@@ -51,7 +69,7 @@ const Vitals = (props) => {
           value={heartRate}
           keyboardType='numeric'
         />
-        <Text style={{color: '#FFFFFF'}}>BPM</Text>
+        <Text style={{ color: '#FFFFFF' }}>BPM</Text>
       </View>
       <View style={styles.inputRow}>
         <TextInput
@@ -61,7 +79,7 @@ const Vitals = (props) => {
           value={systolic}
           keyboardType='numeric'
         />
-        <Text style={{color: '#FFFFFF'}}>/</Text>
+        <Text style={{ color: '#FFFFFF' }}>/</Text>
         <TextInput
           style={styles.inputs}
           placeholder="Diastolic"
@@ -78,7 +96,7 @@ const Vitals = (props) => {
           value={sats}
           keyboardType='numeric'
         />
-        <Text style={{color: '#FFFFFF'}}>%</Text>
+        <Text style={{ color: '#FFFFFF' }}>%</Text>
       </View>
       <View style={styles.inputRow}>
         <TextInput
@@ -88,7 +106,7 @@ const Vitals = (props) => {
           value={temp}
           keyboardType='numeric'
         />
-        <Text style={{color: '#FFFFFF'}}>°C</Text>
+        <Text style={{ color: '#FFFFFF' }}>°C</Text>
         <TextInput
           style={styles.inputs}
           placeholder="RR"
@@ -100,13 +118,21 @@ const Vitals = (props) => {
       <View style={styles.inputRow}>
         <TextInput
           style={styles.inputs}
+          placeholder="Weight"
+          onChangeText={(text) => setWeight(text)}
+          value={weight}
+          keyboardType='numeric'
+        />
+        <Text style={{ color: '#FFFFFF' }}>kg</Text>
+        <TextInput
+          style={styles.inputs}
           placeholder="BG"
           onChangeText={(text) => setBloodGlucose(text)}
           value={bloodGlucose}
           keyboardType='numeric'
         />
       </View>
-      <View style={{marginTop: 30}}>
+      <View style={{ marginTop: 30 }}>
         <TouchableOpacity onPress={() => setVitals()}>
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>

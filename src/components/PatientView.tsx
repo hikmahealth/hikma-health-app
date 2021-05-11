@@ -151,7 +151,7 @@ const PatientView = (props) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.profileButton, {flex: 1}]}
-            onPress={() => props.navigation.navigate('VisitList', { language: language, patient: patient })}>
+            onPress={() => props.navigation.navigate('VisitList', { language: language, patient: patient, userName })}>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20 }}>
               <Text style={{ fontSize: 15 }}>{LocalizedStrings[language].visitHistory}</Text>
               <Text style={{ fontSize: 15 }}>></Text>

@@ -7,10 +7,16 @@ import { LocalizedStrings } from '../enums/LocalizedStrings'
 import { EventTypes } from "../enums/EventTypes";
 import { Event } from "../types/Event";
 import { Covid19Display } from "./Covid19Form";
+import { VitalsDisplay } from "./Vitals";
+import { ExaminationDisplay } from "./Examination";
+import { MedicinesDisplay } from "./Medicine";
+import { MedicalHistoryDisplay } from "./MedicalHistory";
+import { PhysiotherapyDisplay } from "./Physiotherapy";
 
 const EventList = (props) => {
   const visit = props.navigation.getParam('visit');
   const patient = props.navigation.getParam('patient');
+  const userName = props.navigation.getParam('userName');
 
   const [list, setList] = useState(props.navigation.getParam('events', []));
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
@@ -37,19 +43,69 @@ const EventList = (props) => {
       case EventTypes.Covid19Screening:
         break
       case EventTypes.Vitals:
-        props.navigation.navigate('EditVitals', { event, language })
+        props.navigation.navigate('EditVitals', { event, language, userName })
         break
+      case EventTypes.ExaminationFull:
+        props.navigation.navigate('EditExamination', { event, language, userName})
+        break
+      case EventTypes.Medicine:
+        props.navigation.navigate('EditMedicine', { event, language, userName})
+        break  
+      case EventTypes.MedicalHistoryFull:
+        props.navigation.navigate('EditMedicalHistory', { event, language, userName})
+        break  
+      case EventTypes.Physiotherapy:
+        props.navigation.navigate('EditPhysiotherapy', { event, language, userName})
+        break    
       default:
         props.navigation.navigate('EditOpenTextEvent', { event, language })
 
     }
   }
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }) => {
+    const metadataObj = parseMetadata(item.event_metadata)
+    let eventTypeText: string
+    let display
+
+    switch (item.event_type) {
+      case EventTypes.Covid19Screening:
+        eventTypeText = LocalizedStrings[language].covidScreening
+        display = Covid19Display(metadataObj, language)
+        break
+      case EventTypes.Vitals:
+        eventTypeText = LocalizedStrings[language].vitals
+        display = VitalsDisplay(metadataObj)
+        break
+      case EventTypes.ExaminationFull:
+        eventTypeText = LocalizedStrings[language].examination
+        display = ExaminationDisplay(metadataObj, language)
+        break
+      case EventTypes.Medicine:
+        eventTypeText = LocalizedStrings[language].medicine
+        display = MedicinesDisplay(metadataObj, language)
+        break
+      case EventTypes.MedicalHistoryFull:
+        eventTypeText = LocalizedStrings[language].medicalHistory
+        display = MedicalHistoryDisplay(metadataObj, language)
+        break
+      case EventTypes.Physiotherapy:
+        eventTypeText = LocalizedStrings[language].physiotherapy
+        display = PhysiotherapyDisplay(metadataObj, language)
+        break
+      default:
+        eventTypeText = item.event_type
+        display = <Text>{metadataObj}</Text>
+        break
+    }
+    const time = new Date(item.event_timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
+
+    return (
+
     <TouchableOpacity style={styles.card} onLongPress={() => editEvent(item)}>
       <View style={styles.cardContent} >
         <View style={{ margin: 10 }}>
-          <Text>{`${LocalizedStrings[language].eventType}: ${item.event_type}`}</Text>
+          <Text>{`${eventTypeText}, ${time}`}</Text>
           <View
             style={{
               marginVertical: 5,
@@ -57,11 +113,11 @@ const EventList = (props) => {
               borderBottomWidth: 1,
             }}
           />
-          {renderMetadata(item.event_type, item.event_metadata)}
+          {display}
         </View>
       </View>
     </TouchableOpacity>
-  )
+  )}
 
   const parseMetadata = (metadata: string) => {
     try {
@@ -70,30 +126,6 @@ const EventList = (props) => {
       return metadata;
     }
     return JSON.parse(metadata);
-  }
-
-  const renderMetadata = (type: EventTypes, metadata: string) => {
-    const metadataObj = parseMetadata(metadata)
-
-    switch (type) {
-      case EventTypes.Covid19Screening:
-        return Covid19Display(metadataObj, language)
-      case EventTypes.Vitals:
-        return (
-          <View style={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-          }}>
-            <Text style={{ width: '50%' }}>HR: {metadataObj.heartRate} BPM</Text>
-            <Text style={{ width: '50%' }}>BP: {metadataObj.systolic}/{metadataObj.diastolic}</Text>
-            <Text style={{ width: '50%' }}>Sats: {metadataObj.sats}%</Text>
-            <Text style={{ width: '50%' }}>Temp: {metadataObj.temp} °C</Text>
-            <Text style={{ width: '50%' }}>RR: {metadataObj.respiratoryRate}</Text>
-            <Text style={{ width: '50%' }}>BG: {metadataObj.bloodGlucose}</Text>
-          </View>)
-      default:
-        return (<Text>{metadataObj}</Text>)
-    }
   }
 
   const LanguageToggle = () => {
@@ -140,6 +172,7 @@ const EventList = (props) => {
                 language: language,
                 patient: patient,
                 visitId: visit.id,
+                userName: userName,
                 existingVisit: true
               }
             )

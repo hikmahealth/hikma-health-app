@@ -16,6 +16,14 @@ import VisitList from '../components/VisitList';
 import EventList from '../components/EventList';
 import EditVitals from '../components/EditVitals';
 import PrescriptionList from '../components/PrescriptionList';
+import MedicalHistory from '../components/MedicalHistory';
+import Examination from '../components/Examination';
+import Physiotherapy from '../components/Physiotherapy';
+import Medicine from '../components/Medicine';
+import EditExamination from '../components/EditExamination';
+import EditMedicalHistory from '../components/EditMedicalHistory';
+import EditPhysiotherapy from '../components/EditPhysiotherapy';
+import EditMedicine from '../components/EditMedicine';
 
 const rootNavigator = createStackNavigator(
   {
@@ -93,6 +101,62 @@ const rootNavigator = createStackNavigator(
       screen: EditVitals,
       navigationOptions: () => ({
         title: `EditVitals`,
+        header: null
+      })
+    },
+    MedicalHistory: {
+      screen: MedicalHistory,
+      navigationOptions: () => ({
+        title: `MedicalHistory`,
+        header: null
+      })
+    },
+    EditMedicalHistory: {
+      screen: EditMedicalHistory,
+      navigationOptions: () => ({
+        title: `EditMedicalHistory`,
+        header: null
+      })
+    },
+    Examination: {
+      screen: Examination,
+      navigationOptions: () => ({
+        title: `Examination`,
+        header: null
+      })
+    },
+    EditExamination: {
+      screen: EditExamination,
+      navigationOptions: () => ({
+        title: `EditExamination`,
+        header: null
+      })
+    },
+    Physiotherapy: {
+      screen: Physiotherapy,
+      navigationOptions: () => ({
+        title: `Physiotherapy`,
+        header: null
+      })
+    },
+    EditPhysiotherapy: {
+      screen: EditPhysiotherapy,
+      navigationOptions: () => ({
+        title: `EditPhysiotherapy`,
+        header: null
+      })
+    },
+    Medicine: {
+      screen: Medicine,
+      navigationOptions: () => ({
+        title: `Medicine`,
+        header: null
+      })
+    },
+    EditMedicine: {
+      screen: EditMedicine,
+      navigationOptions: () => ({
+        title: `EditMedicine`,
         header: null
       })
     },

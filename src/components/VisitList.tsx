@@ -11,6 +11,7 @@ const VisitList = (props) => {
 
   const [list, setList] = useState([]);
   const [language, setLanguage] = useState(props.navigation.getParam('language'));
+  const userName = props.navigation.getParam('userName');
 
   useEffect(() => {
     database.getVisits(patient.id).then(visits => {
@@ -51,8 +52,9 @@ const VisitList = (props) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.card} onPress={() => props.navigation.navigate('EventList',
       {
-        language: language,
-        patient: patient,
+        language,
+        patient,
+        userName,
         visit: item
       }
     )}

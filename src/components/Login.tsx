@@ -15,10 +15,10 @@ import styles from './Style';
 const Login = (props) => {
   const databaseSync = new DatabaseSync();
   const imageSync = new ImageSync();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('sam@hikmahealth.org');
+  const [password, setPassword] = useState('c43171c8a242');
   const [instanceList, setInstanceList] = useState([]);
-  const [selectedInstance, setSelectedInstance] = useState();
+  const [selectedInstance, setSelectedInstance] = useState({name: 'Local', url: 'http://192.168.0.3:8080'});
   const [showInstanceDropdown, setShowInstanceDropdown] = useState(false);
   const [loginFailed, setLoginFailed] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -29,19 +29,19 @@ const Login = (props) => {
   let clinicId = '';
   let instanceUrl = '';
 
-  useEffect(() => {
-    database.usersExist().then(result => {
-      if (!result) {
-        getInstances().then(response => {
-          setInstanceList(response)
-        })
-        setShowInstanceDropdown(true)
-      } else {
-        setShowInstanceDropdown(false)
-      }
-      database.close()
-    })
-  }, [props])
+  // useEffect(() => {
+  //   database.usersExist().then(result => {
+  //     if (!result) {
+  //       getInstances().then(response => {
+  //         setInstanceList(response)
+  //       })
+  //       setShowInstanceDropdown(true)
+  //     } else {
+  //       setShowInstanceDropdown(false)
+  //     }
+  //     database.close()
+  //   })
+  // }, [props])
 
   const getInstances = async (): Promise<any> => {
     return fetch('https://demo-api.hikmahealth.org/api/instances', {
