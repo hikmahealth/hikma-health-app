@@ -22,10 +22,8 @@ const OpenTextEvent = (props) => {
   useEffect(() => {
     database.getLatestPatientEventByType(patientId, eventType).then((response: string) => {
       if (response.length > 0 && (
-        eventType === EventTypes.MedicalHistory ||
-        eventType === EventTypes.Allergies ||
-        eventType === EventTypes.Diagnosis ||
-        eventType === EventTypes.Prescriptions ||
+        eventType === EventTypes.Complaint ||
+        eventType === EventTypes.DentalTreatment ||
         eventType === EventTypes.Notes)) {
         setResponseText(response)
       }

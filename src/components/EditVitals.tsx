@@ -17,39 +17,42 @@ const EditVitals = (props) => {
   const [sats, setSats] = useState(null);
   const [temp, setTemp] = useState(null);
   const [respiratoryRate, setRespiratoryRate] = useState(null);
+  const [weight, setWeight] = useState(null);
   const [bloodGlucose, setBloodGlucose] = useState(null);
 
   useEffect(() => {
-      if (!!metadata) {
-        const metadataObj = JSON.parse(metadata)
-        setHeartRate(metadataObj.heartRate)
-        setSystolic(metadataObj.systolic)
-        setDiastolic(metadataObj.diastolic)
-        setSats(metadataObj.sats)
-        setTemp(metadataObj.temp)
-        setRespiratoryRate(metadataObj.respiratoryRate)
-        setBloodGlucose(metadataObj.bloodGlucose)
-      }
+    if (!!metadata) {
+      const metadataObj = JSON.parse(metadata)
+      setHeartRate(metadataObj.heartRate)
+      setSystolic(metadataObj.systolic)
+      setDiastolic(metadataObj.diastolic)
+      setSats(metadataObj.sats)
+      setTemp(metadataObj.temp)
+      setRespiratoryRate(metadataObj.respiratoryRate)
+      setWeight(metadataObj.weight)
+      setBloodGlucose(metadataObj.bloodGlucose)
+    }
   }, [props])
 
   const setVitals = async () => {
     database.editEvent(
       event.id,
-      JSON.stringify({ 
+      JSON.stringify({
         heartRate,
         systolic,
         diastolic,
         sats,
         temp,
         respiratoryRate,
+        weight,
         bloodGlucose
       })
-    ).then((response) => props.navigation.navigate('EventList', {events: response, language}))
+    ).then((response) => props.navigation.navigate('EventList', { events: response, language }))
   };
 
   return (
     <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
-      <View style={[styles.inputRow, {marginTop: 30}]}>
+      <View style={[styles.inputRow, { marginTop: 30 }]}>
         <TextInput
           style={styles.inputs}
           placeholder="HR"
@@ -57,7 +60,7 @@ const EditVitals = (props) => {
           value={heartRate}
           keyboardType='numeric'
         />
-        <Text style={{color: '#FFFFFF'}}>BPM</Text>
+        <Text style={{ color: '#FFFFFF' }}>BPM</Text>
       </View>
       <View style={styles.inputRow}>
         <TextInput
@@ -67,7 +70,7 @@ const EditVitals = (props) => {
           value={systolic}
           keyboardType='numeric'
         />
-        <Text style={{color: '#FFFFFF'}}>/</Text>
+        <Text style={{ color: '#FFFFFF' }}>/</Text>
         <TextInput
           style={styles.inputs}
           placeholder="Diastolic"
@@ -84,7 +87,7 @@ const EditVitals = (props) => {
           value={sats}
           keyboardType='numeric'
         />
-        <Text style={{color: '#FFFFFF'}}>%</Text>
+        <Text style={{ color: '#FFFFFF' }}>%</Text>
       </View>
       <View style={styles.inputRow}>
         <TextInput
@@ -94,7 +97,7 @@ const EditVitals = (props) => {
           value={temp}
           keyboardType='numeric'
         />
-        <Text style={{color: '#FFFFFF'}}>°C</Text>
+        <Text style={{ color: '#FFFFFF' }}>°C</Text>
         <TextInput
           style={styles.inputs}
           placeholder="RR"
@@ -106,13 +109,21 @@ const EditVitals = (props) => {
       <View style={styles.inputRow}>
         <TextInput
           style={styles.inputs}
+          placeholder="Weight"
+          onChangeText={(text) => setWeight(text)}
+          value={weight}
+          keyboardType='numeric'
+        />
+        <Text style={{ color: '#FFFFFF' }}>kg</Text>
+        <TextInput
+          style={styles.inputs}
           placeholder="BG"
           onChangeText={(text) => setBloodGlucose(text)}
           value={bloodGlucose}
           keyboardType='numeric'
         />
       </View>
-      <View style={{marginTop: 30}}>
+      <View style={{ marginTop: 30 }}>
         <TouchableOpacity onPress={() => setVitals()}>
           <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
         </TouchableOpacity>

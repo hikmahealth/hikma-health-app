@@ -8,6 +8,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { database } from "../storage/Database";
 import { uuid } from "uuidv4";
 import { LocalizedStrings } from '../enums/LocalizedStrings';
+import radioButtons from './shared/RadioButtons'
 import DatePicker from 'react-native-datepicker';
 
 const formatResult = (metadataObj, language) => {
@@ -92,7 +93,7 @@ const Covid19Form = (props) => {
 
   const [isCollapsed, setIsCollapsed] = useState(true)
 
-  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
+  const language = props.navigation.getParam('language', 'en');
   const patient = props.navigation.getParam('patient');
   const visitId = props.navigation.getParam('visitId');
 
@@ -122,20 +123,6 @@ const Covid19Form = (props) => {
     let ageDifMs = Date.now() - birthdate.getTime();
     let ageDate = new Date(ageDifMs);
     return Math.abs(ageDate.getUTCFullYear() - 1970);
-  }
-
-  const LanguageToggle = () => {
-    return (
-      <Picker
-        selectedValue={language}
-        onValueChange={value => setLanguage(value)}
-        style={styles.picker}
-      >
-        <Picker.Item value='en' label='en' />
-        <Picker.Item value='ar' label='ar' />
-        <Picker.Item value='sp' label='sp' />
-      </Picker>
-    )
   }
 
   const datePicker = (props) => {
@@ -172,31 +159,6 @@ const Covid19Form = (props) => {
         androidMode='spinner'
         onDateChange={(date) => props.action(date)}
       />
-    )
-  }
-
-  const radioButtons = (props) => {
-    return (
-      <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
-        <Text style={{ color: '#FFFFFF', flex: 1, flexDirection: 'column', flexWrap: 'wrap' }}>{props.prompt}</Text>
-        <View style={{ flexDirection: 'row' }}>
-          <TouchableOpacity onPress={() => props.action(!props.field)}>
-            <View style={styles.outerRadioButton}>
-              {props.field ? <View style={styles.selectedRadioButton} /> : null}
-            </View>
-          </TouchableOpacity>
-          <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].yes}</Text>
-
-          <TouchableOpacity onPress={() => {
-            props.field === null ? props.action(false) : props.action(!props.field)
-          }}>
-            <View style={styles.outerRadioButton}>
-              {(!props.field && props.field !== null) ? <View style={styles.selectedRadioButton} /> : null}
-            </View>
-          </TouchableOpacity>
-          <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].no}</Text>
-        </View>
-      </View>
     )
   }
 
@@ -241,51 +203,50 @@ const Covid19Form = (props) => {
   }
 
   return !submitted ? (
-    <ScrollView>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={[styles.containerLeft]}>
         <View style={styles.searchBar}>
           <TouchableOpacity onPress={() => { props.navigation.navigate('NewVisit', { language: language }) }}>
             <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
           </TouchableOpacity>
-          {LanguageToggle()}
         </View>
 
         <View style={[styles.inputsContainer, { alignItems: 'flex-start' }]}>
           <View style={styles.responseRow}>
-            {radioButtons({ field: chestPain, action: setChestPain, prompt: LocalizedStrings[language].chestPain })}
+            {radioButtons({ field: chestPain, action: setChestPain, prompt: LocalizedStrings[language].chestPain, language })}
           </View>
           <View style={styles.responseRow}>
-            {radioButtons({ field: confusion, action: setConfusion, prompt: LocalizedStrings[language].confusion })}
+            {radioButtons({ field: confusion, action: setConfusion, prompt: LocalizedStrings[language].confusion, language })}
           </View>
           <View style={styles.responseRow}>
-            {radioButtons({ field: bluish, action: setBluish, prompt: LocalizedStrings[language].bluish })}
+            {radioButtons({ field: bluish, action: setBluish, prompt: LocalizedStrings[language].bluish, language })}
           </View>
           <View style={styles.responseRow}>
-            {radioButtons({ field: fever, action: setFever, prompt: LocalizedStrings[language].fever })}
+            {radioButtons({ field: fever, action: setFever, prompt: LocalizedStrings[language].fever, language })}
           </View>
           <View style={styles.responseRow}>
-            {radioButtons({ field: dryCough, action: setDryCough, prompt: LocalizedStrings[language].dryCough })}
+            {radioButtons({ field: dryCough, action: setDryCough, prompt: LocalizedStrings[language].dryCough, language })}
           </View>
           <View style={styles.responseRow}>
-            {radioButtons({ field: diffBreathing, action: setDiffBreathing, prompt: LocalizedStrings[language].diffBreathing })}
+            {radioButtons({ field: diffBreathing, action: setDiffBreathing, prompt: LocalizedStrings[language].diffBreathing, language })}
           </View>
           <View style={styles.responseRow}>
-            {radioButtons({ field: soreThroat, action: setSoreThroat, prompt: LocalizedStrings[language].soreThroat })}
+            {radioButtons({ field: soreThroat, action: setSoreThroat, prompt: LocalizedStrings[language].soreThroat, language })}
           </View>
           <View style={styles.responseRow}>
-            {radioButtons({ field: nausea, action: setNausea, prompt: LocalizedStrings[language].nausea })}
+            {radioButtons({ field: nausea, action: setNausea, prompt: LocalizedStrings[language].nausea, language })}
           </View>
           <View style={styles.responseRow}>
-            {radioButtons({ field: fatigue, action: setFatigue, prompt: LocalizedStrings[language].fatigue })}
+            {radioButtons({ field: fatigue, action: setFatigue, prompt: LocalizedStrings[language].fatigue, language })}
           </View>
           <View style={styles.responseRow}>
-            {radioButtons({ field: aches, action: setAches, prompt: LocalizedStrings[language].aches })}
+            {radioButtons({ field: aches, action: setAches, prompt: LocalizedStrings[language].aches, language })}
           </View>
           <View style={styles.responseRow}>
-            {radioButtons({ field: headache, action: setHeadache, prompt: LocalizedStrings[language].headache })}
+            {radioButtons({ field: headache, action: setHeadache, prompt: LocalizedStrings[language].headache, language })}
           </View>
           <View style={styles.responseRow}>
-            {radioButtons({ field: changeTasteSmell, action: setChangeTasteSmell, prompt: LocalizedStrings[language].changeTasteSmell })}
+            {radioButtons({ field: changeTasteSmell, action: setChangeTasteSmell, prompt: LocalizedStrings[language].changeTasteSmell, language })}
           </View>
           <View style={styles.responseRow}>{datePicker({ placeholder: LocalizedStrings[language].symptomsDate, date: symptomsDate, action: setSymptomsDate })}</View>
 
@@ -347,7 +308,6 @@ const Covid19Form = (props) => {
           <TouchableOpacity onPress={() => { setSubmitted(false) }}>
             <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
           </TouchableOpacity>
-          {LanguageToggle()}
         </View>
 
         <View style={{ alignItems: 'center' }}>
