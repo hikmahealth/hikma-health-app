@@ -12,7 +12,6 @@ const EditOpenTextEvent = (props) => {
 
   const event = props.navigation.getParam('event');
   const language = props.navigation.getParam('language', 'en')
-  const editPrescription = props.navigation.getParam('prescriptionEdit')
   const [responseText, setResponseText] = useState(props.navigation.getParam('event').event_metadata);
 
   const editEvent = async () => {
@@ -20,13 +19,13 @@ const EditOpenTextEvent = (props) => {
       event.id,
       responseText
     ).then((response) => {
-      editPrescription ? props.navigation.navigate('PrescriptionList', { events: response, language }) : props.navigation.navigate('EventList', { events: response, language })
+      props.navigation.navigate('EventList', { events: response, language })
     })
   };
 
   return (
     <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
-      <TouchableOpacity onPress={() => editPrescription ? props.navigation.navigate('PrescriptionList', { language }) : props.navigation.navigate('EventList', { language })}>
+      <TouchableOpacity onPress={() => props.navigation.navigate('EventList', { language })}>
         <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
       </TouchableOpacity>
       <Text>{event.event_type}</Text>

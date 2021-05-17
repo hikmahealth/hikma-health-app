@@ -18,22 +18,21 @@ export const MedicineType = (value, action, language) => {
             style={[styles.picker, { width: 180 }]}
         >
             <Picker.Item value='' label={LocalizedStrings[language].type} />
-            <Picker.Item value='Tablet' label='Tablet' />
-            <Picker.Item value='Syrup' label='Syrup' />
-            <Picker.Item value='Ampule' label='Ampule' />
-            <Picker.Item value='Suppository' label='Suppository' />
-            <Picker.Item value='Cream' label='Cream' />
-            <Picker.Item value='Drops' label='Drops' />
-            <Picker.Item value='Bottle' label='Bottle' />
-            <Picker.Item value='Spray' label='Spray' />
-            <Picker.Item value='Gel' label='Gel' />
-            <Picker.Item value='Lotion' label='Lotion' />
-
+            <Picker.Item value={LocalizedStrings[language].tablet} label={LocalizedStrings[language].tablet} />
+            <Picker.Item value={LocalizedStrings[language].syrup} label={LocalizedStrings[language].syrup} />
+            <Picker.Item value={LocalizedStrings[language].ampule} label={LocalizedStrings[language].ampule} />
+            <Picker.Item value={LocalizedStrings[language].suppository} label={LocalizedStrings[language].suppository} />
+            <Picker.Item value={LocalizedStrings[language].cream} label={LocalizedStrings[language].cream} />
+            <Picker.Item value={LocalizedStrings[language].drops} label={LocalizedStrings[language].drops} />
+            <Picker.Item value={LocalizedStrings[language].bottle} label={LocalizedStrings[language].bottle} />
+            <Picker.Item value={LocalizedStrings[language].spray} label={LocalizedStrings[language].spray} />
+            <Picker.Item value={LocalizedStrings[language].gel} label={LocalizedStrings[language].gel} />
+            <Picker.Item value={LocalizedStrings[language].lotion} label={LocalizedStrings[language].lotion} />
         </Picker>
     )
 }
 
-export const MedicinesDisplay = (metadataObj, language) => {
+export const MedicineDisplay = (metadataObj, language) => {
     return (
         <View>
             <Text>{LocalizedStrings[language].provider}: {metadataObj.doctor} </Text>

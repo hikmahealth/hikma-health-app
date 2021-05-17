@@ -9,7 +9,7 @@ import { Event } from "../types/Event";
 import { Covid19Display } from "./Covid19Form";
 import { VitalsDisplay } from "./Vitals";
 import { ExaminationDisplay } from "./Examination";
-import { MedicinesDisplay } from "./Medicine";
+import { MedicineDisplay } from "./Medicine";
 import { MedicalHistoryDisplay } from "./MedicalHistory";
 import { PhysiotherapyDisplay } from "./Physiotherapy";
 
@@ -83,7 +83,7 @@ const EventList = (props) => {
         break
       case EventTypes.Medicine:
         eventTypeText = LocalizedStrings[language].medicine
-        display = MedicinesDisplay(metadataObj, language)
+        display = MedicineDisplay(metadataObj, language)
         break
       case EventTypes.MedicalHistoryFull:
         eventTypeText = LocalizedStrings[language].medicalHistory
@@ -137,7 +137,6 @@ const EventList = (props) => {
       >
         <Picker.Item value='en' label='en' />
         <Picker.Item value='ar' label='ar' />
-        <Picker.Item value='sp' label='sp' />
       </Picker>
     )
   }

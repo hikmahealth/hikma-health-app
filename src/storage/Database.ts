@@ -54,8 +54,7 @@ class DatabaseImpl implements Database {
     return SQLite.openDatabase({
       name: this.databaseName,
       location: "default"
-    })
-      .then(db => {
+    }).then(db => {
         databaseInstance = db;
         console.log("[db] Database open!");
 

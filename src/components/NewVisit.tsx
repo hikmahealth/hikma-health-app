@@ -45,7 +45,6 @@ const NewVisit = (props) => {
       >
         <Picker.Item value='en' label='en' />
         <Picker.Item value='ar' label='ar' />
-        <Picker.Item value='sp' label='sp' />
       </Picker>
     )
   }
@@ -117,7 +116,7 @@ const NewVisit = (props) => {
       }
 
       <View style={styles.gridContainer}>
-        <TouchableOpacity style={styles.actionButton} onPress={() => props.navigation.navigate('MedicalHistory', { patientId: patient.id, visitId, userName })}>
+        <TouchableOpacity style={styles.actionButton} onPress={() => props.navigation.navigate('MedicalHistory', { patientId: patient.id, visitId, userName, language })}>
           <View style={styles.actionIcon}>
             <Image source={require('../images/medicalHistory.png')} style={{ width: 53, height: 51 }} />
           </View>
@@ -129,7 +128,7 @@ const NewVisit = (props) => {
           </View>
           <Text style={styles.actionText}>{LocalizedStrings[language].complaint}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton} onPress={() => props.navigation.navigate('Vitals', { patientId: patient.id, visitId, userName })}>
+        <TouchableOpacity style={styles.actionButton} onPress={() => props.navigation.navigate('Vitals', { patientId: patient.id, visitId, userName, language })}>
           <View style={styles.actionIcon}>
             <Image source={require('../images/vitals.png')} style={{ width: 66, height: 31 }} />
           </View>
@@ -138,19 +137,19 @@ const NewVisit = (props) => {
       </View>
 
       <View style={styles.gridContainer}>
-        <TouchableOpacity style={styles.actionButton} onPress={() => props.navigation.navigate('Examination', { patientId: patient.id, visitId, userName })}>
+        <TouchableOpacity style={styles.actionButton} onPress={() => props.navigation.navigate('Examination', { patientId: patient.id, visitId, userName, language })}>
           <View style={styles.actionIcon}>
             <Image source={require('../images/stethoscope.png')} style={{ width: 43, height: 47 }} />
           </View>
           <Text style={styles.actionText}>{LocalizedStrings[language].examination}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton} onPress={() => props.navigation.navigate('Medicine', { patientId: patient.id, visitId, userName })}>
+        <TouchableOpacity style={styles.actionButton} onPress={() => props.navigation.navigate('Medicine', { patientId: patient.id, visitId, userName, language })}>
           <View style={styles.actionIcon}>
             <Image source={require('../images/medicine.png')} style={{ width: 77, height: 38 }} />
           </View>
           <Text style={styles.actionText}>{LocalizedStrings[language].medicineDispensed}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton} onPress={() => props.navigation.navigate('Physiotherapy', { patientId: patient.id, visitId, userName })}>
+        <TouchableOpacity style={styles.actionButton} onPress={() => props.navigation.navigate('Physiotherapy', { patientId: patient.id, visitId, userName, language })}>
           <View style={styles.actionIcon}>
             <Image source={require('../images/doctor.png')} style={{ width: 40, height: 48 }} />
           </View>
