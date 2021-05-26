@@ -40,25 +40,27 @@ const EventList = (props) => {
 
   const editEvent = (event: Event) => {
     switch (event.event_type) {
-      case EventTypes.Covid19Screening:
-        break
       case EventTypes.Vitals:
         props.navigation.navigate('EditVitals', { event, language, userName })
         break
       case EventTypes.ExaminationFull:
-        props.navigation.navigate('EditExamination', { event, language, userName})
+        props.navigation.navigate('EditExamination', { event, language, userName })
         break
       case EventTypes.Medicine:
-        props.navigation.navigate('EditMedicine', { event, language, userName})
-        break  
+        props.navigation.navigate('EditMedicine', { event, language, userName })
+        break
       case EventTypes.MedicalHistoryFull:
-        props.navigation.navigate('EditMedicalHistory', { event, language, userName})
-        break  
+        props.navigation.navigate('EditMedicalHistory', { event, language, userName })
+        break
       case EventTypes.Physiotherapy:
-        props.navigation.navigate('EditPhysiotherapy', { event, language, userName})
-        break    
-      default:
+        props.navigation.navigate('EditPhysiotherapy', { event, language, userName })
+        break
+      case EventTypes.Complaint:
+      case EventTypes.DentalTreatment:
+      case EventTypes.Notes:
         props.navigation.navigate('EditOpenTextEvent', { event, language })
+      default:
+        break
 
     }
   }
@@ -101,23 +103,23 @@ const EventList = (props) => {
     const time = new Date(item.event_timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
 
     return (
-
-    <TouchableOpacity style={styles.card} onLongPress={() => editEvent(item)}>
-      <View style={styles.cardContent} >
-        <View style={{ margin: 10 }}>
-          <Text>{`${eventTypeText}, ${time}`}</Text>
-          <View
-            style={{
-              marginVertical: 5,
-              borderBottomColor: 'black',
-              borderBottomWidth: 1,
-            }}
-          />
-          {display}
+      <TouchableOpacity style={styles.card} onLongPress={() => editEvent(item)}>
+        <View style={styles.cardContent} >
+          <View style={{ margin: 10 }}>
+            <Text>{`${eventTypeText}, ${time}`}</Text>
+            <View
+              style={{
+                marginVertical: 5,
+                borderBottomColor: 'black',
+                borderBottomWidth: 1,
+              }}
+            />
+            {display}
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
-  )}
+      </TouchableOpacity>
+    )
+  }
 
   const parseMetadata = (metadata: string) => {
     try {

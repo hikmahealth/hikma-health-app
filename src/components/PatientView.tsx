@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity, ImageBackground, Alert, Picker } from "react-native";
+import { View, Text, Image, TextInput, TouchableOpacity, ImageBackground, Alert, Picker, ScrollView } from "react-native";
 import { ImageSync } from '../storage/ImageSync';
 import { database } from '../storage/Database';
 import styles from './Style';
@@ -90,7 +90,7 @@ const PatientView = (props) => {
   }
 
   return (
-    <View style={styles.main}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.viewContainer}>
         <View style={styles.searchBar}>
           <TouchableOpacity onPress={() => props.navigation.navigate('PatientList', { language: language, reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle, imagesSynced: null })}>
@@ -119,7 +119,7 @@ const PatientView = (props) => {
             <Text>{`${LocalizedStrings[language].camp}:  ${patient.camp}`}</Text>
           </View>
         </View>
-        <View style={[styles.card, { flex: 1, justifyContent: 'center', marginTop: 0, elevation: 0 }]}>
+        <View style={[styles.card, { flex: 1, justifyContent: 'center', elevation: 0 }]}>
           <View style={{ marginTop: 10, marginHorizontal: 20, display: "flex", flexDirection: "row" }}>
             <View style={{ flex: 1, display: 'flex', justifyContent: 'center' }}><Text style={[styles.gridItemText, { marginRight: 'auto' }]}>{patient.date_of_birth}</Text></View>
             <View style={{ flex: 1, display: 'flex', justifyContent: 'center' }}><Text style={styles.gridItemText}>{getPatientAge(patient.date_of_birth)}</Text></View>
@@ -143,7 +143,7 @@ const PatientView = (props) => {
         <View style={{ alignItems: 'center', flex: 1 }}>
 
           <TouchableOpacity
-            style={[styles.profileButton, { flex: 1 }]}
+            style={[styles.profileButton, { flex: 1, height: 40, marginVertical: 1 }]}
             onPress={() => props.navigation.navigate('VisitList', { language: language, patient: patient, userName })}>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20 }}>
               <Text style={{ fontSize: 15 }}>{LocalizedStrings[language].visitHistory}</Text>
@@ -151,7 +151,7 @@ const PatientView = (props) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.profileButton, { flex: 1 }]}
+            style={[styles.profileButton, isCollapsed ? {} : {backgroundColor: '#31BBF3', marginBottom: 5}, { height: 40, marginVertical: 1, flex: 1 }]}
             onPress={() => setIsCollapsed(!isCollapsed)}>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20 }}>
               <Text style={{ fontSize: 15 }}>{LocalizedStrings[language].patientSnapshot}</Text>
@@ -248,7 +248,7 @@ const PatientView = (props) => {
         </View>
 
       </View>
-    </View >
+    </ScrollView >
   )
 
 }

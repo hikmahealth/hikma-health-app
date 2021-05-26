@@ -207,6 +207,14 @@ export default StyleSheet.create({
     alignItems: 'center',
     height: 50,
   },
+  topNav: {
+    marginTop: 10,
+    marginHorizontal: 10,
+    flexDirection: 'row',
+    justifyContent: "flex-start",
+    width: '100%',
+    height: 50,
+  },
   buttonBar: {
     flex: 1,
     marginTop: 10,
@@ -233,7 +241,7 @@ export default StyleSheet.create({
     textAlign: 'center',
   },
   gridItemLabel: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: 'bold',
     textAlign: 'center',
   },
@@ -267,7 +275,7 @@ export default StyleSheet.create({
     height: 12,
     width: 12,
     borderRadius: 6,
-    backgroundColor: 'green',
+    backgroundColor: '#FFFFFF',
   },
   datePicker: {
     backgroundColor: '#FFFFFF',

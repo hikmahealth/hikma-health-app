@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, TextInput, ScrollView, Button
+  View, Text, TextInput, ScrollView, Button, TouchableOpacity
 } from 'react-native';
 
 import { database } from "../storage/Database";
@@ -69,61 +69,63 @@ const MedicalHistory = (props) => {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
-        <View style={[styles.inputsContainer, { alignItems: 'flex-start' }]}>
-
-          <View style={{ flexDirection: 'row', justifyContent: 'center', alignSelf: 'stretch', }}>
-            <Text style={[styles.text, { fontSize: 16, fontWeight: 'bold' }]}>{LocalizedStrings[language].medicalHistory}</Text>
-          </View>
-          <View style={[styles.responseRow, { paddingBottom: 0 }]}>
-            <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].allergies}</Text>
-          </View>
-          <View style={[styles.responseRow, { padding: 0 }]}>
-            <TextInput
-              style={styles.inputs}
-              onChangeText={(text) => setAllergies(text)}
-              value={allergies}
-            />
-          </View>
-          <View style={[styles.responseRow, { paddingVertical: 0 }]}>
-            <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].surgeryHx}</Text>
-          </View>
-          <View style={[styles.responseRow, { padding: 0 }]}>
-            <TextInput
-              style={styles.inputs}
-              onChangeText={(text) => setSurgeryHx(text)}
-              value={surgeryHx}
-            />
-          </View>
-          <View style={[styles.responseRow, { paddingVertical: 0 }]}>
-            <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].chronicConditions}</Text>
-          </View>
-          <View style={[styles.responseRow, { padding: 0 }]}>
-            <TextInput
-              style={styles.inputs}
-              onChangeText={(text) => setChronicConditions(text)}
-              value={chronicConditions}
-            />
-          </View>
-          <View style={[styles.responseRow, { paddingVertical: 0 }]}>
-            <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].currentMedications}</Text>
-          </View>
-          <View style={[styles.responseRow, { padding: 0 }]}>
-            <TextInput
-              style={styles.inputs}
-              onChangeText={(text) => setCurrentMedications(text)}
-              value={currentMedications}
-            />
-          </View>
-          <View style={[styles.responseRow, { paddingVertical: 0 }]}>
-            <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].vaccinations}</Text>
-          </View>
-          <View style={[styles.responseRow, { paddingTop: 0, paddingHorizontal: 0 }]}>
-            <TextInput
-              style={styles.inputs}
-              onChangeText={(text) => setVaccinations(text)}
-              value={vaccinations}
-            />
-          </View>
+        <View style={styles.topNav}>
+          <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit')}>
+            <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', alignSelf: 'stretch', }}>
+          <Text style={[styles.text, { fontSize: 16, fontWeight: 'bold' }]}>{LocalizedStrings[language].medicalHistory}</Text>
+        </View>
+        <View style={[styles.responseRow, { paddingBottom: 0 }]}>
+          <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].allergies}</Text>
+        </View>
+        <View style={[styles.responseRow, { padding: 0 }]}>
+          <TextInput
+            style={styles.inputs}
+            onChangeText={(text) => setAllergies(text)}
+            value={allergies}
+          />
+        </View>
+        <View style={[styles.responseRow, { paddingVertical: 0 }]}>
+          <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].surgeryHx}</Text>
+        </View>
+        <View style={[styles.responseRow, { padding: 0 }]}>
+          <TextInput
+            style={styles.inputs}
+            onChangeText={(text) => setSurgeryHx(text)}
+            value={surgeryHx}
+          />
+        </View>
+        <View style={[styles.responseRow, { paddingVertical: 0 }]}>
+          <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].chronicConditions}</Text>
+        </View>
+        <View style={[styles.responseRow, { padding: 0 }]}>
+          <TextInput
+            style={styles.inputs}
+            onChangeText={(text) => setChronicConditions(text)}
+            value={chronicConditions}
+          />
+        </View>
+        <View style={[styles.responseRow, { paddingVertical: 0 }]}>
+          <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].currentMedications}</Text>
+        </View>
+        <View style={[styles.responseRow, { padding: 0 }]}>
+          <TextInput
+            style={styles.inputs}
+            onChangeText={(text) => setCurrentMedications(text)}
+            value={currentMedications}
+          />
+        </View>
+        <View style={[styles.responseRow, { paddingVertical: 0 }]}>
+          <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].vaccinations}</Text>
+        </View>
+        <View style={[styles.responseRow, { paddingTop: 0, paddingHorizontal: 0 }]}>
+          <TextInput
+            style={styles.inputs}
+            onChangeText={(text) => setVaccinations(text)}
+            value={vaccinations}
+          />
         </View>
         <View style={{ alignItems: 'center' }}>
           <Button

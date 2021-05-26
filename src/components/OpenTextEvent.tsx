@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, Image, TextInput, TouchableOpacity
+  View, Text, Image, TextInput, TouchableOpacity, Button
 } from 'react-native';
 
 import { database } from "../storage/Database";
@@ -15,14 +15,13 @@ const OpenTextEvent = (props) => {
   const eventType = props.navigation.getParam('eventType');
   const patientId = props.navigation.getParam('patientId');
   const visitId = props.navigation.getParam('visitId');
-  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
+  const language = props.navigation.getParam('language', 'en')
   const [textColor, setTextColor] = useState('#A9A9A9')
   const [responseText, setResponseText] = useState('');
 
   useEffect(() => {
     database.getLatestPatientEventByType(patientId, eventType).then((response: string) => {
       if (response.length > 0 && (
-        eventType === EventTypes.Complaint ||
         eventType === EventTypes.DentalTreatment ||
         eventType === EventTypes.Notes)) {
         setResponseText(response)
@@ -42,12 +41,14 @@ const OpenTextEvent = (props) => {
 
   return (
     <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
-      <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit')}>
-        <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
-      </TouchableOpacity>
-      <Text>{eventType}</Text>
+      <View style={styles.topNav}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit')}>
+          <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
+        </TouchableOpacity>
+      </View>
+      <Text style={[styles.text, { fontWeight: 'bold' }]}>{eventType}</Text>
       <TextInput
-        style={[styles.loginInputsContainer, {color: textColor}]}
+        style={[styles.loginInputsContainer, { color: textColor }]}
         placeholder={LocalizedStrings[language].enterTextHere}
         onChangeText={(text) => {
           setResponseText(text)
@@ -56,11 +57,11 @@ const OpenTextEvent = (props) => {
         value={responseText}
         multiline={true}
       />
-
-      <View>
-        <TouchableOpacity onPress={() => addEvent()}>
-          <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
-        </TouchableOpacity>
+      <View style={{ alignItems: 'center' }}>
+        <Button
+          title={LocalizedStrings[language].save}
+          color={'#F77824'}
+          onPress={() => addEvent()} />
       </View>
     </LinearGradient>
   );

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, Image, TextInput, TouchableOpacity
+  View, Text, TextInput, TouchableOpacity, Button
 } from 'react-native';
 
 import { database } from "../storage/Database";
 import styles from './Style';
 import LinearGradient from 'react-native-linear-gradient';
+import { LocalizedStrings } from '../enums/LocalizedStrings';
 
 const EditVitals = (props) => {
   const event = props.navigation.getParam('event');
@@ -52,6 +53,13 @@ const EditVitals = (props) => {
 
   return (
     <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
+      <View style={styles.topNav}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('EventList', { language })}>
+          <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
+        </TouchableOpacity>
+      </View>
+      <Text style={[styles.text, { fontWeight: 'bold' }]}>{LocalizedStrings[language].vitals}</Text>
+
       <View style={[styles.inputRow, { marginTop: 30 }]}>
         <TextInput
           style={styles.inputs}
@@ -124,9 +132,10 @@ const EditVitals = (props) => {
         />
       </View>
       <View style={{ marginTop: 30 }}>
-        <TouchableOpacity onPress={() => setVitals()}>
-          <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
-        </TouchableOpacity>
+        <Button
+          title={LocalizedStrings[language].save}
+          color={'#F77824'}
+          onPress={() => setVitals()} />
       </View>
     </LinearGradient>
   );

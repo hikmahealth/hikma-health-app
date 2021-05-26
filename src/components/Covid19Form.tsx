@@ -32,7 +32,7 @@ const formatTravel = (metadataObj, language) => {
 export const Covid19Display = (metadataObj, language) => {
   return (
     <View>
-      <Text style={{fontWeight: 'bold'}}>{formatResult(metadataObj, language)}</Text>
+      <Text style={{ fontWeight: 'bold' }}>{formatResult(metadataObj, language)}</Text>
       {!!metadataObj.fever ? <Text>{LocalizedStrings[language].fever}: {LocalizedStrings[language].yes}</Text> : null}
       {!!metadataObj.dryCough ? <Text>{LocalizedStrings[language].dryCough}: {LocalizedStrings[language].yes}</Text> : null}
       {!!metadataObj.diffBreathing ? <Text>{LocalizedStrings[language].diffBreathing}: {LocalizedStrings[language].yes}</Text> : null}
@@ -205,10 +205,14 @@ const Covid19Form = (props) => {
   return !submitted ? (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={[styles.containerLeft]}>
-        <View style={styles.searchBar}>
+        <View style={styles.topNav}>
           <TouchableOpacity onPress={() => { props.navigation.navigate('NewVisit', { language: language }) }}>
             <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
           </TouchableOpacity>
+        </View>
+
+        <View style={{ flexDirection: 'row', justifyContent: 'center', alignSelf: 'stretch', }}>
+          <Text style={[styles.text, { fontSize: 16, fontWeight: 'bold' }]}>{LocalizedStrings[language].covidScreening}</Text>
         </View>
 
         <View style={[styles.inputsContainer, { alignItems: 'flex-start' }]}>

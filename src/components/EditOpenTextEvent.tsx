@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  View, Text, Image, TextInput, TouchableOpacity
+  View, Text, TextInput, TouchableOpacity, Button
 } from 'react-native';
 
 import { database } from "../storage/Database";
@@ -25,10 +25,12 @@ const EditOpenTextEvent = (props) => {
 
   return (
     <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
-      <TouchableOpacity onPress={() => props.navigation.navigate('EventList', { language })}>
-        <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
-      </TouchableOpacity>
-      <Text>{event.event_type}</Text>
+      <View style={styles.topNav}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('EventList', { language })}>
+          <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
+        </TouchableOpacity>
+      </View>
+      <Text style={[styles.text, { fontWeight: 'bold' }]}>{event.event_type}</Text>
       <TextInput
         style={styles.loginInputsContainer}
         placeholder={LocalizedStrings[language].enterTextHere}
@@ -37,10 +39,11 @@ const EditOpenTextEvent = (props) => {
         multiline={true}
       />
 
-      <View>
-        <TouchableOpacity onPress={() => editEvent()}>
-          <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
-        </TouchableOpacity>
+      <View style={{ alignItems: 'center' }}>
+        <Button
+          title={LocalizedStrings[language].save}
+          color={'#F77824'}
+          onPress={() => editEvent()} />
       </View>
     </LinearGradient>
   );
