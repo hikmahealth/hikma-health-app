@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity, ImageBackground, Alert, Picker, ScrollView } from "react-native";
+import { View, Text, Image, TextInput, TouchableOpacity, ImageBackground, Picker, ScrollView, Button } from "react-native";
 import { ImageSync } from '../storage/ImageSync';
 import { database } from '../storage/Database';
 import styles from './Style';
@@ -151,7 +151,7 @@ const PatientView = (props) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.profileButton, isCollapsed ? {} : {backgroundColor: '#31BBF3', marginBottom: 5}, { height: 40, marginVertical: 1, flex: 1 }]}
+            style={[styles.profileButton, isCollapsed ? {} : { backgroundColor: '#31BBF3', marginBottom: 5 }, { height: 40, marginVertical: 1, flex: 1 }]}
             onPress={() => setIsCollapsed(!isCollapsed)}>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20 }}>
               <Text style={{ fontSize: 15 }}>{LocalizedStrings[language].patientSnapshot}</Text>
@@ -226,27 +226,27 @@ const PatientView = (props) => {
 
         </View>
         <View style={styles.newVisit}>
-          <TouchableOpacity onPress={() => {
-            const newVisitId = uuid();
-            database.addVisit({
-              id: newVisitId,
-              patient_id: patient.id,
-              clinic_id: clinicId,
-              provider_id: userId
-            })
-            props.navigation.navigate('NewVisit',
-              {
-                language: language,
-                patient: patient,
-                visitId: newVisitId.replace(/-/g, ""),
-                userName: userName
-              }
-            )
-          }}>
-            <Image source={require('../images/newVisit.png')} style={{ width: 75, height: 75 }} />
-          </TouchableOpacity>
+          <Button
+            title={LocalizedStrings[language].newVisit}
+            color={'#F77824'}
+            onPress={() => {
+              const newVisitId = uuid();
+              database.addVisit({
+                id: newVisitId,
+                patient_id: patient.id,
+                clinic_id: clinicId,
+                provider_id: userId
+              })
+              props.navigation.navigate('NewVisit',
+                {
+                  language: language,
+                  patient: patient,
+                  visitId: newVisitId.replace(/-/g, ""),
+                  userName: userName
+                }
+              )
+            }} />
         </View>
-
       </View>
     </ScrollView >
   )

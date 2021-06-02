@@ -219,14 +219,15 @@ const PatientList = (props) => {
         </View>
 
         <View style={{ position: 'absolute', bottom: 20, right: 20 }}>
-          <TouchableOpacity onPress={() => props.navigation.navigate('NewPatient',
+          <Button 
+            title={LocalizedStrings[language].newPatient}
+            color={'#F77824'}
+            onPress={() => props.navigation.navigate('NewPatient',
             {
               reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle,
               language: language
             }
-          )}>
-            <Image source={require('../images/newVisit.png')} style={{ width: 75, height: 75 }} />
-          </TouchableOpacity>
+          )}/>
         </View>
       </View>
       <Modal

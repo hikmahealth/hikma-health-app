@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, TouchableOpacity, Picker, Image } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Picker, Button } from "react-native";
 import { database } from "../storage/Database";
 import styles from './Style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -166,7 +166,9 @@ const EventList = (props) => {
 
       </View>
       <View style={{ position: 'absolute', bottom: 20, right: 20 }}>
-        <TouchableOpacity
+        <Button
+          title={LocalizedStrings[language].newEntry}
+          color={'#F77824'}
           onPress={() => {
             props.navigation.navigate('NewVisit',
               {
@@ -177,9 +179,7 @@ const EventList = (props) => {
                 existingVisit: true
               }
             )
-          }}>
-          <Image source={require('../images/newVisit.png')} style={{ width: 75, height: 75 }} />
-        </TouchableOpacity>
+          }} />
       </View>
     </LinearGradient>
   )

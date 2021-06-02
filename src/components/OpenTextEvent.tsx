@@ -46,7 +46,7 @@ const OpenTextEvent = (props) => {
           <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
         </TouchableOpacity>
       </View>
-      <Text style={[styles.text, { fontWeight: 'bold' }]}>{eventType}</Text>
+      <Text style={[styles.text, { fontSize: 16, fontWeight: 'bold' }]}>{eventType}</Text>
       <TextInput
         style={[styles.loginInputsContainer, { color: textColor }]}
         placeholder={LocalizedStrings[language].enterTextHere}

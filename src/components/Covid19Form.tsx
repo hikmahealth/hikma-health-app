@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import {
-  View, Text, Image, TextInput, TouchableOpacity, ScrollView, Picker
+  View, Text, Image, TouchableOpacity, ScrollView, Button
 } from 'react-native';
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
@@ -258,38 +258,38 @@ const Covid19Form = (props) => {
             style={styles.responseRow}
           // style={{ flexDirection: 'row', justifyContent: "flex-end", alignItems: 'center', }}
           >
-            <Text>{isCollapsed ? LocalizedStrings[language].riskFactors : LocalizedStrings[language].hideRiskFactors}</Text>
+            <Text style={styles.text}>{isCollapsed ? LocalizedStrings[language].riskFactors : LocalizedStrings[language].hideRiskFactors}</Text>
             <Image source={require('../images/menu.png')} style={{ width: 50, height: 50 }} />
           </TouchableOpacity>
 
           {isCollapsed ? null :
             <View style={{ width: '100%' }}>
               <View style={styles.responseRow}>
-                {radioButtons({ field: diabetes, action: setDiabetes, prompt: LocalizedStrings[language].diabetes })}
+                {radioButtons({ field: diabetes, action: setDiabetes, prompt: LocalizedStrings[language].diabetes, language })}
               </View>
               <View style={styles.responseRow}>
-                {radioButtons({ field: cardioDisease, action: setCardioDisease, prompt: LocalizedStrings[language].cardioDisease })}
+                {radioButtons({ field: cardioDisease, action: setCardioDisease, prompt: LocalizedStrings[language].cardioDisease, language })}
               </View>
               <View style={styles.responseRow}>
-                {radioButtons({ field: pulmonaryDisease, action: setPulmonaryDisease, prompt: LocalizedStrings[language].pulmonaryDisease })}
+                {radioButtons({ field: pulmonaryDisease, action: setPulmonaryDisease, prompt: LocalizedStrings[language].pulmonaryDisease, language })}
               </View>
               <View style={styles.responseRow}>
-                {radioButtons({ field: renalDisease, action: setRenalDisease, prompt: LocalizedStrings[language].renalDisease })}
+                {radioButtons({ field: renalDisease, action: setRenalDisease, prompt: LocalizedStrings[language].renalDisease, language })}
               </View>
               <View style={styles.responseRow}>
-                {radioButtons({ field: malignancy, action: setMalignancy, prompt: LocalizedStrings[language].malignancy })}
+                {radioButtons({ field: malignancy, action: setMalignancy, prompt: LocalizedStrings[language].malignancy, language })}
               </View>
               <View style={styles.responseRow}>
-                {radioButtons({ field: pregnant, action: setPregnant, prompt: LocalizedStrings[language].pregnant })}
+                {radioButtons({ field: pregnant, action: setPregnant, prompt: LocalizedStrings[language].pregnant, language })}
               </View>
               <View style={styles.responseRow}>
-                {radioButtons({ field: immunocompromised, action: setImmunocompromised, prompt: LocalizedStrings[language].immunocompromised })}
+                {radioButtons({ field: immunocompromised, action: setImmunocompromised, prompt: LocalizedStrings[language].immunocompromised, language })}
               </View>
               <View style={[styles.responseRow]}>
-                {radioButtons({ field: exposureKnown, action: setExposureKnown, prompt: LocalizedStrings[language].exposureKnown })}
+                {radioButtons({ field: exposureKnown, action: setExposureKnown, prompt: LocalizedStrings[language].exposureKnown, language })}
               </View>
               <View style={styles.responseRow}>
-                {radioButtons({ field: travel, action: setTravel, prompt: LocalizedStrings[language].travel })}
+                {radioButtons({ field: travel, action: setTravel, prompt: LocalizedStrings[language].travel, language })}
               </View>
               <View style={styles.responseRow}>
                 <View style={{ paddingLeft: 20 }}>{travel ? datePicker({ placeholder: LocalizedStrings[language].departure, date: travelDeparture, action: setTravelDeparture }) : null}</View>
@@ -300,16 +300,18 @@ const Covid19Form = (props) => {
           }
         </View>
         <View style={{ alignItems: 'center' }}>
-          <TouchableOpacity onPress={() => handleSaveScreeningEvent()}>
-            <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
-          </TouchableOpacity>
+          <Button
+            title={LocalizedStrings[language].save}
+            color={'#F77824'}
+            onPress={() => handleSaveScreeningEvent()}
+          />
         </View>
       </LinearGradient>
     </ScrollView>
   ) : (
       <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
         <View style={styles.searchBar}>
-          <TouchableOpacity onPress={() => { setSubmitted(false) }}>
+          <TouchableOpacity onPress={() => { props.navigation.navigate('NewVisit', { language: language }) }}>
             <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
           </TouchableOpacity>
         </View>

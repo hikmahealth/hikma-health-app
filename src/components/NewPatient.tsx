@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
-  View, Text, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, ImageBackground, Platform, Picker
+  View, Text, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, Picker, Button
 } from 'react-native';
 import { database } from "../storage/Database";
 import { ImageSync } from '../storage/ImageSync'
@@ -220,9 +220,11 @@ const NewPatient = (props) => {
           />
         </View>
         <View style={{ marginTop: 30 }}>
-          <TouchableOpacity onPress={() => addPatient()}>
-            <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
-          </TouchableOpacity>
+          <Button
+            title={LocalizedStrings[language].save}
+            color={'#F77824'}
+            onPress={() => addPatient()}
+          />
         </View>
       </LinearGradient>
     );

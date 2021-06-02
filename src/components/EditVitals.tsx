@@ -58,7 +58,7 @@ const EditVitals = (props) => {
           <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
         </TouchableOpacity>
       </View>
-      <Text style={[styles.text, { fontWeight: 'bold' }]}>{LocalizedStrings[language].vitals}</Text>
+      <Text style={[styles.text, {  fontSize: 16, fontWeight: 'bold' }]}>{LocalizedStrings[language].vitals}</Text>
 
       <View style={[styles.inputRow, { marginTop: 30 }]}>
         <TextInput

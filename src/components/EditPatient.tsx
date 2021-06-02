@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, Image, TextInput, TouchableOpacity, Platform, Picker, TouchableWithoutFeedback
+  View, Text, Image, TextInput, TouchableOpacity, Picker, TouchableWithoutFeedback, Button
 } from 'react-native';
 import { ImageSync } from '../storage/ImageSync'
 import { uuid } from 'uuidv4';
@@ -31,7 +31,7 @@ const EditPatient = (props) => {
   const [hometownText, setHometownText] = useState(!!props.navigation.state.params.patient.hometown ? props.navigation.state.params.patient.hometown.content[language] : '');
   const [phone, setPhone] = useState(props.navigation.state.params.patient.phone || '');
   const [imageTimestamp, setImageTimestamp] = useState(props.navigation.state.params.patient.image_timestamp || '');
-  const [camp, setCamp] = useState('');  
+  const [camp, setCamp] = useState('');
   const [cameraOpen, setCameraOpen] = useState(false);
   const today = new Date();
 
@@ -268,7 +268,7 @@ const EditPatient = (props) => {
           />
         </View>
         <View style={styles.inputRow}>
-        <TextInput
+          <TextInput
             style={[styles.inputs]}
             placeholder={LocalizedStrings[language].camp}
             onChangeText={(text) => {
@@ -285,9 +285,11 @@ const EditPatient = (props) => {
           />
         </View>
         <View style={{ marginTop: 30 }}>
-          <TouchableOpacity onPress={() => editPatient()}>
-            <Image source={require('../images/login.png')} style={{ width: 75, height: 75 }} />
-          </TouchableOpacity>
+          <Button
+            title={LocalizedStrings[language].save}
+            color={'#F77824'}
+            onPress={() => editPatient()}
+          />
         </View>
       </LinearGradient>
     );

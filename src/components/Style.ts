@@ -237,11 +237,11 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   gridItemText: {
-    fontSize: 20,
+    fontSize: 18,
     textAlign: 'center',
   },
   gridItemLabel: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'center',
   },
