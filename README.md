@@ -7,12 +7,12 @@ This repository contains the client-side code for Hikma Health's mobile applicat
 This app is built using React Native and can be compiled for either iOS or Android, although we do most of our testing on Android. 
 
 # Local Frontend Setup
-----------------------
+
 Requirements: local backend is running, and local db is populated with a clinic and a user.
 
 Fork frontend repository to your organization and clone
 
-**Point the the selected instance to your local backend:**
+**Point to the selected instance to your local backend:**
 -----------------------------------------------------------
 In src/components/Login.tsx:
 If present, comment out the useEffect hook (lines 32-44)
@@ -65,7 +65,7 @@ This should run the app on the emulator that you have running, and you should be
 -------------------
 Doublepress the ‘R’ key with the emulator in the foreground in order to recompile the app after making changes in the codebase.
 
-Sometimes you'll want to clear the device database when testing things - maybe you add some test data that you don't want to sync to your local psql db. To do this:
+Sometimes you'll want to clear the device database when testing things - maybe you added some test data that you don't want to sync to your local psql db. To do this:
 change this line in `DatabaseInitialization.ts:`
 ```
     const dropAllTables = false;
@@ -77,5 +77,7 @@ to
 
 Reload the app, and then be sure to change this line back and reload the app again.
 
+Managing Releases
+-----------------
 There is an older version of the application on the Google Play Store, but releases and updates have historically been handled by manually building APK files within Android Studio and sharing with clinics  
 
