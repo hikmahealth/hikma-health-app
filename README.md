@@ -12,7 +12,7 @@ Requirements: local backend is running, and local db is populated with a clinic 
 
 Fork frontend repository to your organization and clone
 
-**Point to the selected instance to your local backend:**
+**Point the selected instance to your local backend:**
 -----------------------------------------------------------
 In src/components/Login.tsx:
 If present, comment out the useEffect hook (lines 32-44)
