@@ -4,7 +4,6 @@ import {
 } from 'react-native';
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
-import LinearGradient from 'react-native-linear-gradient';
 import { database } from "../storage/Database";
 import { uuid } from "uuidv4";
 import { LocalizedStrings } from '../enums/LocalizedStrings';
@@ -64,7 +63,7 @@ const NewVisit = (props) => {
   }
 
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
+    <View style={styles.containerLeft}>
       <View style={styles.searchBar}>
         <TouchableOpacity onPress={() => existingVisit ?
           props.navigation.navigate('EventList', { language, patient }) :
@@ -177,7 +176,7 @@ const NewVisit = (props) => {
           <Text style={styles.actionText}>{LocalizedStrings[language].covidScreening}</Text>
         </TouchableOpacity>
       </View>
-    </LinearGradient>
+    </View>
   );
 };
 

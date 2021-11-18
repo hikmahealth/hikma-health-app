@@ -6,7 +6,6 @@ import {
 import { database } from "../storage/Database";
 import { StringContent } from '../types/StringContent';
 import { NewUser } from '../types/User';
-import LinearGradient from 'react-native-linear-gradient';
 import { DatabaseSync } from '../storage/Sync'
 import { ImageSync } from '../storage/ImageSync'
 import { Clinic } from '../types/Clinic';
@@ -15,8 +14,8 @@ import styles from './Style';
 const Login = (props) => {
   const databaseSync = new DatabaseSync();
   const imageSync = new ImageSync();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('demo@hikmahealth.org');
+  const [password, setPassword] = useState('HikmaHealth');
   const [instanceList, setInstanceList] = useState([]);
   const [selectedInstance, setSelectedInstance] = useState();
   const [showInstanceDropdown, setShowInstanceDropdown] = useState(false);
@@ -142,7 +141,7 @@ const Login = (props) => {
   };
 
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.loginContainer}>
+    <View style={styles.loginContainer}>
       <Modal
         animationType="slide"
         transparent={true}
@@ -347,7 +346,7 @@ const Login = (props) => {
           <Image source={require('../images/information.png')} style={{ width: 20, height: 20 }} />
         </TouchableOpacity>
       </View>
-    </LinearGradient>
+    </View>
   );
 };
 

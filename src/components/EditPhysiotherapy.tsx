@@ -5,7 +5,6 @@ import {
 
 import { database } from "../storage/Database";
 import styles from './Style';
-import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import radioButtons from './shared/RadioButtons';
 
@@ -59,7 +58,7 @@ const EditPhysiotherapy = (props) => {
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
+      <View style={styles.containerLeft}>
         <View style={styles.topNav}>
           <TouchableOpacity onPress={() => props.navigation.navigate('EventList', { language })}>
             <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
@@ -152,7 +151,7 @@ const EditPhysiotherapy = (props) => {
             color={'#F77824'}
             onPress={() => submit()} />
         </View>
-      </LinearGradient>
+      </View>
     </ScrollView>
   );
 };

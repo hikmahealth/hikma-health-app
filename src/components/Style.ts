@@ -53,12 +53,14 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     flex: 1,
+    backgroundColor: "#3A539B",
   },
   containerLeft: {
     paddingTop: Platform.OS === 'ios' ? getStatusBarHeight() : 0,
     paddingBottom: 20,
     justifyContent: 'flex-start',
     flex: 1,
+    backgroundColor: "#3A539B",
   },
   inputsContainer: {
     flex: 1,
@@ -100,6 +102,7 @@ export default StyleSheet.create({
     color: '#FFFFFF'
   },
   main: {
+    backgroundColor: "#3A539B",
     paddingTop: Platform.OS === 'ios' ? getStatusBarHeight() : 0,
     flex: 1,
   },

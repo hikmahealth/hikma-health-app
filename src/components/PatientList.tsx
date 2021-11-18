@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, Image as Image, TextInput, FlatList, TouchableOpacity, ImageBackground, Keyboard, Picker, Modal, TouchableHighlight, Button } from "react-native";
-import LinearGradient from 'react-native-linear-gradient';
 import { database } from "../storage/Database";
 import { DatabaseSync } from "../storage/Sync";
 import { ImageSync } from '../storage/ImageSync';
@@ -160,7 +159,7 @@ const PatientList = (props) => {
   )
 
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.main}>
+    <View style={styles.main}>
       <View style={styles.listContainer}>
         <View style={styles.searchBar}>
           <TextInput
@@ -334,7 +333,7 @@ const PatientList = (props) => {
           </View>
         </View>
       </Modal>
-    </LinearGradient>
+    </View>
   )
 }
 

@@ -7,7 +7,6 @@ import { database } from "../storage/Database";
 import { uuid } from 'uuidv4';
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
-import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 
 export const VitalsDisplay = (metadataObj) => {
@@ -62,7 +61,7 @@ const Vitals = (props) => {
   };
 
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.topNav}>
         <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit')}>
           <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
@@ -146,7 +145,7 @@ const Vitals = (props) => {
           color={'#F77824'}
           onPress={() => setVitals()} />
       </View>
-    </LinearGradient>
+    </View>
   );
 };
 

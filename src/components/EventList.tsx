@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, TouchableOpacity, Picker, Button } from "react-native";
 import { database } from "../storage/Database";
 import styles from './Style';
-import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings'
 import { EventTypes } from "../enums/EventTypes";
 import { Event } from "../types/Event";
@@ -144,7 +143,7 @@ const EventList = (props) => {
   }
 
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.main}>
+    <View style={styles.main}>
       <View style={styles.searchBar}>
         <TouchableOpacity onPress={() => props.navigation.navigate('VisitList', { language: language, patient: patient })}>
           <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
@@ -181,7 +180,7 @@ const EventList = (props) => {
             )
           }} />
       </View>
-    </LinearGradient>
+    </View>
   )
 
 }

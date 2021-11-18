@@ -6,7 +6,6 @@ import {
 import { database } from "../storage/Database";
 import styles from './Style';
 import { uuid } from 'uuidv4';
-import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import { EventTypes } from '../enums/EventTypes';
 
@@ -40,7 +39,7 @@ const OpenTextEvent = (props) => {
   };
 
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.topNav}>
         <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit')}>
           <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
@@ -63,7 +62,7 @@ const OpenTextEvent = (props) => {
           color={'#F77824'}
           onPress={() => addEvent()} />
       </View>
-    </LinearGradient>
+    </View>
   );
 };
 

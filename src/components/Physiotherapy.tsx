@@ -7,7 +7,6 @@ import { database } from "../storage/Database";
 import { v4 as uuid } from 'uuid';
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
-import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import radioButtons from './shared/RadioButtons';
 import { formatTextDisplay } from './shared/EventFieldDisplay';
@@ -84,7 +83,7 @@ const Physiotherapy = (props) => {
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
+      <View style={styles.containerLeft}>
         <View style={styles.topNav}>
           <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit')}>
             <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
@@ -178,7 +177,7 @@ const Physiotherapy = (props) => {
             color={'#F77824'}
             onPress={() => submit()} />
         </View>
-      </LinearGradient>
+      </View>
     </ScrollView>
   );
 };

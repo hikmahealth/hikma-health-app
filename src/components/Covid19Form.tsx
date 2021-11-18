@@ -4,7 +4,6 @@ import {
 } from 'react-native';
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
-import LinearGradient from 'react-native-linear-gradient';
 import { database } from "../storage/Database";
 import { uuid } from "uuidv4";
 import { LocalizedStrings } from '../enums/LocalizedStrings';
@@ -204,7 +203,7 @@ const Covid19Form = (props) => {
 
   return !submitted ? (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={[styles.containerLeft]}>
+      <View style={[styles.containerLeft]}>
         <View style={styles.topNav}>
           <TouchableOpacity onPress={() => { props.navigation.navigate('NewVisit', { language: language }) }}>
             <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
@@ -306,10 +305,10 @@ const Covid19Form = (props) => {
             onPress={() => handleSaveScreeningEvent()}
           />
         </View>
-      </LinearGradient>
+      </View>
     </ScrollView>
   ) : (
-      <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
+      <View colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
         <View style={styles.searchBar}>
           <TouchableOpacity onPress={() => { props.navigation.navigate('NewVisit', { language: language }) }}>
             <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
@@ -319,7 +318,7 @@ const Covid19Form = (props) => {
         <View style={{ alignItems: 'center' }}>
           <Text style={{ color: '#FFFFFF', fontSize: 20 }}>{result()}</Text>
         </View>
-      </LinearGradient>
+      </View>
     );
 };
 

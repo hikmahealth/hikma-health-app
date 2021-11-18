@@ -7,7 +7,6 @@ import { ImageSync } from '../storage/ImageSync'
 import { uuid } from 'uuidv4';
 import styles from './Style';
 import DatePicker from 'react-native-datepicker'
-import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import { RNCamera } from 'react-native-camera';
 import { useCamera } from 'react-native-camera-hooks';
@@ -135,7 +134,7 @@ const NewPatient = (props) => {
       </TouchableOpacity>
     </View>
   ) : (
-      <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
+      <View style={styles.container}>
         {LanguageToggle()}
         <View style={styles.inputRow}>
           {!!imageTimestamp ?
@@ -226,7 +225,7 @@ const NewPatient = (props) => {
             onPress={() => addPatient()}
           />
         </View>
-      </LinearGradient>
+      </View>
     );
 };
 
