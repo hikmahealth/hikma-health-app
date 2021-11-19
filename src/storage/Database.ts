@@ -3,7 +3,7 @@ import { DatabaseInitialization } from "./DatabaseInitialization";
 import { Clinic } from "../types/Clinic";
 import { User, NewUser } from "../types/User";
 import { StringContent } from "../types/StringContent";
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 import { SyncResponse } from "../types/syncResponse";
 import { Patient, NewPatient } from "../types/Patient";
 import { LanguageString } from "../types/LanguageString";

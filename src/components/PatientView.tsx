@@ -3,7 +3,7 @@ import { View, Text, Image, TextInput, TouchableOpacity, ImageBackground, Picker
 import { ImageSync } from '../storage/ImageSync';
 import { database } from '../storage/Database';
 import styles from './Style';
-import { uuid } from "uuidv4";
+import { v4 as uuid } from 'uuid';
 import { EventTypes } from "../enums/EventTypes";
 import { iconHash } from '../services/hash'
 import { icons } from '../enums/Icons';
