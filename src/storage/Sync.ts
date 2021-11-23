@@ -1,7 +1,7 @@
 import { Platform, Alert } from "react-native";
-import RNFS from "react-native-fs";
 import RNFetchBlob, { FetchBlobResponse } from "rn-fetch-blob";
 import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
+import RNFS from "react-native-fs";
 import { DATABASE } from "./Constants";
 import { database } from "./Database";
 import { SyncResponse } from "../types/syncResponse";
@@ -63,11 +63,14 @@ export class DatabaseSync {
     console.log(
       `Syncing DB!`
     );
-    return RNFetchBlob.fetch(
+    return RNFetchBlob
+    .config({ timeout: 600000})
+    .fetch(
       "POST",
       `${instanceUrl}/api/sync`,
       {
         "Content-Type": "multipart/form-data",
+        "Transfer-Encoding": "chunked"
       }, [
         {
           name: 'email', data: email

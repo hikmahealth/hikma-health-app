@@ -22,6 +22,8 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-fs": "2.15.2",
     "react-native-gesture-handler": "^1.5.0",
+    "react-native-get-random-values": "^1.7.1",
+    "react-native-linear-gradient": "^2.5.6",
     "react-native-screens": "^1.0.0-alpha.23",
     "react-native-search-bar": "^3.5.1",
     "react-native-sqlite-storage": "^4.1.0",
@@ -31,7 +33,7 @@
     "react-navigation": "^4.0.10",
     "react-navigation-stack": "^1.10.3",
     "rn-fetch-blob": "^0.11.2",
-    "uuidv4": "^6.0.0"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",

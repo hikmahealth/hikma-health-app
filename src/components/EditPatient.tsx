@@ -3,7 +3,7 @@ import {
   View, Text, Image, TextInput, TouchableOpacity, Picker, TouchableWithoutFeedback, Button
 } from 'react-native';
 import { ImageSync } from '../storage/ImageSync'
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 import { database } from "../storage/Database";
 import styles from './Style';
 import DatePicker from 'react-native-datepicker'

@@ -5,7 +5,7 @@ import {
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
 import { database } from "../storage/Database";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from 'uuid';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';

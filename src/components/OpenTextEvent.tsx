@@ -5,7 +5,7 @@ import {
 
 import { database } from "../storage/Database";
 import styles from './Style';
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import { EventTypes } from '../enums/EventTypes';
 

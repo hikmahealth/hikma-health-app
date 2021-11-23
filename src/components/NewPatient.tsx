@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { database } from "../storage/Database";
 import { ImageSync } from '../storage/ImageSync'
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 import styles from './Style';
 import DatePicker from 'react-native-datepicker'
 import { LocalizedStrings } from '../enums/LocalizedStrings';
