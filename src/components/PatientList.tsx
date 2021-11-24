@@ -161,9 +161,36 @@ const PatientList = (props) => {
   return (
     <View style={styles.main}>
       <View style={styles.listContainer}>
-        <View style={styles.searchBar}>
+        <View style={[styles.searchBar, { display: 'flex' }]}>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flex: 1, display: 'flex' }}>
+            <View style={[styles.card]}>
+              <TouchableOpacity onPress={() => logout()}>
+                <Text>{LocalizedStrings[language].logOut}</Text>
+              </TouchableOpacity>
+            </View>
+
+          </View>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', display: 'flex' }}>
+            <Image source={require('../images/logo_no_text.png')} style={{ width: 60, height: 60, }} />
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1, display: 'flex', alignItems: 'center' }}>
+            {LanguageToggle()}
+            <TouchableOpacity
+              onPress={async () => {
+                await databaseSync.performSync(instanceUrl, email, password, language)
+                await imageSync.syncPhotos(instanceUrl, email, password)
+                reloadPatients()
+              }}>
+              <View style={[styles.card, { flexDirection: 'row', alignItems: 'center' }]}>
+                <Text>{LocalizedStrings[language].sync}</Text>
+                <Image source={require('../images/sync.png')} style={{ width: 15, height: 15, marginLeft: 5 }} />
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={[styles.searchBar, { backgroundColor: '#6177B7', borderRadius: 30 }]}>
           <TextInput
-            style={styles.searchInput}
+            style={[styles.searchInput, {marginLeft: 10}]}
             placeholderTextColor='#FFFFFF'
             placeholder={LocalizedStrings[language].patientSearch}
             onChangeText={(text) => setGivenName(text)}
@@ -181,7 +208,7 @@ const PatientList = (props) => {
               setSearchIconFunction(true)
             }
           }}>
-            <Image source={require('../images/search.jpg')} style={{ width: 30, height: 30 }} />
+            <Image source={require('../images/search.jpg')} style={{ width: 30, height: 30, marginRight: 10 }} />
           </TouchableOpacity>
         </View>
 
@@ -194,21 +221,7 @@ const PatientList = (props) => {
             <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].clearFilters}</Text>
           </TouchableOpacity>
         </View>
-        <View style={[styles.searchBar, { marginTop: 0, justifyContent: 'center' }]}>
-          {LanguageToggle()}
-          <TouchableOpacity onPress={async () => {
-            await databaseSync.performSync(instanceUrl, email, password, language)
-            await imageSync.syncPhotos(instanceUrl, email, password)
-            reloadPatients()
-          }}
-            style={{ marginLeft: 50, marginRight: 100 }}>
-            <Image source={require('../images/sync.png')} style={{ width: 30, height: 30 }} />
-          </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => logout()}>
-            <Image source={require('../images/logout.png')} style={{ width: 30, height: 30 }} />
-          </TouchableOpacity>
-        </View>
         <View style={styles.scroll}>
           <FlatList
             keyExtractor={keyExtractor}
@@ -218,15 +231,15 @@ const PatientList = (props) => {
         </View>
 
         <View style={{ position: 'absolute', bottom: 20, right: 20 }}>
-          <Button 
+          <Button
             title={LocalizedStrings[language].newPatient}
             color={'#F77824'}
             onPress={() => props.navigation.navigate('NewPatient',
-            {
-              reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle,
-              language: language
-            }
-          )}/>
+              {
+                reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle,
+                language: language
+              }
+            )} />
         </View>
       </View>
       <Modal

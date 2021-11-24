@@ -121,6 +121,8 @@ export const LocalizedStrings = {
     treatmentSession: "Treatment Session",
     recommendations: "Recommendations",
     patientSnapshot: "Patient Snapshot",
+    logOut: "Log Out",
+    sync: "Sync",
   },
   "ar": {
     patients: "المرضى",
