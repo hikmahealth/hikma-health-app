@@ -9,7 +9,6 @@ export interface Patient {
   hometown: LanguageString
   sex: string
   phone: string
-  image_timestamp: string
   camp: string
 }
 
@@ -22,5 +21,4 @@ export interface NewPatient {
   hometown: string
   sex: string
   phone: string
-  image_timestamp: string
 }

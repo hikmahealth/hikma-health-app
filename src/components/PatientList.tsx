@@ -3,7 +3,6 @@ import { View, Text, Image as Image, TextInput, FlatList, TouchableOpacity, Imag
 import LinearGradient from 'react-native-linear-gradient';
 import { database } from "../storage/Database";
 import { DatabaseSync } from "../storage/Sync";
-import { ImageSync } from '../storage/ImageSync';
 import styles from './Style';
 import { iconHash } from '../services/hash'
 import { LocalizedStrings } from '../enums/LocalizedStrings';
@@ -11,7 +10,6 @@ import { icons } from '../enums/Icons';
 
 const PatientList = (props) => {
   const databaseSync: DatabaseSync = new DatabaseSync();
-  const imageSync: ImageSync = new ImageSync();
   const email = props.navigation.state.params.email;
   const password = props.navigation.state.params.password;
   const clinicId = props.navigation.state.params.clinicId;
@@ -38,12 +36,6 @@ const PatientList = (props) => {
   }, [props.navigation.state.params.reloadPatientsToggle, language])
 
   useEffect(() => {
-    if (!!props.navigation.getParam('imagesSynced')) {
-      props.navigation.state.params.imagesSynced.then(() => {
-        reloadPatients()
-      })
-    }
-
     if (!!props.navigation.getParam('language') && language !== props.navigation.getParam('language')) {
       setLanguage(props.navigation.getParam('language'));
     }
@@ -134,14 +126,7 @@ const PatientList = (props) => {
       }
     )}>
       <View style={styles.cardContent}>
-        {!!item.image_timestamp ?
-          <ImageBackground source={{ uri: `${imageSync.imgURI(item.id)}/${item.image_timestamp}.jpg` }} style={{ width: 100, height: 100, justifyContent: 'center' }}>
-            <View style={styles.hexagon}>
-              <View style={styles.hexagonBefore} />
-              <View style={styles.hexagonAfter} />
-            </View>
-          </ImageBackground> :
-          <Image source={icons[iconHash(item.id)]} style={{ width: 100, height: 100, justifyContent: 'center' }} />}
+        <Image source={icons[iconHash(item.id)]} style={{ width: 100, height: 100, justifyContent: 'center' }} />
         <View style={{ flexShrink: 1, marginLeft: 20 }}>
           {displayName(item)}
           <View
@@ -199,7 +184,6 @@ const PatientList = (props) => {
           {LanguageToggle()}
           <TouchableOpacity onPress={async () => {
             await databaseSync.performSync(instanceUrl, email, password, language)
-            await imageSync.syncPhotos(instanceUrl, email, password)
             reloadPatients()
           }}
             style={{ marginLeft: 50, marginRight: 100 }}>
@@ -219,15 +203,15 @@ const PatientList = (props) => {
         </View>
 
         <View style={{ position: 'absolute', bottom: 20, right: 20 }}>
-          <Button 
+          <Button
             title={LocalizedStrings[language].newPatient}
             color={'#F77824'}
             onPress={() => props.navigation.navigate('NewPatient',
-            {
-              reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle,
-              language: language
-            }
-          )}/>
+              {
+                reloadPatientsToggle: props.navigation.state.params.reloadPatientsToggle,
+                language: language
+              }
+            )} />
         </View>
       </View>
       <Modal

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Image, TextInput, TouchableOpacity, ImageBackground, Picker, ScrollView, Button } from "react-native";
-import { ImageSync } from '../storage/ImageSync';
 import { database } from '../storage/Database';
 import styles from './Style';
 import { v4 as uuid } from 'uuid';
@@ -12,7 +11,6 @@ import { LocalizedStrings } from "../enums/LocalizedStrings";
 
 const PatientView = (props) => {
 
-  const imageSync: ImageSync = new ImageSync();
   const [patient, setPatient] = useState(props.navigation.getParam('patient'));
   const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
   const [isEditingSummary, setIsEditingSummary] = useState(false);
@@ -93,7 +91,7 @@ const PatientView = (props) => {
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.viewContainer}>
         <View style={styles.searchBar}>
-          <TouchableOpacity onPress={() => props.navigation.navigate('PatientList', { language: language, reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle, imagesSynced: null })}>
+          <TouchableOpacity onPress={() => props.navigation.navigate('PatientList', { language: language, reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle})}>
             <Text style={{ padding: 20 }}>{LocalizedStrings[language].PATIENTS}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => props.navigation.navigate('EditPatient', { language: language, patient: patient })}>
@@ -103,17 +101,7 @@ const PatientView = (props) => {
         </View>
 
         <View style={styles.cardContent}>
-          {!!patient.image_timestamp ?
-            <ImageBackground source={{ uri: `${imageSync.imgURI(patient.id)}/${patient.image_timestamp}.jpg` }} style={{ width: 100, height: 100, justifyContent: 'center' }}>
-              <View style={styles.hexagon}>
-                <View style={styles.hexagonBeforePatientView} />
-                <View style={styles.hexagonAfterPatientView} />
-              </View>
-            </ImageBackground> :
-            <Image source={icons[iconHash(patient.id)]} style={{ width: 100, height: 100, justifyContent: 'center' }}>
-
-            </Image>}
-
+          <Image source={icons[iconHash(patient.id)]} style={{ width: 100, height: 100, justifyContent: 'center' }} />
           <View style={{ marginLeft: 20 }}>
             <Text style={styles.gridItemText}>{displayName(patient)}</Text>
             <Text>{`${LocalizedStrings[language].camp}:  ${patient.camp}`}</Text>
