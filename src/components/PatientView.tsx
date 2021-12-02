@@ -8,6 +8,7 @@ import { iconHash } from '../services/hash'
 import { icons } from '../enums/Icons';
 import { User } from "../types/User";
 import { LocalizedStrings } from "../enums/LocalizedStrings";
+import Header from "./shared/Header";
 
 const PatientView = (props) => {
 
@@ -48,19 +49,6 @@ const PatientView = (props) => {
     })
   }, [])
 
-  const LanguageToggle = () => {
-    return (
-      <Picker
-        selectedValue={language}
-        onValueChange={value => setLanguage(value)}
-        style={{ height: 50, width: 90 }}
-      >
-        <Picker.Item value='en' label='en' />
-        <Picker.Item value='ar' label='ar' />
-      </Picker>
-    )
-  }
-
   const displayName = (patient) => {
     if (!!patient.given_name.content[language] && !!patient.surname.content[language]) {
       return <Text>{`${patient.given_name.content[language]} ${patient.surname.content[language]}`}</Text>
@@ -90,17 +78,23 @@ const PatientView = (props) => {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.viewContainer}>
-        <View style={styles.searchBar}>
+        {/* <View style={styles.searchBar}>
           <TouchableOpacity onPress={() => props.navigation.navigate('PatientList', { language: language, reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle})}>
             <Text style={{ padding: 20 }}>{LocalizedStrings[language].PATIENTS}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => props.navigation.navigate('EditPatient', { language: language, patient: patient })}>
             <Text style={{ padding: 20 }}>{`${LocalizedStrings[language].edit}`}</Text>
           </TouchableOpacity>
-          {LanguageToggle()}
-        </View>
+          {LanguageToggle({language, setLanguage})}
+        </View> */}
+
+        {Header({action: () => props.navigation.navigate('PatientList', { language: language, reloadPatientsToggle: !props.navigation.state.params.reloadPatientsToggle}), language, setLanguage})}
 
         <View style={styles.cardContent}>
+          {/* TODO: editPatient
+          <TouchableOpacity onPress={() => props.navigation.navigate('EditPatient', { language: language, patient: patient })}>
+            <Text style={{ padding: 20 }}>{`${LocalizedStrings[language].edit}`}</Text>
+          </TouchableOpacity> */}
           <Image source={icons[iconHash(patient.id)]} style={{ width: 100, height: 100, justifyContent: 'center' }} />
           <View style={{ marginLeft: 20 }}>
             <Text style={styles.gridItemText}>{displayName(patient)}</Text>

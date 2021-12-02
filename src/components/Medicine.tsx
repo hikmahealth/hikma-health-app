@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid';
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
+import Header from './shared/Header';
 
 export const MedicineType = (value, action, language) => {
   return (
@@ -47,10 +48,10 @@ const Medicine = (props) => {
   const [type, setType] = useState(null);
   const [dosage, setDosage] = useState(null);
   const [days, setDays] = useState(null);
+  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
 
   const patientId = props.navigation.getParam('patientId');
   const visitId = props.navigation.getParam('visitId');
-  const language = props.navigation.getParam('language', 'en');
   const userName = props.navigation.getParam('userName');
 
   const submit = async () => {
@@ -76,11 +77,8 @@ const Medicine = (props) => {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.containerLeft}>
-        <View style={styles.topNav}>
-          <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit')}>
-            <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
-          </TouchableOpacity>
-        </View>
+        {Header({ action: () => props.navigation.navigate('NewVisit', { language }), language, setLanguage })}
+
 
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignSelf: 'stretch', }}>
           <Text style={[styles.text, { fontSize: 16, fontWeight: 'bold' }]}>{LocalizedStrings[language].medicine}</Text>

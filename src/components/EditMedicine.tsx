@@ -7,12 +7,13 @@ import { database } from "../storage/Database";
 import styles from './Style';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import { MedicineType } from './Medicine';
+import Header from './shared/Header';
 
 const EditMedicine = (props) => {
   const event = props.navigation.getParam('event');
-  const language = props.navigation.getParam('language', 'en')
   const userName = props.navigation.getParam('userName');
 
+  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
   const [medication, setMedication] = useState(null);
   const [type, setType] = useState(null);
   const [dosage, setDosage] = useState(null);
@@ -44,12 +45,7 @@ const EditMedicine = (props) => {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.containerLeft}>
-        <View style={styles.topNav}>
-          <TouchableOpacity onPress={() => props.navigation.navigate('EventList', { language })}>
-            <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
-          </TouchableOpacity>
-        </View>
-
+        {Header({ action: () => props.navigation.navigate('EventList', { language }), language, setLanguage })}
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignSelf: 'stretch', }}>
           <Text style={[styles.text, { fontSize: 16, fontWeight: 'bold' }]}>{LocalizedStrings[language].medicine}</Text>
         </View>

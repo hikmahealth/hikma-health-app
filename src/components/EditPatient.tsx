@@ -8,11 +8,12 @@ import styles from './Style';
 import DatePicker from 'react-native-datepicker'
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import { EventTypes } from '../enums/EventTypes';
+import Header from './shared/Header';
 
 const EditPatient = (props) => {
-  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
   const patient = props.navigation.getParam('patient');
 
+  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
   const [givenNameText, setGivenNameText] = useState(!!props.navigation.state.params.patient.given_name ? props.navigation.state.params.patient.given_name.content[language] : '');
   const [surnameText, setSurnameText] = useState(!!props.navigation.state.params.patient.surname ? props.navigation.state.params.patient.surname.content[language] : '');
   const [dob, setDob] = useState(props.navigation.state.params.patient.date_of_birth == 'None' ? '' : props.navigation.state.params.patient.date_of_birth);
@@ -151,7 +152,7 @@ const EditPatient = (props) => {
 
   return (
     <View style={styles.container}>
-      {LanguageToggle()}
+        {Header({ action: () => props.navigation.navigate('PatientView', { language }), language, setLanguage })}
       <View style={styles.inputRow}>
         <TextInput
           style={styles.inputs}

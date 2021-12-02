@@ -10,6 +10,7 @@ import { EventTypes } from '../enums/EventTypes';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import radioButtons from './shared/RadioButtons';
 import { formatTextDisplay } from './shared/EventFieldDisplay';
+import Header from './shared/Header';
 
 export const PhysiotherapyDisplay = (metadataObj, language) => {
   return (
@@ -35,10 +36,10 @@ const Physiotherapy = (props) => {
   const [recommendations, setRecommendations] = useState(null);
   const [referral, setReferral] = useState(null);
   const [referralText, setReferralText] = useState(null);
+  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
 
   const patientId = props.navigation.getParam('patientId');
   const visitId = props.navigation.getParam('visitId');
-  const language = props.navigation.getParam('language', 'en');
   const userName = props.navigation.getParam('userName');
 
   useEffect(() => {
@@ -84,11 +85,8 @@ const Physiotherapy = (props) => {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.containerLeft}>
-        <View style={styles.topNav}>
-          <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit')}>
-            <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
-          </TouchableOpacity>
-        </View>
+        {Header({ action: () => props.navigation.navigate('NewVisit', { language }), language, setLanguage })}
+
 
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignSelf: 'stretch', }}>
           <Text style={[styles.text, { fontSize: 16, fontWeight: 'bold' }]}>{LocalizedStrings[language].physiotherapy}</Text>

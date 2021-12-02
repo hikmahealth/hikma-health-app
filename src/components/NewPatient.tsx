@@ -8,6 +8,7 @@ import styles from './Style';
 import DatePicker from 'react-native-datepicker'
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import { EventTypes } from '../enums/EventTypes';
+import Header from './shared/Header';
 
 const NewPatient = (props) => {
   const [givenName, setGivenName] = useState('');
@@ -57,21 +58,7 @@ const NewPatient = (props) => {
         language: language
       })
     })
-
   };
-
-  const LanguageToggle = () => {
-    return (
-      <Picker
-        selectedValue={language}
-        onValueChange={value => setLanguage(value)}
-        style={[styles.picker, { marginLeft: 10 }]}
-      >
-        <Picker.Item value='en' label='en' />
-        <Picker.Item value='ar' label='ar' />
-      </Picker>
-    )
-  }
 
   function RadioButton(props) {
     return (
@@ -83,11 +70,9 @@ const NewPatient = (props) => {
     );
   }
 
-
-
   return (
     <View style={styles.container}>
-      {LanguageToggle()}
+      {Header({ action: () => props.navigation.navigate('PatientList', { language }), language, setLanguage })}
       <View style={styles.inputRow}>
         <TextInput
           style={styles.inputs}

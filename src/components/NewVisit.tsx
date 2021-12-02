@@ -9,6 +9,7 @@ import { v4 as uuid } from 'uuid';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
+import Header from './shared/Header';
 
 const NewVisit = (props) => {
   const [visitType, setVisitType] = useState('');
@@ -64,15 +65,11 @@ const NewVisit = (props) => {
 
   return (
     <View style={styles.containerLeft}>
-      <View style={styles.searchBar}>
-        <TouchableOpacity onPress={() => existingVisit ?
+      {Header({
+        action: () => existingVisit ?
           props.navigation.navigate('EventList', { language, patient }) :
-          props.navigation.navigate('PatientView', { language, patient })
-        }>
-          <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
-        </TouchableOpacity>
-        {LanguageToggle()}
-      </View>
+          props.navigation.navigate('PatientView', { language, patient }), language, setLanguage
+      })}
 
       {existingVisit ?
         null :

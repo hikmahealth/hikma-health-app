@@ -11,6 +11,7 @@ import { ExaminationDisplay } from "./Examination";
 import { MedicineDisplay } from "./Medicine";
 import { MedicalHistoryDisplay } from "./MedicalHistory";
 import { PhysiotherapyDisplay } from "./Physiotherapy";
+import Header from "./shared/Header";
 
 const EventList = (props) => {
   const visit = props.navigation.getParam('visit');
@@ -129,27 +130,9 @@ const EventList = (props) => {
     return JSON.parse(metadata);
   }
 
-  const LanguageToggle = () => {
-    return (
-      <Picker
-        selectedValue={language}
-        onValueChange={value => setLanguage(value)}
-        style={styles.picker}
-      >
-        <Picker.Item value='en' label='en' />
-        <Picker.Item value='ar' label='ar' />
-      </Picker>
-    )
-  }
-
   return (
     <View style={styles.main}>
-      <View style={styles.searchBar}>
-        <TouchableOpacity onPress={() => props.navigation.navigate('VisitList', { language: language, patient: patient })}>
-          <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
-        </TouchableOpacity>
-        {LanguageToggle()}
-      </View>
+      {Header({ action: () => props.navigation.navigate('VisitList', { language: language, patient: patient }), language, setLanguage })}
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <Text style={styles.text}>{visit.check_in_timestamp.split('T')[0]}   ({list.length})</Text>
       </View>

@@ -8,13 +8,14 @@ import styles from './Style';
 import { v4 as uuid } from 'uuid';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import { EventTypes } from '../enums/EventTypes';
+import Header from './shared/Header';
 
 const OpenTextEvent = (props) => {
 
   const eventType = props.navigation.getParam('eventType');
   const patientId = props.navigation.getParam('patientId');
   const visitId = props.navigation.getParam('visitId');
-  const language = props.navigation.getParam('language', 'en')
+  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
   const [textColor, setTextColor] = useState('#A9A9A9')
   const [responseText, setResponseText] = useState('');
 
@@ -40,11 +41,8 @@ const OpenTextEvent = (props) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topNav}>
-        <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit')}>
-          <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
-        </TouchableOpacity>
-      </View>
+      {Header({ action: () => props.navigation.navigate('NewVisit', { language }), language, setLanguage })}
+
       <Text style={[styles.text, { fontSize: 16, fontWeight: 'bold' }]}>{eventType}</Text>
       <TextInput
         style={[styles.loginInputsContainer, { color: textColor }]}

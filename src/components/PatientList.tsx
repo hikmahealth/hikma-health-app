@@ -6,6 +6,8 @@ import styles from './Style';
 import { iconHash } from '../services/hash'
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import { icons } from '../enums/Icons';
+import LanguageToggle from './shared/LanguageToggle';
+
 
 const PatientList = (props) => {
   const databaseSync: DatabaseSync = new DatabaseSync();
@@ -78,18 +80,18 @@ const PatientList = (props) => {
     setSearchIconFunction(false)
   }
 
-  const LanguageToggle = () => {
-    return (
-      <Picker
-        selectedValue={language}
-        onValueChange={value => setLanguage(value)}
-        style={styles.picker}
-      >
-        <Picker.Item value='en' label='en' />
-        <Picker.Item value='ar' label='ar' />
-      </Picker>
-    )
-  }
+  // const LanguageToggle = () => {
+  //   return (
+  //     <Picker
+  //       selectedValue={language}
+  //       onValueChange={value => setLanguage(value)}
+  //       style={styles.picker}
+  //     >
+  //       <Picker.Item value='en' label='en' />
+  //       <Picker.Item value='ar' label='ar' />
+  //     </Picker>
+  //   )
+  // }
 
   const agePicker = () => {
     let ages = []
@@ -159,11 +161,10 @@ const PatientList = (props) => {
             <Image source={require('../images/logo_no_text.png')} style={{ width: 60, height: 60, }} />
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1, display: 'flex', alignItems: 'center' }}>
-            {LanguageToggle()}
+            {LanguageToggle({language, setLanguage})}
             <TouchableOpacity
               onPress={async () => {
                 await databaseSync.performSync(instanceUrl, email, password, language)
-                await imageSync.syncPhotos(instanceUrl, email, password)
                 reloadPatients()
               }}>
               <View style={[styles.card, { flexDirection: 'row', alignItems: 'center' }]}>
@@ -175,7 +176,7 @@ const PatientList = (props) => {
         </View>
         <View style={[styles.searchBar, { backgroundColor: '#6177B7', borderRadius: 30 }]}>
           <TextInput
-            style={[styles.searchInput, {marginLeft: 10}]}
+            style={[styles.searchInput, { marginLeft: 10 }]}
             placeholderTextColor='#FFFFFF'
             placeholder={LocalizedStrings[language].patientSearch}
             onChangeText={(text) => setGivenName(text)}
@@ -206,15 +207,6 @@ const PatientList = (props) => {
             <Text style={{ color: '#FFFFFF' }}>{LocalizedStrings[language].clearFilters}</Text>
           </TouchableOpacity>
         </View>
-        <View style={[styles.searchBar, { marginTop: 0, justifyContent: 'center' }]}>
-          {LanguageToggle()}
-          <TouchableOpacity onPress={async () => {
-            await databaseSync.performSync(instanceUrl, email, password, language)
-            reloadPatients()
-          }}
-            style={{ marginLeft: 50, marginRight: 100 }}>
-            <Image source={require('../images/sync.png')} style={{ width: 30, height: 30 }} />
-          </TouchableOpacity>
 
         <View style={styles.scroll}>
           <FlatList
