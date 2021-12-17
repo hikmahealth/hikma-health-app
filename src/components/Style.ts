@@ -149,6 +149,23 @@ export default StyleSheet.create({
     borderRadius: 12,
     backgroundColor: '#FFFFFF'
   },
+  editPatientButton: {
+    margin: 10,
+    padding: 10,
+    height: 'auto',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    borderColor: '#EAEAEA',
+    borderWidth: .5,
+    borderRadius: 12,
+    backgroundColor: '#6177B7'
+  },
   actionButton: {
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -193,6 +210,7 @@ export default StyleSheet.create({
     width: '70%'
   },
   profileButton: {
+    height: 60,
     margin: 10,
     flexDirection: 'row',
     alignItems: 'center',
@@ -242,7 +260,6 @@ export default StyleSheet.create({
   },
   gridItemText: {
     fontSize: 18,
-    textAlign: 'center',
   },
   gridItemLabel: {
     fontSize: 15,
@@ -258,7 +275,6 @@ export default StyleSheet.create({
     justifyContent: 'flex-start'
   },
   paragraph: {
-    marginHorizontal: 20,
     lineHeight: 20
   },
   title: {

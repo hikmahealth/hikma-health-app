@@ -8,7 +8,7 @@ import LanguageToggle from './LanguageToggle';
 
 const Header = (props) => {
   return (
-    <View style={[styles.searchBar, { display: 'flex' }]}>
+    <View style={[styles.searchBar, { display: 'flex', marginBottom: 10 }]}>
 
       <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flex: 1, display: 'flex' }}>
         <View style={[styles.card]}>

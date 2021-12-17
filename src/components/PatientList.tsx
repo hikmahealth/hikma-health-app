@@ -148,7 +148,7 @@ const PatientList = (props) => {
   return (
     <View style={styles.main}>
       <View style={styles.listContainer}>
-        <View style={[styles.searchBar, { display: 'flex' }]}>
+        <View style={[styles.searchBar, { display: 'flex', marginBottom: 5}]}>
           <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flex: 1, display: 'flex' }}>
             <View style={[styles.card]}>
               <TouchableOpacity onPress={() => logout()}>
