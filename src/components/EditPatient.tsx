@@ -110,41 +110,11 @@ const EditPatient = (props) => {
     })
   }, [])
 
-  const LanguageToggle = () => {
-    return (
-      <Picker
-        selectedValue={language}
-        onValueChange={value => setLanguage(value)}
-        style={[styles.picker, { marginLeft: 10 }]}
-      >
-        <Picker.Item value='en' label='en' />
-        <Picker.Item value='ar' label='ar' />
-      </Picker>
-    )
-  }
-
   function RadioButton(props) {
     return (
       <TouchableOpacity onPress={() => setMale(!male)}>
-        <View style={[{
-          height: 24,
-          width: 24,
-          borderRadius: 12,
-          borderWidth: 2,
-          borderColor: '#FFFFFF',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }, props.style]}>
-          {
-            props.selected ?
-              <View style={{
-                height: 12,
-                width: 12,
-                borderRadius: 6,
-                backgroundColor: 'green',
-              }} />
-              : null
-          }
+        <View style={styles.outerRadioButton}>
+          {props.selected ? <View style={styles.selectedRadioButton} /> : null}
         </View>
       </TouchableOpacity>
     );

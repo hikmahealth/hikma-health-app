@@ -5,7 +5,7 @@ import { DatabaseSync } from "../storage/Sync";
 import styles from './Style';
 import { iconHash } from '../services/hash'
 import { LocalizedStrings } from '../enums/LocalizedStrings';
-import { icons } from '../enums/Icons';
+import UserAvatar from 'react-native-user-avatar';
 import LanguageToggle from './shared/LanguageToggle';
 
 
@@ -80,19 +80,6 @@ const PatientList = (props) => {
     setSearchIconFunction(false)
   }
 
-  // const LanguageToggle = () => {
-  //   return (
-  //     <Picker
-  //       selectedValue={language}
-  //       onValueChange={value => setLanguage(value)}
-  //       style={styles.picker}
-  //     >
-  //       <Picker.Item value='en' label='en' />
-  //       <Picker.Item value='ar' label='ar' />
-  //     </Picker>
-  //   )
-  // }
-
   const agePicker = () => {
     let ages = []
     let i = 0;
@@ -116,6 +103,15 @@ const PatientList = (props) => {
     }
   }
 
+  const displayNameAvatar = (patient) => {
+    if (!!patient.given_name.content[language] && !!patient.surname.content[language]) {
+      return `${patient.given_name.content[language]} ${patient.surname.content[language]}`
+    } else {
+      patient.given_name.content[Object.keys(patient.given_name.content)[0]]
+      return `${patient.given_name.content[Object.keys(patient.given_name.content)[0]]} ${patient.surname.content[Object.keys(patient.surname.content)[0]]}`
+    }
+  }
+
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.card} onPress={() => props.navigation.navigate('PatientView',
       {
@@ -127,7 +123,7 @@ const PatientList = (props) => {
       }
     )}>
       <View style={styles.cardContent}>
-        <Image source={icons[iconHash(item.id)]} style={{ width: 100, height: 100, justifyContent: 'center' }} />
+        <UserAvatar size={100} name={displayNameAvatar(item)} bgColor='#ECECEC' textColor='#6177B7' />
         <View style={{ flexShrink: 1, marginLeft: 20 }}>
           {displayName(item)}
           <View
@@ -148,32 +144,26 @@ const PatientList = (props) => {
   return (
     <View style={styles.main}>
       <View style={styles.listContainer}>
-        <View style={[styles.searchBar, { display: 'flex', marginBottom: 5}]}>
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flex: 1, display: 'flex' }}>
-            <View style={[styles.card]}>
-              <TouchableOpacity onPress={() => logout()}>
-                <Text>{LocalizedStrings[language].logOut}</Text>
-              </TouchableOpacity>
-            </View>
-
-          </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', display: 'flex' }}>
-            <Image source={require('../images/logo_no_text.png')} style={{ width: 60, height: 60, }} />
-          </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1, display: 'flex', alignItems: 'center' }}>
-            {LanguageToggle({language, setLanguage})}
-            <TouchableOpacity
-              onPress={async () => {
-                await databaseSync.performSync(instanceUrl, email, password, language)
-                reloadPatients()
-              }}>
-              <View style={[styles.card, { flexDirection: 'row', alignItems: 'center' }]}>
-                <Text>{LocalizedStrings[language].sync}</Text>
-                <Image source={require('../images/sync.png')} style={{ width: 15, height: 15, marginLeft: 5 }} />
-              </View>
+        <View style={[styles.searchBar, { display: 'flex', marginBottom: 5 }]}>
+          <View style={[styles.card]}>
+            <TouchableOpacity onPress={() => logout()}>
+              <Text>{LocalizedStrings[language].logOut}</Text>
             </TouchableOpacity>
           </View>
+
+          {LanguageToggle({ language, setLanguage })}
+          <TouchableOpacity
+            onPress={async () => {
+              await databaseSync.performSync(instanceUrl, email, password, language)
+              reloadPatients()
+            }}>
+            <View style={[styles.card, { flexDirection: 'row', alignItems: 'center' }]}>
+              <Text>{LocalizedStrings[language].sync}</Text>
+              <Image source={require('../images/sync.png')} style={{ width: 15, height: 15, marginLeft: 5 }} />
+            </View>
+          </TouchableOpacity>
         </View>
+
         <View style={[styles.searchBar, { backgroundColor: '#6177B7', borderRadius: 30 }]}>
           <TextInput
             style={[styles.searchInput, { marginLeft: 10 }]}
