@@ -5,15 +5,14 @@ import {
 
 import { database } from "../storage/Database";
 import styles from './Style';
-import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import radioButtons from './shared/RadioButtons';
+import Header from './shared/Header';
 
 const EditPhysiotherapy = (props) => {
   const event = props.navigation.getParam('event');
-  const language = props.navigation.getParam('language', 'en')
   const userName = props.navigation.getParam('userName');
-
+  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
   const [previousTreatment, setPreviousTreatment] = useState(null);
   const [previousTreatmentText, setPreviousTreatmentText] = useState(null);
   const [complaint, setComplaint] = useState(null);
@@ -59,13 +58,8 @@ const EditPhysiotherapy = (props) => {
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
-        <View style={styles.topNav}>
-          <TouchableOpacity onPress={() => props.navigation.navigate('EventList', { language })}>
-            <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
-          </TouchableOpacity>
-        </View>
-
+      <View style={styles.containerLeft}>
+        {Header({ action: () => props.navigation.navigate('EventList', { language }), language, setLanguage })}
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignSelf: 'stretch', }}>
           <Text style={[styles.text, { fontSize: 16, fontWeight: 'bold' }]}>{LocalizedStrings[language].physiotherapy}</Text>
         </View>
@@ -152,7 +146,7 @@ const EditPhysiotherapy = (props) => {
             color={'#F77824'}
             onPress={() => submit()} />
         </View>
-      </LinearGradient>
+      </View>
     </ScrollView>
   );
 };

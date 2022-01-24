@@ -5,15 +5,15 @@ import {
 import { v4 as uuid } from 'uuid';
 import { database } from "../storage/Database";
 import styles from './Style';
-import LinearGradient from 'react-native-linear-gradient';
 import DatePicker from 'react-native-datepicker'
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import { EventTypes } from '../enums/EventTypes';
+import Header from './shared/Header';
 
 const EditPatient = (props) => {
-  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'))
   const patient = props.navigation.getParam('patient');
 
+  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
   const [givenNameText, setGivenNameText] = useState(!!props.navigation.state.params.patient.given_name ? props.navigation.state.params.patient.given_name.content[language] : '');
   const [surnameText, setSurnameText] = useState(!!props.navigation.state.params.patient.surname ? props.navigation.state.params.patient.surname.content[language] : '');
   const [dob, setDob] = useState(props.navigation.state.params.patient.date_of_birth == 'None' ? '' : props.navigation.state.params.patient.date_of_birth);
@@ -110,49 +110,19 @@ const EditPatient = (props) => {
     })
   }, [])
 
-  const LanguageToggle = () => {
-    return (
-      <Picker
-        selectedValue={language}
-        onValueChange={value => setLanguage(value)}
-        style={[styles.picker, { marginLeft: 10 }]}
-      >
-        <Picker.Item value='en' label='en' />
-        <Picker.Item value='ar' label='ar' />
-      </Picker>
-    )
-  }
-
   function RadioButton(props) {
     return (
       <TouchableOpacity onPress={() => setMale(!male)}>
-        <View style={[{
-          height: 24,
-          width: 24,
-          borderRadius: 12,
-          borderWidth: 2,
-          borderColor: '#FFFFFF',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }, props.style]}>
-          {
-            props.selected ?
-              <View style={{
-                height: 12,
-                width: 12,
-                borderRadius: 6,
-                backgroundColor: 'green',
-              }} />
-              : null
-          }
+        <View style={styles.outerRadioButton}>
+          {props.selected ? <View style={styles.selectedRadioButton} /> : null}
         </View>
       </TouchableOpacity>
     );
   }
 
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
-      {LanguageToggle()}
+    <View style={styles.container}>
+        {Header({ action: () => props.navigation.navigate('PatientView', { language }), language, setLanguage })}
       <View style={styles.inputRow}>
         <TextInput
           style={styles.inputs}
@@ -235,7 +205,7 @@ const EditPatient = (props) => {
           onPress={() => editPatient()}
         />
       </View>
-    </LinearGradient>
+    </View>
   );
 };
 

@@ -7,9 +7,9 @@ import { database } from "../storage/Database";
 import { v4 as uuid } from 'uuid';
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
-import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import radioButtons from './shared/RadioButtons';
+import Header from './shared/Header';
 import { formatTextDisplay, formatBooleanDisplay } from './shared/EventFieldDisplay';
 
 export const ExaminationDisplay = (metadataObj, language) => {
@@ -33,10 +33,10 @@ const Examination = (props) => {
   const [covid19, setCovid19] = useState(null);
   const [referral, setReferral] = useState(null);
   const [referralText, setReferralText] = useState(null);
+  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
 
   const patientId = props.navigation.getParam('patientId');
   const visitId = props.navigation.getParam('visitId');
-  const language = props.navigation.getParam('language', 'en');
   const userName = props.navigation.getParam('userName');
 
   const submit = async () => {
@@ -62,13 +62,8 @@ const Examination = (props) => {
 
   return (
     <ScrollView contentContainerStyle={{ flex: 1 }}>
-      <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
-        <View style={styles.topNav}>
-          <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit')}>
-            <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
-          </TouchableOpacity>
-        </View>
-
+      <View style={styles.containerLeft}>
+        {Header({ action: () => props.navigation.navigate('NewVisit', { language }), language, setLanguage })}
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignSelf: 'stretch', }}>
           <Text style={[styles.text, { fontSize: 16, fontWeight: 'bold' }]}>{LocalizedStrings[language].examination}</Text>
         </View>
@@ -134,7 +129,7 @@ const Examination = (props) => {
             color={'#F77824'}
             onPress={() => submit()} />
         </View>
-      </LinearGradient>
+      </View>
     </ScrollView>
   );
 };

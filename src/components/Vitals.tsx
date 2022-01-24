@@ -7,8 +7,8 @@ import { database } from "../storage/Database";
 import { v4 as uuid } from 'uuid';
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
-import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
+import Header from './shared/Header';
 
 export const VitalsDisplay = (metadataObj) => {
   return (
@@ -35,10 +35,10 @@ const Vitals = (props) => {
   const [respiratoryRate, setRespiratoryRate] = useState(null);
   const [weight, setWeight] = useState(null);
   const [bloodGlucose, setBloodGlucose] = useState(null);
+  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
 
   const patientId = props.navigation.getParam('patientId');
   const visitId = props.navigation.getParam('visitId');
-  const language = props.navigation.getParam('language', 'en')
 
   const setVitals = async () => {
     database.addEvent({
@@ -62,12 +62,8 @@ const Vitals = (props) => {
   };
 
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
-      <View style={styles.topNav}>
-        <TouchableOpacity onPress={() => props.navigation.navigate('NewVisit')}>
-          <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
-        </TouchableOpacity>
-      </View>
+    <View style={styles.container}>
+      {Header({ action: () => props.navigation.navigate('NewVisit', { language }), language, setLanguage })}
       <Text style={[styles.text, { fontSize: 16, fontWeight: 'bold' }]}>{LocalizedStrings[language].vitals}</Text>
       <View style={[styles.inputRow, { marginTop: 30 }]}>
         <TextInput
@@ -146,7 +142,7 @@ const Vitals = (props) => {
           color={'#F77824'}
           onPress={() => setVitals()} />
       </View>
-    </LinearGradient>
+    </View>
   );
 };
 

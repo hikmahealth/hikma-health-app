@@ -4,12 +4,12 @@ import {
 } from 'react-native';
 import styles from './Style';
 import { EventTypes } from '../enums/EventTypes';
-import LinearGradient from 'react-native-linear-gradient';
 import { database } from "../storage/Database";
 import { v4 as uuid } from 'uuid';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import radioButtons from './shared/RadioButtons'
 import DatePicker from 'react-native-datepicker';
+import Header from './shared/Header';
 
 const formatResult = (metadataObj, language) => {
   if (metadataObj.seekCare) {
@@ -93,7 +93,7 @@ const Covid19Form = (props) => {
 
   const [isCollapsed, setIsCollapsed] = useState(true)
 
-  const language = props.navigation.getParam('language', 'en');
+  const [language, setLanguage] = useState(props.navigation.getParam('language', 'en'));
   const patient = props.navigation.getParam('patient');
   const visitId = props.navigation.getParam('visitId');
 
@@ -204,13 +204,8 @@ const Covid19Form = (props) => {
 
   return !submitted ? (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={[styles.containerLeft]}>
-        <View style={styles.topNav}>
-          <TouchableOpacity onPress={() => { props.navigation.navigate('NewVisit', { language: language }) }}>
-            <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
-          </TouchableOpacity>
-        </View>
-
+      <View style={[styles.containerLeft]}>
+        {Header({ action: () => props.navigation.navigate('NewVisit', { language }), language, setLanguage })}
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignSelf: 'stretch', }}>
           <Text style={[styles.text, { fontSize: 16, fontWeight: 'bold' }]}>{LocalizedStrings[language].covidScreening}</Text>
         </View>
@@ -306,10 +301,10 @@ const Covid19Form = (props) => {
             onPress={() => handleSaveScreeningEvent()}
           />
         </View>
-      </LinearGradient>
+      </View>
     </ScrollView>
   ) : (
-      <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
+      <View colors={['#31BBF3', '#4D7FFF']} style={styles.containerLeft}>
         <View style={styles.searchBar}>
           <TouchableOpacity onPress={() => { props.navigation.navigate('NewVisit', { language: language }) }}>
             <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
@@ -319,7 +314,7 @@ const Covid19Form = (props) => {
         <View style={{ alignItems: 'center' }}>
           <Text style={{ color: '#FFFFFF', fontSize: 20 }}>{result()}</Text>
         </View>
-      </LinearGradient>
+      </View>
     );
 };
 

@@ -6,9 +6,9 @@ import { database } from "../storage/Database";
 import { v4 as uuid } from 'uuid';
 import styles from './Style';
 import DatePicker from 'react-native-datepicker'
-import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings';
 import { EventTypes } from '../enums/EventTypes';
+import Header from './shared/Header';
 
 const NewPatient = (props) => {
   const [givenName, setGivenName] = useState('');
@@ -58,21 +58,7 @@ const NewPatient = (props) => {
         language: language
       })
     })
-
   };
-
-  const LanguageToggle = () => {
-    return (
-      <Picker
-        selectedValue={language}
-        onValueChange={value => setLanguage(value)}
-        style={[styles.picker, { marginLeft: 10 }]}
-      >
-        <Picker.Item value='en' label='en' />
-        <Picker.Item value='ar' label='ar' />
-      </Picker>
-    )
-  }
 
   function RadioButton(props) {
     return (
@@ -84,11 +70,9 @@ const NewPatient = (props) => {
     );
   }
 
-
-
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.container}>
-      {LanguageToggle()}
+    <View style={styles.container}>
+      {Header({ action: () => props.navigation.navigate('PatientList', { language }), language, setLanguage })}
       <View style={styles.inputRow}>
         <TextInput
           style={styles.inputs}
@@ -170,7 +154,7 @@ const NewPatient = (props) => {
           onPress={() => addPatient()}
         />
       </View>
-    </LinearGradient>
+    </View>
   );
 };
 

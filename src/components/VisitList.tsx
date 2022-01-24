@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, TouchableOpacity, Picker, Alert } from "react-native";
 import { database } from "../storage/Database";
 import styles from './Style';
-import LinearGradient from 'react-native-linear-gradient';
 import { LocalizedStrings } from '../enums/LocalizedStrings'
 import { Visit } from "../types/Visit";
+import Header from "./shared/Header";
 
 const VisitList = (props) => {
   const patient = props.navigation.getParam('patient');
@@ -91,27 +91,10 @@ const VisitList = (props) => {
     </TouchableOpacity>
   )
 
-  const LanguageToggle = () => {
-    return (
-      <Picker
-        selectedValue={language}
-        onValueChange={value => setLanguage(value)}
-        style={styles.picker}
-      >
-        <Picker.Item value='en' label='en' />
-        <Picker.Item value='ar' label='ar' />
-      </Picker>
-    )
-  }
 
   return (
-    <LinearGradient colors={['#31BBF3', '#4D7FFF']} style={styles.main}>
-      <View style={styles.searchBar}>
-        <TouchableOpacity onPress={() => props.navigation.navigate('PatientView', { language: language, patient: patient })}>
-          <Text style={styles.text}>{LocalizedStrings[language].back}</Text>
-        </TouchableOpacity>
-        {LanguageToggle()}
-      </View>
+    <View style={styles.main}>
+      {Header({ action: () => props.navigation.navigate('PatientView', { language: language, patient: patient }), language, setLanguage })}
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <Text style={styles.text}>{LocalizedStrings[language].visitHistory}   ({list.length})</Text>
       </View>
@@ -124,7 +107,7 @@ const VisitList = (props) => {
           />
         </View>
       </View>
-    </LinearGradient>
+    </View>
   )
 
 }

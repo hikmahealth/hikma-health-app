@@ -121,6 +121,8 @@ export const LocalizedStrings = {
     treatmentSession: "Treatment Session",
     recommendations: "Recommendations",
     patientSnapshot: "Patient Snapshot",
+    logOut: "Log Out",
+    sync: "Sync",
   },
   "ar": {
     patients: "المرضى",
@@ -244,6 +246,8 @@ export const LocalizedStrings = {
     treatmentSession: "جلسة العلاج",
     recommendations: "توصيات",
     patientSnapshot: "صفحة المريض",
+    logOut: "تسجيل خروج",
+    sync: "مزامنة",
   },
   "sp": {
     patients: "Pacientes",
