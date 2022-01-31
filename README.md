@@ -77,7 +77,7 @@ to
 
 Reload the app, and then be sure to change this line back and reload the app again.
 
-Managing Releases
+Creating APK
 -----------------
-There is an older version of the application on the Google Play Store, but releases and updates have historically been handled by manually building APK files within Android Studio and sharing with clinics  
+A tutorial for building an APK can be found here: https://reactnative.dev/docs/signed-apk-android. You can also build the APK in Android Studio by adding Run/Debug configurations in your Android Studio project. Select the gradle project in the configuration (~/android) and the Gradle task ‘assembleRelease’.
 
