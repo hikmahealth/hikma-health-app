@@ -16,7 +16,7 @@
     "moment": "^2.27.0",
     "react": "16.8.6",
     "react-final-form": "^6.3.0",
-    "react-native": "^0.60.5",
+    "react-native": "^0.62.3",
     "react-native-camera": "^3.21.0",
     "react-native-camera-hooks": "^0.3.1",
     "react-native-datepicker": "^1.7.2",
